@@ -1,8 +1,13 @@
 package CouponRedeemSystem.System.File.model;
 
-public abstract class TextFile {
+public class TextFile {
 	String fileName;
 	String fileContent;
+	
+	public TextFile(String fileName, String fileContent) {
+		this.fileName = fileName;
+		this.fileContent = fileContent;
+	}
 	
 	public String getFileName() {return fileName;}
 	public void setFiName(String fileName) {this.fileName = fileName;}
