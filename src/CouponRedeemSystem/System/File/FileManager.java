@@ -16,7 +16,7 @@ public class FileManager {
 	}
 	
 	private String getFolderPath(String dirName) {
-		return "../../../../Data/" + dirName;
+		return "Data\\" + dirName;
 	}
 	
 	private File getTextFile(String dirName, TextFile file) throws IOException {
@@ -25,7 +25,7 @@ public class FileManager {
 		if(!folder.exists()) {
 			folder.mkdir();
 		}
-		File realFile = new File(folder.getPath() + file.getFileName());
+		File realFile = new File(folder.getPath() + "\\" + file.getFileName());
 		if (!realFile.exists()) {
 			realFile.createNewFile();
 		}
