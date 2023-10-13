@@ -3,10 +3,10 @@ package CouponRedeemSystem.System.Password;
 import java.io.File;
 import java.io.IOException;
 
+import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.System.File.FileManager;
 import CouponRedeemSystem.System.File.model.TextFile;
 import CouponRedeemSystem.System.Password.model.Password;
-import CouponRedeemSystem.User.model.User;
 
 public class PasswordManager {
 	private PasswordManager instance;
@@ -27,9 +27,9 @@ public class PasswordManager {
 		mgr.modifyFile("Password", textFile);
 	}
 	
-	public void deletePassword(User user) throws IOException {
+	public void deletePassword(Account account) throws IOException {
 		FileManager mgr = FileManager.getInstance();
-		String userIdStr = String.valueOf(user.getUserId());
+		String userIdStr = String.valueOf(account.getUserId());
 		File userPasswordFile = mgr.searchFile("Password", userIdStr);
 		mgr.deleteFile("Password", userPasswordFile);
 	}
