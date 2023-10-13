@@ -10,8 +10,14 @@ We collect almost outdated coupon and give back point.
 - [ ] Create User info with different role  
 - [ ] Create permission for each user  
 - [ ] Break down the class diagram and define the needed function for each users  
-- [ ] Assign each part to team and decide their own unit test case  
+- [ ] Assign each part to team and decide their own unit test case 
+- [ ] Build foundaton for easy integration - Tony
+- [ ] Build login session - Hendry
+- [ ] Command Interface - Anson
+- [ ] Redeem point from old coupon - Kelvin
+- [ ] Redeem new coupon from point - Orange
 - [ ] 
+
 
 ### In-Progress
 
