@@ -7,7 +7,7 @@ import CouponRedeemSystem.System.File.model.TextFile;
 
 public class main {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 
 	}
 
