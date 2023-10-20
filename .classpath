@@ -7,7 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/gson_lib"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/gson"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/beanUtil"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/collections"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ezmorph"/>

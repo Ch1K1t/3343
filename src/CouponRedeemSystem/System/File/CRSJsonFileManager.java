@@ -10,11 +10,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.PropertyUtils;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-
 import net.sf.json.JSONObject;
 
 public class CRSJsonFileManager {
@@ -46,8 +41,8 @@ public class CRSJsonFileManager {
 		return file;
 	}
 	
-	public void modifyJSONByDynaBean(String dirName, String fileName, DynaBean content) throws IOException {
-		
+	public void modifyJSONByDynaBean(String dirName, String fileName, DynaBean content) {
+
 	}
 	
 	public void delete() {}
