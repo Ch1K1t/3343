@@ -13,5 +13,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/lang3"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/logging"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/json lib"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/io"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,22 +1,45 @@
 package CouponRedeemSystem.System.File;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
+import net.sf.json.util.JSONBuilder;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CRSJsonFileManager.
+ */
 public class CRSJsonFileManager {
+	
+	/** The instance. */
 	private CRSJsonFileManager instance;
 	
+	/**
+	 * Instantiates a new CRS json file manager.
+	 */
 	private CRSJsonFileManager() {}
 	
+	/**
+	 * Gets the single instance of CRSJsonFileManager.
+	 *
+	 * @return single instance of CRSJsonFileManager
+	 */
 	public CRSJsonFileManager getInstance() {
 		if (instance == null) {
 			instance = new CRSJsonFileManager();
@@ -24,11 +47,25 @@ public class CRSJsonFileManager {
 		return instance;
 	}
 	
-	public String getDirectoryPath(String dirName) {
+	/**
+	 * Gets the directory path.
+	 *
+	 * @param dirName the dir name
+	 * @return the directory path
+	 */
+	private String getDirectoryPath(String dirName) {
 		return "Data\\" + dirName;
 	}
 	
-	public File create(String dirName, String fileName) throws IOException {
+	/**
+	 * Creates New File.
+	 *
+	 * @param dirName the dir name
+	 * @param fileName the file name
+	 * @return the file
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	private File create(String dirName, String fileName) throws IOException {
 		String pathStr = getDirectoryPath(dirName);
 		File dir = new File(pathStr);
 		if (!dir.exists()) {
@@ -41,13 +78,128 @@ public class CRSJsonFileManager {
 		return file;
 	}
 	
-	public void modifyJSONByDynaBean(String dirName, String fileName, DynaBean content) {
-
+	/**
+	 * Modify JSON by DynaBean.
+	 *
+	 * @param dirName the dir name
+	 * @param fileName the file name
+	 * @param content the content
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public void modifyJSON(String dirName, String fileName, DynaBean content) throws IOException {
+		modifyJSON(dirName, fileName, JSONObject.fromObject(content));
 	}
 	
-	public void delete() {}
+	/**
+	 * Modify JSON by JSONObject.
+	 *
+	 * @param dirName the dir name
+	 * @param fileName the file name
+	 * @param content the content
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public void modifyJSON(String dirName, String fileName, JSONObject content) throws IOException {
+		File file = create(dirName, fileName);
+		FileWriter fileWriter = new FileWriter(file);
+		fileWriter.write(content.toString());
+	}
 	
-	public void search() {}
+	/**
+	 * Safe modify JSON by key.
+	 *
+	 * @param dirName the dir name
+	 * @param fileName the file name
+	 * @param key the key
+	 * @param obj the obj
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public void safeModifyJSONByKey(String dirName, String fileName, String key, Object obj) throws IOException {
+		File file = create(dirName, fileName);
+		JSONObject jsonObject = convertFileTextToJSON(file);
+		if (jsonObject.containsKey(key)) {
+			jsonObject.remove(key);
+		}
+		jsonObject.put(key, jsonObject);
+		modifyJSON(dirName, fileName, jsonObject);
+	}
 	
-	public void list() {}
+	/**
+	 * Delete JSON.
+	 *
+	 * @param dirName the dir name
+	 * @param fileName the file name
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public void deleteJSON(String dirName, String fileName) throws IOException {
+		File file = create(dirName, fileName);
+		if(!file.delete()) {
+			System.out.println("Delete is failed!");
+		}
+	}
+	
+	/**
+	 * Removes the element.
+	 *
+	 * @param dirName the dir name
+	 * @param fileName the file name
+	 * @param key the key
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public void removeElement(String dirName, String fileName, String key) throws IOException {
+		File file = create(dirName, fileName);
+		JSONObject jsonObject = convertFileTextToJSON(file);
+		if (jsonObject.containsKey(key)) {
+			jsonObject.remove(key);
+			modifyJSON(dirName, fileName, jsonObject);
+		} else {
+			System.out.println("Key is not exist in this Json");
+		}
+	}
+	
+	/**
+	 * Search JSON.
+	 *
+	 * @param fileName the file name
+	 * @return the JSON object
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public JSONObject searchJSON(String fileName) throws IOException {
+		File jsonFile = searhFile(fileName);
+		if (jsonFile.isDirectory()) {
+			System.out.println("JSON not Found! Return emmpty json");
+			return new JSONObject();
+		}
+		return convertFileTextToJSON(jsonFile);
+	}
+	
+	/**
+	 * Searh file.
+	 *
+	 * @param fileName the file name
+	 * @return the file
+	 */
+	public File searhFile(String fileName) {
+		File rootDirectory = new File("Data");
+		List<File> fileList = Arrays.asList(rootDirectory.listFiles());
+		for (File file: fileList) {
+			if (file.getName().equals(fileName)) {
+				return file;
+			}
+		}
+		System.out.println("File not found! Return the root directory");
+		return rootDirectory;
+	}
+	
+	/**
+	 * Convert file text to JSON.
+	 *
+	 * @param file the file
+	 * @return the JSON object
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	private JSONObject convertFileTextToJSON(File file) throws IOException {
+		InputStream iStream = new FileInputStream(file);
+		String jsonText = IOUtils.toString(iStream);
+		return (JSONObject) JSONSerializer.toJSON(jsonText);
+	}
 }
