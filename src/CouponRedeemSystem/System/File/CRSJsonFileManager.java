@@ -28,7 +28,7 @@ import net.sf.json.util.JSONBuilder;
 public class CRSJsonFileManager {
 	
 	/** The instance. */
-	private CRSJsonFileManager instance;
+	private static CRSJsonFileManager instance;
 	
 	/**
 	 * Instantiates a new CRS json file manager.
@@ -40,7 +40,7 @@ public class CRSJsonFileManager {
 	 *
 	 * @return single instance of CRSJsonFileManager
 	 */
-	public CRSJsonFileManager getInstance() {
+	public static CRSJsonFileManager getInstance() {
 		if (instance == null) {
 			instance = new CRSJsonFileManager();
 		}
@@ -65,7 +65,7 @@ public class CRSJsonFileManager {
 	 * @return the file
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	private File create(String dirName, String fileName) throws IOException {
+	private File createJson(String dirName, String fileName) throws IOException {
 		String pathStr = getDirectoryPath(dirName);
 		File dir = new File(pathStr);
 		if (!dir.exists()) {
@@ -99,7 +99,7 @@ public class CRSJsonFileManager {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public void modifyJSON(String dirName, String fileName, JSONObject content) throws IOException {
-		File file = create(dirName, fileName);
+		File file = createJson(dirName, fileName);
 		FileWriter fileWriter = new FileWriter(file);
 		fileWriter.write(content.toString());
 	}
@@ -114,7 +114,7 @@ public class CRSJsonFileManager {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public void safeModifyJSONByKey(String dirName, String fileName, String key, Object obj) throws IOException {
-		File file = create(dirName, fileName);
+		File file = createJson(dirName, fileName);
 		JSONObject jsonObject = convertFileTextToJSON(file);
 		if (jsonObject.containsKey(key)) {
 			jsonObject.remove(key);
@@ -131,7 +131,7 @@ public class CRSJsonFileManager {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public void deleteJSON(String dirName, String fileName) throws IOException {
-		File file = create(dirName, fileName);
+		File file = createJson(dirName, fileName);
 		if(!file.delete()) {
 			System.out.println("Delete is failed!");
 		}
@@ -146,7 +146,7 @@ public class CRSJsonFileManager {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public void removeElement(String dirName, String fileName, String key) throws IOException {
-		File file = create(dirName, fileName);
+		File file = createJson(dirName, fileName);
 		JSONObject jsonObject = convertFileTextToJSON(file);
 		if (jsonObject.containsKey(key)) {
 			jsonObject.remove(key);
