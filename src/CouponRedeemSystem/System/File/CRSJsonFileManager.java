@@ -1,5 +1,22 @@
 package CouponRedeemSystem.System.File;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.DynaBean;
+import org.apache.commons.beanutils.PropertyUtils;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+
+import net.sf.json.JSONObject;
+
 public class CRSJsonFileManager {
 	private CRSJsonFileManager instance;
 	
@@ -16,11 +33,26 @@ public class CRSJsonFileManager {
 		return "Data\\" + dirName;
 	}
 	
-	public void create() {}
+	public File create(String dirName, String fileName) throws IOException {
+		String pathStr = getDirectoryPath(dirName);
+		File dir = new File(pathStr);
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+		File file = new File(pathStr + "\\" + fileName + ".json");
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		return file;
+	}
 	
-	public void modify() {}
+	public void modifyJSONByDynaBean(String dirName, String fileName, DynaBean content) throws IOException {
+		
+	}
 	
 	public void delete() {}
 	
 	public void search() {}
+	
+	public void list() {}
 }
