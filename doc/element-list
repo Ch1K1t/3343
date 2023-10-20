@@ -1,0 +1,17 @@
+CouponRedeemSystem.Account
+CouponRedeemSystem.Account.model
+CouponRedeemSystem.Coupon
+CouponRedeemSystem.Coupon.model
+CouponRedeemSystem.Discount
+CouponRedeemSystem.Discount.model
+CouponRedeemSystem.Main
+CouponRedeemSystem.Page
+CouponRedeemSystem.Page.model
+CouponRedeemSystem.Role
+CouponRedeemSystem.Role.model
+CouponRedeemSystem.Shop
+CouponRedeemSystem.Shop.model
+CouponRedeemSystem.System.Authorization
+CouponRedeemSystem.System.File
+CouponRedeemSystem.System.File.model
+CouponRedeemSystem.User
