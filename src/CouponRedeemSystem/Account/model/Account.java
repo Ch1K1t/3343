@@ -12,7 +12,7 @@ public class Account {
 	int userId;
 	int age;
 	int telNo;
-	int score;
+	double points;
 	Date dateOfBirth;
 	String userName;
 	String address;
@@ -22,7 +22,7 @@ public class Account {
 		this.userId = userId;
 		this.age = age;
 		this.telNo = telNo;
-		this.score = 0;
+		this.points = 0;
 		this.dateOfBirth = new SimpleDateFormat("yyyy-MM-dd").parse(dateOfBirth);
 		this.userName = userName;
 		this.address = address;
@@ -50,8 +50,8 @@ public class Account {
 	public List<Coupon> getCoupons() {
 		return coupons;
 	}
-	public int getScore() {
-		return score;
+	public double getPoints() {
+		return points;
 	}
 	public void setUserId(int userId) {
 		this.userId = userId;
@@ -74,7 +74,7 @@ public class Account {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public void setScore(int score) {
-		this.score = score;
+	public void setPoints(double score) {
+		this.points = score;
 	}
 }
