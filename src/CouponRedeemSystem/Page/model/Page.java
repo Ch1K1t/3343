@@ -1,5 +1,5 @@
 package CouponRedeemSystem.Page.model;
 
-public class Page {
-
+public interface Page {
+  public void execute();
 }
