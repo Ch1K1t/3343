@@ -173,16 +173,28 @@ public class CRSJsonFileManager {
 	 * @param fileName the file name
 	 * @return the file
 	 */
+	
 	public File searhFile(String fileName) {
+		return searhFile(fileName, null);
+	}
+	public File searhFile(String fileName, File[] fileList) {
 		File rootDirectory = new File("Data");
-		List<File> fileList = Arrays.asList(rootDirectory.listFiles());
+		if(fileList == null) {
+			fileList = rootDirectory.listFiles();
+		} 
+		File returnFile = rootDirectory;
 		for (File file: fileList) {
-			if (file.getName().equals(fileName)) {
-				return file;
+			if (file.isDirectory()) {
+				returnFile = searhFile(fileName, file.listFiles());
+			} else if (file.getName().equals(fileName)) {
+				returnFile = file;
 			}
+			if (returnFile != rootDirectory) {
+				return returnFile;
+			} 
 		}
-		System.out.println("File not found! Return the root directory");
-		return rootDirectory;
+		System.out.println("File not found!");
+		return returnFile;
 	}
 	
 	/**
