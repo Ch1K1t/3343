@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.io.IOUtils;
+
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
@@ -156,7 +158,7 @@ public class CRSJsonFileManager {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public JSONObject searchJSON(String fileName) throws IOException {
-		File jsonFile = searhFile(fileName);
+		File jsonFile = searchFile(fileName);
 		if (jsonFile.isDirectory()) {
 			System.out.println("JSON not Found! Return emmpty json");
 			return new JSONObject();
@@ -170,7 +172,7 @@ public class CRSJsonFileManager {
 	 * @param fileName the file name
 	 * @return the file
 	 */
-	public File searhFile(String fileName) {
+	public File searchFile(String fileName) {
 		File rootDirectory = new File("Data");
 		List<File> fileList = Arrays.asList(rootDirectory.listFiles());
 		for (File file: fileList) {

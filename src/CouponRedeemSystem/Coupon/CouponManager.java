@@ -1,7 +1,11 @@
 package CouponRedeemSystem.Coupon;
+import java.io.IOException;
 import java.util.Date;
+import java.util.Map;
 
 import CouponRedeemSystem.Coupon.model.Coupon;
+import CouponRedeemSystem.System.File.CRSJsonFileManager;
+import net.sf.json.JSONObject;
 
 public class CouponManager {
     private CouponManager instance;
@@ -16,11 +20,20 @@ public class CouponManager {
 	}
 
     public void couponToPoints(Coupon coupon) {
+        CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
+
         Date currentDate = new Date();
 
         if (coupon.isExchanged()) return;
-        if (coupon.getExpirationDate().compareTo(currentDate) > 0) return;
+        if (coupon.getExpirationDate().after(currentDate)) return;
         // TODO: check if coupon code is invalid
+        JSONObject json;
+        try {
+            json = jsonFileManager.searchJSON("coupons.json");
+        } catch (IOException e) {
+            System.out.println("Coupon database not found");
+            return;
+        }
 
         double points = 0;
 
