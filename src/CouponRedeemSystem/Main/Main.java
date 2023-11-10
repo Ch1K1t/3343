@@ -1,15 +1,13 @@
 package CouponRedeemSystem.Main;
 
-import java.io.IOException;
-
+import CouponRedeemSystem.Page.HomePage;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
+import java.io.IOException;
 import net.sf.json.JSONObject;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
-
+  public static void main(String[] args) throws IOException {
+    new HomePage().execute();
+  }
 }

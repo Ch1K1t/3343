@@ -8,7 +8,7 @@ import net.sf.json.JSONObject;
 public class HomePage implements Page {
 
   public static void getInstruction() {
-    System.out.println("Please input the command e.g. !login:");
+    System.out.println("Please input the command e.g. !signin:");
     System.out.println("1. Signin");
     System.out.println("2. Signup");
     System.out.println("3. Exit");
