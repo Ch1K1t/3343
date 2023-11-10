@@ -2,8 +2,6 @@ package CouponRedeemSystem.Page;
 
 import CouponRedeemSystem.Page.model.Page;
 import java.util.Scanner;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 public class HomePage implements Page {
 
