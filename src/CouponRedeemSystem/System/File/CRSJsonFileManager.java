@@ -160,8 +160,8 @@ public class CRSJsonFileManager {
 	 * @return the JSON object
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public JSONObject searchJSON(String fileName) throws IOException {
-		File jsonFile = searchFile(fileName);
+	public JSONObject searchJSON(String fileName, File[] fileList) throws IOException {
+		File jsonFile = searchFile(fileName, null);
 		if (jsonFile.isDirectory()) {
 			System.out.println("JSON not Found! Return emmpty json");
 			return new JSONObject();
@@ -175,15 +175,8 @@ public class CRSJsonFileManager {
 	 * @param fileName the file name
 	 * @return the file
 	 */
-<<<<<<< HEAD
-	public File searchFile(String fileName) {
-=======
-	
-	public File searhFile(String fileName) {
-		return searhFile(fileName, null);
-	}
-	public File searhFile(String fileName, File[] fileList) {
->>>>>>> main
+
+	public File searchFile(String fileName, File[] fileList) {
 		File rootDirectory = new File("Data");
 		if(fileList == null) {
 			fileList = rootDirectory.listFiles();
@@ -191,7 +184,7 @@ public class CRSJsonFileManager {
 		File returnFile = rootDirectory;
 		for (File file: fileList) {
 			if (file.isDirectory()) {
-				returnFile = searhFile(fileName, file.listFiles());
+				returnFile = searchFile(fileName, file.listFiles());
 			} else if (file.getName().equals(fileName)) {
 				returnFile = file;
 			}

@@ -1,46 +1,44 @@
 package CouponRedeemSystem.Coupon;
+
 import java.io.IOException;
-import java.util.Date;
-import java.util.Map;
+
+import org.apache.commons.beanutils.LazyDynaBean;
 
 import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import net.sf.json.JSONObject;
 
 public class CouponManager {
-    private CouponManager instance;
+    private static CouponManager instance;
+    private CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
 	
 	private CouponManager() {}
 	
-	public CouponManager getInstance() {
+	public static CouponManager getInstance() {
 		if (instance == null) {
 			instance = new CouponManager();
 		}
 		return instance;
 	}
 
-    public void couponToPoints(Coupon coupon) {
-        CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
-
-        Date currentDate = new Date();
-
-        if (coupon.isExchanged()) return;
-        if (coupon.getExpirationDate().after(currentDate)) return;
-        // TODO: check if coupon code is invalid
-        JSONObject json;
+    // Create json record
+    public void create(Coupon coupon) {
+        LazyDynaBean bean = new LazyDynaBean();
+        bean.set("code", coupon.getCouponCode());
+        bean.set("value", coupon.getIntrinsicValue());
+        bean.set("expiration_date", coupon.getExpirationDate());
+        bean.set("owner", coupon.getOwner().getUserId());
+        bean.set("shop", coupon.getShop());
         try {
-            json = jsonFileManager.searchJSON("coupons.json");
+            jsonFileManager.modifyJSON(null, coupon.getCouponCode(), bean);
         } catch (IOException e) {
-            System.out.println("Coupon database not found");
-            return;
+            e.printStackTrace();
         }
-
-        double points = 0;
-
-        //TODO: implement point conversion algorithm
-
-        double newPoints = coupon.getOwner().getPoints() + points;
-        coupon.getOwner().setPoints(newPoints);
-        coupon.setExchanged(true);
+    }
+    public void delete(Coupon coupon) {
+        try {
+            jsonFileManager.deleteJSON(null, coupon.getCouponCode());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
