@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.io.IOUtils;
+
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
@@ -158,8 +160,8 @@ public class CRSJsonFileManager {
 	 * @return the JSON object
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public JSONObject searchJSON(String fileName) throws IOException {
-		File jsonFile = searhFile(fileName);
+	public JSONObject searchJSON(String fileName, File[] fileList) throws IOException {
+		File jsonFile = searchFile(fileName, null);
 		if (jsonFile.isDirectory()) {
 			System.out.println("JSON not Found! Return emmpty json");
 			return new JSONObject();
@@ -173,16 +175,25 @@ public class CRSJsonFileManager {
 	 * @param fileName the file name
 	 * @return the file
 	 */
-	public File searhFile(String fileName) {
+
+	public File searchFile(String fileName, File[] fileList) {
 		File rootDirectory = new File("Data");
-		List<File> fileList = Arrays.asList(rootDirectory.listFiles());
+		if(fileList == null) {
+			fileList = rootDirectory.listFiles();
+		} 
+		File returnFile = rootDirectory;
 		for (File file: fileList) {
-			if (file.getName().equals(fileName)) {
-				return file;
+			if (file.isDirectory()) {
+				returnFile = searchFile(fileName, file.listFiles());
+			} else if (file.getName().equals(fileName)) {
+				returnFile = file;
 			}
+			if (returnFile != rootDirectory) {
+				return returnFile;
+			} 
 		}
-		System.out.println("File not found! Return the root directory");
-		return rootDirectory;
+		System.out.println("File not found!");
+		return returnFile;
 	}
 	
 	/**
