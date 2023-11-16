@@ -23,7 +23,7 @@ public class IdGenerator {
 	public int getNextId(String idName) throws IOException {
 		CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
 		
-		File file = mgr.searhFile("SysNextId.json");
+		File file = mgr.searchFile("SysNextId.json", null);
 		
 		if (file == null) {
 			file = mgr.createJson("ID", "SysNextId");
