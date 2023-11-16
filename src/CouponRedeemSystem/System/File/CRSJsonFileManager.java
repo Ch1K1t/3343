@@ -59,7 +59,7 @@ public class CRSJsonFileManager {
 	 * @return the file
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	private File createJson(String dirName, String fileName) throws IOException {
+	public File createJson(String dirName, String fileName) throws IOException {
 		String pathStr = getDirectoryPath(dirName);
 		File dir = new File(pathStr);
 		if (!dir.exists()) {
@@ -181,16 +181,13 @@ public class CRSJsonFileManager {
 		if(fileList == null) {
 			fileList = rootDirectory.listFiles();
 		} 
-		File returnFile = rootDirectory;
+		File returnFile = null;
 		for (File file: fileList) {
 			if (file.isDirectory()) {
 				returnFile = searchFile(fileName, file.listFiles());
 			} else if (file.getName().equals(fileName)) {
 				returnFile = file;
 			}
-			if (returnFile != rootDirectory) {
-				return returnFile;
-			} 
 		}
 		System.out.println("File not found!");
 		return returnFile;
@@ -203,7 +200,7 @@ public class CRSJsonFileManager {
 	 * @return the JSON object
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	private JSONObject convertFileTextToJSON(File file) throws IOException {
+	public JSONObject convertFileTextToJSON(File file) throws IOException {
 		InputStream iStream = new FileInputStream(file);
 		String jsonText = IOUtils.toString(iStream);
 		return (JSONObject) JSONSerializer.toJSON(jsonText);
