@@ -37,29 +37,23 @@ public class PasswordManager {
 		return mgr.convertFileTextToJSON(file);
 	}
 	
-	public void createNewPassword(String userName, String password, int id) throws IOException {
+	public void createNewPassword(String userName, String password) throws IOException {
 		JSONObject jsonObject = getPasswordRefTable();
-		JSONObject userInfo = new JSONObject();
 		byte[] encryptedPassword = mgr.encryption(password);
-		userInfo.put(userName, encryptedPassword);
-		jsonObject.put(id, userInfo);
+		jsonObject.put(userName, encryptedPassword);
 		
 		CRSJsonFileManager.getInstance().modifyJSON("Password", "Referrence Table", jsonObject);
 	}
 	
 	public String checkPasswordValid(String userName, String password) throws IOException {
 		JSONObject jsonObject = getPasswordRefTable();
-		Set<String> keySet = jsonObject.keySet();
-		
-		for (String key: keySet) {
-			JSONObject passwordObject = (JSONObject) jsonObject.get(key);
-			byte[] textBeforeDecrypt = (byte[]) passwordObject.get(key);
-			String text = mgr.decryption(textBeforeDecrypt);
-			if (text.equals(password)) {
-				return key;
-			}
+		byte[] textBeforeEncrypt = (byte[]) jsonObject.get(userName);
+		String text = mgr.decryption(textBeforeEncrypt);
+		if (text.equals(password)) {
+			return userName;
+		} else {
+			System.out.println("Password is not found!");
+			return null;
 		}
-		System.out.println("Password is not found!");
-		return null;
 	}
 }
