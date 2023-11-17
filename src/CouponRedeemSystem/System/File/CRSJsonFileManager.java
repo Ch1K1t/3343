@@ -175,6 +175,9 @@ public class CRSJsonFileManager {
 	 * @param fileName the file name
 	 * @return the file
 	 */
+	public File searchFile(String fileName) {
+		return searchFile(fileName, null);
+	}
 
 	public File searchFile(String fileName, File[] fileList) {
 		File rootDirectory = new File("Data");

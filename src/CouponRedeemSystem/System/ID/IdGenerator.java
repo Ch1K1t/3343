@@ -20,6 +20,8 @@ public class IdGenerator {
 		return instance;
 	}
 	
+	public String getIdJsonPath() { return "ID\\SysNextIdd.json"; }
+	
 	public int getNextId(String idName) throws IOException {
 		CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
 		
