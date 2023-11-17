@@ -169,7 +169,11 @@ public class CRSJsonFileManager {
   
   public JSONObject searchJSON(String fileName, File[] fileList)
     throws IOException {
-    File jsonFile = searchFile(fileName, null);
+    File jsonFile = searchFile(fileName);
+    if (jsonFile == null) {
+    	System.out.println("File not found!");
+    	return new JSONObject();
+    }
     if (jsonFile.isDirectory()) {
       System.out.println("JSON not Found! Return emmpty json");
       return new JSONObject();
@@ -199,9 +203,9 @@ public class CRSJsonFileManager {
         returnFile = searchFile(fileName, file.listFiles());
       } else if (file.getName().equals(fileName)) {
         returnFile = file;
+        return returnFile;
       }
     }
-    System.out.println("File not found!");
     return returnFile;
   }
 

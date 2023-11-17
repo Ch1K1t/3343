@@ -1,6 +1,7 @@
 package CouponRedeemSystem.System.Password;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 import javax.crypto.*;
 
@@ -41,11 +42,11 @@ public class EncryptionManager {
 		}
 	}
 	
-	public byte[] encryption(String textToEncrypt) {
+	public String encryption(String textToEncrypt) {
 		try {
 			byte[] text = textToEncrypt.getBytes();
 			cipher.init(Cipher.ENCRYPT_MODE, key);
-			byte[] textEncrypted = cipher.doFinal(text);
+			String textEncrypted = Base64.getEncoder().encodeToString(cipher.doFinal(text));
 			
 			return textEncrypted;
 		} catch (Exception e) {
@@ -54,10 +55,10 @@ public class EncryptionManager {
 		}
 	}
 	
-	public String decryption(byte[] textToDecrypt) {
+	public String decryption(String textToDecrypt) {
 		try {
 			cipher.init(Cipher.DECRYPT_MODE, key);
-			byte[] textDecrypted = cipher.doFinal(textToDecrypt);
+			byte[] textDecrypted = cipher.doFinal(Base64.getDecoder().decode(textToDecrypt));
 			String result = new String(textDecrypted);
 			
 			return result;

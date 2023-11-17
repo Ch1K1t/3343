@@ -39,7 +39,7 @@ public class PasswordManager {
 	
 	public void createNewPassword(String userName, String password) throws IOException {
 		JSONObject jsonObject = getPasswordRefTable();
-		byte[] encryptedPassword = mgr.encryption(password);
+		String encryptedPassword = mgr.encryption(password);
 		jsonObject.put(userName, encryptedPassword);
 		
 		CRSJsonFileManager.getInstance().modifyJSON("Password", "Referrence Table", jsonObject);
@@ -47,7 +47,7 @@ public class PasswordManager {
 	
 	public String checkPasswordValid(String userName, String password) throws IOException {
 		JSONObject jsonObject = getPasswordRefTable();
-		byte[] textBeforeEncrypt = (byte[]) jsonObject.get(userName);
+		String textBeforeEncrypt = (String) jsonObject.get(userName);
 		String text = mgr.decryption(textBeforeEncrypt);
 		if (text.equals(password)) {
 			return userName;
