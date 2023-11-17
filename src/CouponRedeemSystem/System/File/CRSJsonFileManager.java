@@ -164,15 +164,15 @@ public class CRSJsonFileManager {
    * @throws IOException Signals that an I/O exception has occurred.
    */
   public JSONObject searchJSON(String fileName) throws IOException {
-	  return searchJSON(fileName, null);
+    return searchJSON(fileName, null);
   }
-  
+
   public JSONObject searchJSON(String fileName, File[] fileList)
     throws IOException {
     File jsonFile = searchFile(fileName);
     if (jsonFile == null) {
-    	System.out.println("File not found!");
-    	return new JSONObject();
+      System.out.println("File not found!");
+      return new JSONObject();
     }
     if (jsonFile.isDirectory()) {
       System.out.println("JSON not Found! Return empty json");
