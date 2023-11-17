@@ -1,11 +1,11 @@
 package CouponRedeemSystem.Page;
 
 import CouponRedeemSystem.Page.model.Page;
-import java.util.Scanner;
 
-public class HomePage implements Page {
+public class HomePage extends Page {
 
   public static void getInstruction() {
+    System.out.println();
     System.out.println("Please input the command e.g. !signin:");
     System.out.println("1. Signin");
     System.out.println("2. Signup");
@@ -13,10 +13,7 @@ public class HomePage implements Page {
     System.out.println();
   }
 
-  @Override
   public void execute() {
-    Scanner s = new Scanner(System.in);
-
     System.out.println("Welcome to Coupon Redeem System");
     String cmd;
     do {
@@ -25,20 +22,18 @@ public class HomePage implements Page {
 
       switch (cmd) {
         case "!signin":
-          System.out.println("Signin");
+          new SigninPage().execute();
           break;
         case "!signup":
-          System.out.println("Signup");
+          new SignupPage().execute();
           break;
         case "!exit":
-          System.out.println("Exit");
+          exit();
           break;
         default:
           System.out.println("Unknown command");
           break;
       }
-    } while (!cmd.equals("!exit"));
-
-    s.close();
+    } while (true);
   }
 }
