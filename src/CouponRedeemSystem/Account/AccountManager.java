@@ -3,7 +3,7 @@ package CouponRedeemSystem.Account;
 import java.util.ArrayList;
 import java.util.List;
 
-import CouponRedeemSystem.Account.model.Account;
+import Account.model.Account;
 
 public class AccountManager {
 	private AccountManager instance;
