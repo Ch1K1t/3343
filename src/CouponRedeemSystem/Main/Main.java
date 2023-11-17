@@ -1,27 +1,22 @@
 package CouponRedeemSystem.Main;
+
+import CouponRedeemSystem.Account.model.Account;
+import CouponRedeemSystem.Coupon.CouponManager;
+import CouponRedeemSystem.Coupon.model.NormalCoupon;
 import CouponRedeemSystem.Page.HomePage;
-import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import net.sf.json.JSONObject;
-
 import java.io.IOException;
-import java.util.HashMap;
-
-import org.apache.commons.beanutils.LazyDynaBean;
+import java.text.ParseException;
+import java.util.Date;
 
 public class Main {
+
   public static void main(String[] args) throws IOException {
-	CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
-	LazyDynaBean bean = new LazyDynaBean();
-	bean.set("Tony", "Good");
-	bean.set("Number", 1);
-	bean.set("3343", false);
-	mgr.modifyJSON("Test01", "Bean Test", bean);
-	System.out.print(bean.toString());
-	
-	JSONObject jsonObject = new JSONObject();
-	jsonObject.put("Apple user", "Hendry");
-	JSONObject feature = new JSONObject();
-	feature.putAll(new HashMap<>());
+    CouponManager manager = CouponManager.getInstance();
+    try {
+      manager.create(new NormalCoupon(1230, null, new Date(), "17897", new Account(0, 0, 0, "1987-04-09", null, null)));
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
     new HomePage().execute();
   }
 }
