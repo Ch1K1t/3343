@@ -1,9 +1,7 @@
 package CouponRedeemSystem.Main;
 
-import java.io.IOException;
-
 import CouponRedeemSystem.Page.HomePage;
-import CouponRedeemSystem.System.Password.PasswordManager;
+import java.io.IOException;
 
 public class Main {
 
