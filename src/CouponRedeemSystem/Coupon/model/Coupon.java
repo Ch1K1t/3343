@@ -3,15 +3,18 @@ package CouponRedeemSystem.Coupon.model;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import java.time.Duration;
-import java.time.LocalDateTime;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public abstract class Coupon {
 
   double intrinsicValue;
   Shop shop;
-  LocalDateTime expirationDate;
+  Date expirationDate;
   boolean active;
   String couponCode;
   Account owner;
@@ -19,7 +22,7 @@ public abstract class Coupon {
   public Coupon(
     double intrinsicValue,
     Shop shop,
-    LocalDateTime expirationDate,
+    Date expirationDate,
     String couponCode,
     Account owner
   ) {
@@ -39,26 +42,32 @@ public abstract class Coupon {
   public static void couponToPoints(Coupon coupon) {
     CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
 
-    LocalDateTime currentDate = LocalDateTime.now();
+    Date currentDate = new Date();
 
     if (!coupon.isActive()) return;
-    if (coupon.getExpirationDate().isAfter(currentDate)) return;
+    if (coupon.getExpirationDate().compareTo(currentDate) <= 0) return;
     boolean exist =
       jsonFileManager.searchFile(coupon.getCouponCode(), null) == null;
     if (!exist) return;
 
-    double points = coupon.pointConversion();
+    double points;
+    try {
+      points = coupon.pointConversion();
+      double newPoints = coupon.getOwner().getPoints() + points;
+      coupon.getOwner().setPoints(newPoints);
+      coupon.setActive(false);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
 
-    double newPoints = coupon.getOwner().getPoints() + points;
-    coupon.getOwner().setPoints(newPoints);
-    coupon.setActive(false);
   }
 
-  public double pointConversion() {
-    LocalDateTime currentDate = LocalDateTime.now();
-    long daysBeforeExpire = Duration
-      .between(currentDate, this.getExpirationDate())
-      .toDays();
+  public double pointConversion() throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+    Date currentDate = sdf.parse(new Date().toString());
+    Date expire = sdf.parse(expirationDate.toString());
+
+    long daysBeforeExpire = Math.abs(expire.getTime() - currentDate.getTime());
     // (Coupon Value + (Days to Expiration * Weight)) * Conversion Rate
     // Remarks: conversion rate refers to the amount of points rewarded per dollar
     // 1 -> 1 point per dollar
@@ -82,11 +91,11 @@ public abstract class Coupon {
     this.shop = shop;
   }
 
-  public LocalDateTime getExpirationDate() {
+  public Date getExpirationDate() {
     return expirationDate;
   }
 
-  public void setExpirationDate(LocalDateTime expirationDate) {
+  public void setExpirationDate(Date expirationDate) {
     this.expirationDate = expirationDate;
   }
 
