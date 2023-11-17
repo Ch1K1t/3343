@@ -1,31 +1,30 @@
 package CouponRedeemSystem.Shop.model;
+import java.Util.Date;
 
 public class Shop {
     int shopId;
+    String shopName;
     ArrayList<String> approvedCouponId; //check Id when transact to validate the coupons
 
 
-    public Shop(int shopId) {
+    public Shop(int shopId, String shopName) {
+        super();
+        this.shopId = shopName;
         this.shopId = shopId;
         this.approvedCouponId = new ArrayList<>();
     }
 
-    /*public void newApprovedCoupon(String couponCode) {
-        approvedCouponId.add(couponCode);
-    }
-    */
-
     //TODO: Transaction
 
     //TODO: check validity of coupons
-    public boolean validate(String couponCode, LocalDateTime expirationDate) {
+    public boolean validate(String couponCode, Date expirationDate) {
         boolean valid = false;
-        LocalDateTime currentDate = LocalDateTime.now();
+        Date currentDate = new Date();
         for (String id :approvedCouponId) {
             if (id == couponCode) 
                 break;
         }
-        return !valid && expirationDate < currentDate;
+        return !valid && expirationDate.before(currentDate);
     }
 
     //TODO: create Coupons own by shops
@@ -35,5 +34,8 @@ public class Shop {
         approvedCouponId.add(coupon.getCouponCode);
     }
 
+    public String getShopId() {return shopId;}
+
+    public ArrayList<String> getApprovedCouponId() {return approvedCouponId;}
     
 }
