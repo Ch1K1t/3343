@@ -15,7 +15,6 @@ public class Main {
 	bean.set("Tony", "Good");
 	bean.set("Number", 1);
 	bean.set("3343", false);
-	mgr.modifyJSON("Test01", "Bean Test", bean);
 	System.out.print(bean.toString());
 	
 	JSONObject jsonObject = new JSONObject();
