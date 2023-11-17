@@ -22,6 +22,13 @@
 	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/ezmorph-1.0.6.jar"/>
 	<classpathentry kind="lib" path="lib/json-lib-2.4-jdk15.jar"/>
-	
+
+	<classpathentry kind="lib" path="X:/workspace/Eclipse/Git/_3343/lib/commons-beanutils-1.9.4.jar"/>
+	<classpathentry kind="lib" path="X:/workspace/Eclipse/Git/_3343/lib/commons-collections-3.2.2.jar"/>
+	<classpathentry kind="lib" path="X:/workspace/Eclipse/Git/_3343/lib/commons-io-2.14.0.jar"/>
+	<classpathentry kind="lib" path="X:/workspace/Eclipse/Git/_3343/lib/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="X:/workspace/Eclipse/Git/_3343/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="X:/workspace/Eclipse/Git/_3343/lib/ezmorph-1.0.6.jar"/>
+	<classpathentry kind="lib" path="X:/workspace/Eclipse/Git/_3343/lib/json-lib-2.4-jdk15.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
