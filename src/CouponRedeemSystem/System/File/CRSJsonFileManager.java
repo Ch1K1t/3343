@@ -43,7 +43,7 @@ public class CRSJsonFileManager {
    * @return the directory path
    */
   private String getDirectoryPath(String dirName) {
-    return "Data\\" + dirName;
+    return "Data/" + dirName;
   }
 
   /**
@@ -60,7 +60,7 @@ public class CRSJsonFileManager {
     if (!dir.exists()) {
       dir.mkdir();
     }
-    File file = new File(pathStr + "\\" + fileName + ".json");
+    File file = new File(pathStr + "/" + fileName + ".json");
     if (!file.exists()) {
       file.createNewFile();
     }
