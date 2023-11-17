@@ -26,7 +26,7 @@ public class CouponManager {
         bean.set("code", coupon.getCouponCode());
         bean.set("value", coupon.getIntrinsicValue());
         bean.set("expiration_date", coupon.getExpirationDate());
-        bean.set("owner", coupon.getOwner().getUserId());
+        bean.set("owner", coupon.getOwner().getUserName());
         bean.set("shop", coupon.getShop());
         try {
             jsonFileManager.modifyJSON(null, coupon.getCouponCode(), bean);

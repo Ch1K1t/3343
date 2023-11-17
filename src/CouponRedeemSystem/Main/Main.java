@@ -10,6 +10,7 @@ import org.apache.commons.beanutils.LazyDynaBean;
 
 public class Main {
   public static void main(String[] args) throws IOException {
+
 	CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
 	LazyDynaBean bean = new LazyDynaBean();
 	bean.set("Tony", "Good");
@@ -22,6 +23,8 @@ public class Main {
 	jsonObject.put("Apple user", "Hendry");
 	JSONObject feature = new JSONObject();
 	feature.putAll(new HashMap<>());
-    new HomePage().execute();
+	
+	boolean isLogin = true;
+	new HomePage().execute();
   }
 }

@@ -9,72 +9,45 @@ import java.util.List;
 import CouponRedeemSystem.Coupon.model.Coupon;
 
 public class Account {
-	int userId;
-	int age;
-	int telNo;
+	String userName;
 	double points;
 	Date dateOfBirth;
-	String userName;
-	String address;
-	List<Coupon> coupons;
+	List<Coupon> userOwnsCoupon;
 	
-	public Account(int userId, int age, int telNo, String dateOfBirth, String userName, String address) throws ParseException {
-		this.userId = userId;
-		this.age = age;
-		this.telNo = telNo;
+	public Account(String userName,String dateOfBirth) throws ParseException {
+		this.userName = userName;
 		this.points = 0;
 		this.dateOfBirth = new SimpleDateFormat("yyyy-MM-dd").parse(dateOfBirth);
-		this.userName = userName;
-		this.address = address;
-		coupons = new ArrayList<Coupon>();
+		userOwnsCoupon = new ArrayList<Coupon>();
 	}
 
-	public int getUserId() {
-		return userId;
-	}
+
 	public String getUserName() {
 		return userName;
 	}
 	public int getAge() {
-		return age;
-	}
-	public int getTelNo() {
-		return telNo;
+		return 18;
 	}
 	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}
-	public String getAddress() {
-		return address;
-	}
 	public List<Coupon> getCoupons() {
-		return coupons;
+		return userOwnsCoupon;
 	}
 	public double getPoints() {
 		return points;
 	}
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-	public void setAge(int age) {
-		this.age = age;
-	}
-	public void setTelNo(int telNo) {
-		this.telNo = telNo;
 	}
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 	public void setCoupons(List<Coupon> coupons) {
-		this.coupons = coupons;
-	}
-	public void setAddress(String address) {
-		this.address = address;
+		this.userOwnsCoupon = coupons;
 	}
 	public void setPoints(double score) {
 		this.points = score;
 	}
+	
 }
