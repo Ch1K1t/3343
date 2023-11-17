@@ -1,10 +1,16 @@
 package CouponRedeemSystem.Shop;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import org.apache.commons.beanutils.LazyDynaBean;
+import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.File.CRSJsonFileManager;
+
 public class ShopManager {
     ArrayList<Shop> shops; //better use unordered map?
     int noOfShops = 0;
     public static ShopManager instance;
-    private CRSJsonFileManager jsonFileManager = new CRSJsonFileManager.getInstance();
+    private CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
 
     private ShopManager() {}
 
@@ -34,10 +40,10 @@ public class ShopManager {
         }
     }
 
-    public void createShop(string shopName) {
+    public void createShop(String shopName) {
         Shop shop = new Shop(Integer.toString(noOfShops), shopName);
         noOfShops++;
         shops.add(shop);
-        
     } 
+
 }

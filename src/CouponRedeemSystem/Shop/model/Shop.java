@@ -1,15 +1,22 @@
 package CouponRedeemSystem.Shop.model;
-import java.Util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Scanner;
+
+import CouponRedeemSystem.Coupon.model.Coupon;
+import CouponRedeemSystem.Coupon.model.NormalCoupon;
 
 public class Shop {
-    int shopId;
+    String shopId;
     String shopName;
     ArrayList<String> approvedCouponId; //check Id when transact to validate the coupons
 
 
-    public Shop(int shopId, String shopName) {
+    public Shop(String shopId, String shopName) {
         super();
-        this.shopId = shopName;
+        this.shopName = shopName;
         this.shopId = shopId;
         this.approvedCouponId = new ArrayList<>();
     }
@@ -19,7 +26,7 @@ public class Shop {
     //TODO: check validity of coupons
     public boolean validate(String couponCode, Date expirationDate) {
         boolean valid = false;
-        Date currentDate = new Date();
+        java.util.Date currentDate = new Date();
         for (String id :approvedCouponId) {
             if (id == couponCode) 
                 break;
@@ -28,14 +35,43 @@ public class Shop {
     }
 
     //
-    public void createCoupon() {
-        Coupon coupon = new Coupon(intrinsicValue, null, expirationDate, couponCode, null); //create a new Coupon without owner
-        coupon.setShop(self);
-        approvedCouponId.add(coupon.getCouponCode);
+    public void createCoupon(double intrinsicValue, Date expirationDate, String couponCode) throws ParseException {
+        while (isBeforeCurrentDate(expirationDate)) {
+            expirationDate = getNewDate();
+        }
+        while (intrinsicValue < 0) {
+            intrinsicValue = getNewIntrinsicValue();
+        }
+        Coupon coupon = new NormalCoupon(intrinsicValue, null, expirationDate, couponCode); //create a new Coupon without owner
+        coupon.setShop(this);
+        approvedCouponId.add(coupon.getCouponCode());
+    }
+    
+    public Date getNewDate() throws ParseException {
+        Scanner s = new Scanner(System.in);
+        System.out.println("Date inputted must be after today, please try again.");
+        System.out.println("Please input the date in yyyy-MM-dd format.");
+        String date = s.nextLine();
+        Date dateObject = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        s.close();
+        return dateObject;
+    }
+    
+    private double getNewIntrinsicValue() { //is this manual inputted?
+        Scanner s = new Scanner(System.in);
+        System.out.println("Intrinsic value inputted must be after today, please try again.");
+        System.out.println("Please input the date in yyyy-MM-dd format.");
+        Double value = s.nextDouble();
+        s.close();
+        return value;
+    }
+    
+    private boolean isBeforeCurrentDate(Date expirationDate) {
+        Date currentDate = new Date();
+        return currentDate.before(expirationDate);
     }
 
     public String getShopId() {return shopId;}
-
-    public ArrayList<String> getApprovedCouponId() {return approvedCouponId;}
     
+    public ArrayList<String> getApprovedCouponId() {return approvedCouponId;}
 }
