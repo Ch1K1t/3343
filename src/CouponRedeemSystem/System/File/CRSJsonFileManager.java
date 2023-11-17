@@ -167,14 +167,14 @@ public class CRSJsonFileManager {
     throws IOException {
     File jsonFile = searchFile(fileName, null);
     if (jsonFile.isDirectory()) {
-      System.out.println("JSON not Found! Return emmpty json");
+      System.out.println("JSON not Found! Return empty json");
       return new JSONObject();
     }
     return convertFileTextToJSON(jsonFile);
   }
 
   /**
-   * Searh file.
+   * Search file.
    *
    * @param fileName the file name
    * @return the file

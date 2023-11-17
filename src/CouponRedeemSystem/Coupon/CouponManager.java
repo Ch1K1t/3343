@@ -24,11 +24,11 @@ public class CouponManager {
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("code", coupon.getCouponCode());
     bean.set("value", coupon.getIntrinsicValue());
-    bean.set("expiration_date", coupon.getExpirationDate());
-    bean.set("owner", coupon.getOwner().getUserId());
+    bean.set("expiration_date", coupon.getExpirationDate().toString());
+    bean.set("owner", null);
     bean.set("shop", coupon.getShop());
     try {
-      jsonFileManager.modifyJSON(null, coupon.getCouponCode(), bean);
+      jsonFileManager.modifyJSON("Coupon", coupon.getCouponCode(), bean);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -36,7 +36,7 @@ public class CouponManager {
 
   public void delete(Coupon coupon) {
     try {
-      jsonFileManager.deleteJSON(null, coupon.getCouponCode());
+      jsonFileManager.deleteJSON("Coupon", coupon.getCouponCode());
     } catch (IOException e) {
       e.printStackTrace();
     }

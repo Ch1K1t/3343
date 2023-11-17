@@ -14,8 +14,10 @@ public class SigninPage extends Page {
 
     if (username.equals("user") && password.equals("user")) {
       new UserPage().execute();
-    } else if (username.equals("admin") && password.equals("admin")) {
-      // new AdminPage().execute();
+    } else if (
+      username.equals("couponManager") && password.equals("couponManager")
+    ) {
+      new CouponManagerPage().execute();
     } else {
       System.out.println("Invalid username or password");
     }
