@@ -2,7 +2,7 @@ package CouponRedeemSystem.Shop.model;
 
 public class Shop {
     int shopId;
-    ArrayList<Coupon> approvedCouponId; //check Id when transact to validate the coupons
+    ArrayList<String> approvedCouponId; //check Id when transact to validate the coupons
 
 
     public Shop(int shopId) {
@@ -10,9 +10,10 @@ public class Shop {
         this.approvedCouponId = new ArrayList<>();
     }
 
-    public void newApprovedCoupon(String couponCode) {
+    /*public void newApprovedCoupon(String couponCode) {
         approvedCouponId.add(couponCode);
     }
+    */
 
     //TODO: Transaction
 
@@ -31,7 +32,7 @@ public class Shop {
     public void createCoupon() {
         Coupon coupon = new Coupon(intrinsicValue, null, expirationDate, couponCode, null); //create a new Coupon without owner
         coupon.setShop(self);
-        approvedCouponId.add(coupon);
+        approvedCouponId.add(coupon.getCouponCode);
     }
 
     
