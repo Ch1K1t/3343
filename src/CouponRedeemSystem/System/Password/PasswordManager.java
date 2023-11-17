@@ -32,7 +32,7 @@ public class PasswordManager {
 		return mgr.convertFileTextToJSON(file);
 	}
 	
-	public void createNewAccount(String userName, String password, int id) throws IOException {
+	public void createNewPassword(String userName, String password, int id) throws IOException {
 		JSONObject jsonObject = getPasswordRefTable();
 		JSONObject userInfo = new JSONObject();
 	}
