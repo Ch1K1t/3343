@@ -2,14 +2,14 @@ package CouponRedeemSystem.Coupon.model;
 
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Shop.model.Shop;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class NormalCoupon extends Coupon {
 
   public NormalCoupon(
     double intrinsicValue,
     Shop shop,
-    LocalDateTime expirationDate,
+    Date expirationDate,
     String couponCode,
     Account owner
   ) {
