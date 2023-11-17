@@ -4,7 +4,7 @@ import CouponRedeemSystem.Page.model.Page;
 
 public class HomePage extends Page {
 
-  public static void getInstruction() {
+  public void getInstruction() {
     System.out.println();
     System.out.println("Please input the command e.g. !signin:");
     System.out.println("1. Signin");
