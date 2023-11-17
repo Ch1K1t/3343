@@ -29,7 +29,8 @@ public class Shop {
 
     //TODO: create Coupons own by shops
     public void createCoupon() {
-        Coupon coupon = new Coupon(); //create Coupon
+        Coupon coupon = new Coupon(intrinsicValue, null, expirationDate, couponCode, null); //create a new Coupon without owner
+        coupon.setShop(self);
         approvedCouponId.add(coupon);
     }
 
