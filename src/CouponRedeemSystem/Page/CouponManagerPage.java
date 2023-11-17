@@ -20,7 +20,7 @@ public class CouponManagerPage extends Page {
     System.out.println();
   }
 
-  public Coupon getCoupon() {
+  public Coupon createCoupon() {
     System.out.println("Please input the coupon's intrinsic value:");
 
     String value;
@@ -52,6 +52,13 @@ public class CouponManagerPage extends Page {
     return coupon;
   }
 
+  public Coupon searchCoupon() {
+    System.out.println("Please input the coupon's code:");
+    String couponCode = s.nextLine();
+    Coupon coupon = null;
+    return coupon;
+  }
+
   public void execute() {
     String cmd;
     CouponManager couponManager = CouponManager.getInstance();
@@ -62,7 +69,7 @@ public class CouponManagerPage extends Page {
 
       switch (cmd) {
         case "!createcoupon":
-          Coupon coupon = getCoupon();
+          Coupon coupon = createCoupon();
           couponManager.create(coupon);
           break;
         case "!deletecoupon":
