@@ -36,7 +36,7 @@ public class CouponManager {
     }
     public void delete(Coupon coupon) {
         try {
-            jsonFileManager.deleteJSON(null, coupon.getCouponCode());
+            jsonFileManager.deleteJSON("Coupon", coupon.getCouponCode());
         } catch (IOException e) {
             e.printStackTrace();
         }

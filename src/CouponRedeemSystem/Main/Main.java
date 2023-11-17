@@ -12,11 +12,7 @@ public class Main {
 
   public static void main(String[] args) throws IOException {
     CouponManager manager = CouponManager.getInstance();
-    try {
-      manager.create(new NormalCoupon(1230, null, new Date(), "17897", new Account(0, 0, 0, "1987-04-09", null, null)));
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
+    manager.create(new NormalCoupon(1230, null, new Date(), "17897"));
     new HomePage().execute();
   }
 }
