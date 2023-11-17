@@ -29,7 +29,7 @@ public class CouponManager {
         bean.set("owner", coupon.getOwner().getUserId());
         bean.set("shop", coupon.getShop());
         try {
-            jsonFileManager.modifyJSON(null, coupon.getCouponCode(), bean);
+            jsonFileManager.modifyJSON("Coupon", coupon.getCouponCode(), bean);
         } catch (IOException e) {
             e.printStackTrace();
         }
