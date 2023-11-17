@@ -1,7 +1,6 @@
 package CouponRedeemSystem.Page;
 
 import CouponRedeemSystem.Page.model.Page;
-import java.util.Scanner;
 
 public class SigninPage extends Page {
 
