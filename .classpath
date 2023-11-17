@@ -15,7 +15,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/lang-2.5"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/collections3.2.2"/>
 	
-  	<classpathentry kind="lib" path="lib/commons-beanutils-1.9.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils-1.9.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.14.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
