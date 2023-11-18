@@ -34,7 +34,7 @@ public class AccountManager {
         return instance;
     }
 
-    public void create(Account account) {
+    public void createAccInfo(Account account) {
         LazyDynaBean bean = new LazyDynaBean();
         bean.set("userName", account.getUserName());
         bean.set("role", account.getRole());
@@ -46,6 +46,24 @@ public class AccountManager {
 
         try {
             jsonFileManager.modifyJSON("Account", account.getUserName(), bean);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+       public void createAccInfo(String userName, String role, int age, int telNo, String dob) throws ParseException {
+        Account acc = new Account(userName, role, age, telNo, dob);
+        LazyDynaBean bean = new LazyDynaBean();
+        bean.set("userName", acc.getUserName());
+        bean.set("role", acc.getRole());
+        bean.set("age", acc.getAge());
+        bean.set("telNo", acc.getTelNo());
+        bean.set("points", acc.getPoints());
+        bean.set("dateOfBirth", acc.getDateOfBirth());
+        bean.set("couponIDs", acc.getCouponIDs());
+
+        try {
+            jsonFileManager.modifyJSON("Account", userName, bean);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,7 +84,7 @@ public class AccountManager {
         delete(account);
 
         // Save the updated account details
-        create(account);
+        createAccInfo(account);
     }
     
     public Account getAccount(String userName) throws IOException, ParseException {
