@@ -5,8 +5,11 @@ import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Coupon.model.NormalCoupon;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.File.CRSJsonFileManager;
+import java.io.IOException;
 import java.util.Date;
 import java.util.regex.Pattern;
+import net.sf.json.JSONObject;
 
 public class CouponManagerPage extends Page {
 
@@ -53,10 +56,18 @@ public class CouponManagerPage extends Page {
     return coupon;
   }
 
-  public Coupon searchCoupon() {
+  public Coupon searchCoupon() throws IOException {
     System.out.println("Please input the coupon's code:");
     String couponCode = s.nextLine();
+
     Coupon coupon = null;
+    // NormalCoupon coupon = new NormalCoupon(
+    //   intrinsicValue,
+    //   shop,
+    //   expirationDate,
+    //   couponCode,
+    //   true
+    // );
     return coupon;
   }
 
