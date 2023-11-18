@@ -1,6 +1,7 @@
 package CouponRedeemSystem.Coupon.model;
 
 import CouponRedeemSystem.Account.model.Account;
+import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import net.sf.json.JSONObject;
@@ -41,18 +42,23 @@ public abstract class Coupon {
     this.point = 100;
   }
 
-  public static void couponToPoints(Coupon coupon) {
-    Date currentDate = new Date();
-
-    if (!coupon.isActive()) return;
-    if (coupon.getExpirationDate().compareTo(currentDate) <= 0) return;
-
-    double points;
+  public static void couponToPoints(String couponCode) {
+    CouponManager couponManager = CouponManager.getInstance();
     try {
+      Coupon coupon = couponManager.getCoupon(couponCode, "Redeemable");
+      if (coupon == null) return;
+      Date currentDate = new Date();
+
+      if (!coupon.isActive()) return;
+      if (coupon.getExpirationDate().compareTo(currentDate) <= 0) return;
+  
+      double points;
       points = coupon.pointConversion();
       double newPoints = coupon.getOwner().getPoints() + points;
       coupon.getOwner().setPoints(newPoints);
       coupon.setActive(false);
+    } catch (IOException e) {
+      e.printStackTrace();
     } catch (ParseException e) {
       e.printStackTrace();
     }
@@ -61,17 +67,17 @@ public abstract class Coupon {
   public static void pointsToCoupon(Account user, String couponCode) throws IOException, ParseException {
     CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
     JSONObject json = jsonFileManager.searchJSON(couponCode, null);
-    if (json == new JSONObject()) return;
+    if (json == null) return;
 
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
     Date expire = sdf.parse(json.get("expiration_date").toString());
 
-    Coupon coupon = new NormalCoupon(
-      Double.parseDouble(json.get("value").toString()), 
+    Coupon coupon = new RedeemableCoupon(
+      json.getDouble("value"),
       null, 
       expire, 
       couponCode, 
-      Boolean.parseBoolean(json.get("active").toString())
+      json.getBoolean("active")
     );
     if (!coupon.isActive()) return;
 
@@ -92,7 +98,7 @@ public abstract class Coupon {
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("owner", coupon.getOwner().getUserName());
     try {
-        jsonFileManager.modifyJSON("Coupon", coupon.getCouponCode(), bean);
+        jsonFileManager.modifyJSON("Coupon/Purchasable", coupon.getCouponCode(), bean);
     } catch (IOException e) {
         e.printStackTrace();
     }

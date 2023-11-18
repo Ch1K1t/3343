@@ -172,7 +172,7 @@ public class CRSJsonFileManager {
     File jsonFile = searchFile(fileName);
     if (jsonFile == null || jsonFile.isDirectory()) {
       System.out.println("File not found! Return empty json");
-      return new JSONObject();
+      return null;
     }
     return convertFileTextToJSON(jsonFile);
   }
