@@ -6,6 +6,7 @@ import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
@@ -64,4 +65,31 @@ public class AccountManager {
         create(account);
     }
     
+    public Account getAccount(String userName) throws IOException, ParseException {
+        // Search for the JSON file
+        JSONObject accountJson = JsonFileManager.searchJSON(userName + ".json", null);
+
+        // Extract account details from JSON and return the Account object
+        if (!accountJson.isEmpty()) {
+            return extractAccountFromJson(accountJson);
+        }
+
+        // Return null if the account was not found
+        return null;
+    }
+
+    private Account extractAccountFromJson(JSONObject accountJson) throws ParseException {
+        String userName = accountJson.getString("userName");
+        int age = accountJson.getInt("age");
+        int telNo = accountJson.getInt("telNo");
+        double points = accountJson.getDouble("points");
+        String dateOfBirth = accountJson.getString("dateOfBirth");
+        JSONArray couponIDsArray = accountJson.getJSONArray("couponIDs");
+        List<String> couponIDs = new ArrayList<>();
+        for (int i = 0; i < couponIDsArray.size(); i++) {
+            couponIDs.add(couponIDsArray.getString(i));
+        }
+
+        return new Account(userName, age, telNo, points, dateOfBirth, couponIDs);
+    }
 }

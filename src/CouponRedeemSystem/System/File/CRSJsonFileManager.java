@@ -22,7 +22,8 @@ public class CRSJsonFileManager {
   /**
    * Instantiates a new CRS json file manager.
    */
-  private CRSJsonFileManager() {}
+  private CRSJsonFileManager() {
+  }
 
   /**
    * Gets the single instance of CRSJsonFileManager.
@@ -49,7 +50,7 @@ public class CRSJsonFileManager {
   /**
    * Creates New File.
    *
-   * @param dirName the dir name
+   * @param dirName  the dir name
    * @param fileName the file name
    * @return the file
    * @throws IOException Signals that an I/O exception has occurred.
@@ -70,26 +71,26 @@ public class CRSJsonFileManager {
   /**
    * Modify JSON by DynaBean.
    *
-   * @param dirName the dir name
+   * @param dirName  the dir name
    * @param fileName the file name
-   * @param content the content
+   * @param content  the content
    * @throws IOException Signals that an I/O exception has occurred.
    */
   public void modifyJSON(String dirName, String fileName, DynaBean content)
-    throws IOException {
+      throws IOException {
     modifyJSON(dirName, fileName, JSONObject.fromObject(content));
   }
 
   /**
    * Modify JSON by JSONObject.
    *
-   * @param dirName the dir name
+   * @param dirName  the dir name
    * @param fileName the file name
-   * @param content the content
+   * @param content  the content
    * @throws IOException Signals that an I/O exception has occurred.
    */
   public void modifyJSON(String dirName, String fileName, JSONObject content)
-    throws IOException {
+      throws IOException {
     File file = createJson(dirName, fileName);
     FileWriter fileWriter = new FileWriter(file);
     System.out.println(content.toString());
@@ -101,18 +102,17 @@ public class CRSJsonFileManager {
   /**
    * Safe modify JSON by key.
    *
-   * @param dirName the dir name
+   * @param dirName  the dir name
    * @param fileName the file name
-   * @param key the key
-   * @param obj the obj
+   * @param key      the key
+   * @param obj      the obj
    * @throws IOException Signals that an I/O exception has occurred.
    */
   public void safeModifyJSONByKey(
-    String dirName,
-    String fileName,
-    String key,
-    Object obj
-  ) throws IOException {
+      String dirName,
+      String fileName,
+      String key,
+      Object obj) throws IOException {
     File file = createJson(dirName, fileName);
     JSONObject jsonObject = convertFileTextToJSON(file);
     if (jsonObject.containsKey(key)) {
@@ -125,7 +125,7 @@ public class CRSJsonFileManager {
   /**
    * Delete JSON.
    *
-   * @param dirName the dir name
+   * @param dirName  the dir name
    * @param fileName the file name
    * @throws IOException Signals that an I/O exception has occurred.
    */
@@ -139,13 +139,13 @@ public class CRSJsonFileManager {
   /**
    * Removes the element.
    *
-   * @param dirName the dir name
+   * @param dirName  the dir name
    * @param fileName the file name
-   * @param key the key
+   * @param key      the key
    * @throws IOException Signals that an I/O exception has occurred.
    */
   public void removeElement(String dirName, String fileName, String key)
-    throws IOException {
+      throws IOException {
     File file = createJson(dirName, fileName);
     JSONObject jsonObject = convertFileTextToJSON(file);
     if (jsonObject.containsKey(key)) {
@@ -168,7 +168,7 @@ public class CRSJsonFileManager {
   }
 
   public JSONObject searchJSON(String fileName, File[] fileList)
-    throws IOException {
+      throws IOException {
     File jsonFile = searchFile(fileName);
     if (jsonFile == null || jsonFile.isDirectory()) {
       System.out.println("File not found! Return empty json");
@@ -184,26 +184,32 @@ public class CRSJsonFileManager {
    * @return the file
    */
 
-  public File searchFile(String fileName) {
-    return searchFile(fileName, null);
-  }
+   public File searchFile(String fileName, File directory) {
+    if (directory == null || !directory.isDirectory()) {
+        return null;
+    }
 
-  public File searchFile(String fileName, File[] fileList) {
+    File[] fileList = directory.listFiles();
+    if (fileList != null) {
+        for (File file : fileList) {
+            if (file.isDirectory()) {
+                File result = searchFile(fileName, file);
+                if (result != null) {
+                    return result;
+                }
+            } else if (file.getName().equals(fileName)) {
+                return file;
+            }
+        }
+    }
+
+    return null;
+}
+
+public File searchFile(String fileName) {
     File rootDirectory = new File("Data");
-    if (fileList == null) {
-      fileList = rootDirectory.listFiles();
-    }
-    File returnFile = null;
-    for (File file : fileList) {
-      if (file.isDirectory()) {
-        returnFile = searchFile(fileName, file.listFiles());
-      } else if (file.getName().equals(fileName)) {
-        returnFile = file;
-        return returnFile;
-      }
-    }
-    return returnFile;
-  }
+    return searchFile(fileName, rootDirectory);
+}
 
   /**
    * Convert file text to JSON.
