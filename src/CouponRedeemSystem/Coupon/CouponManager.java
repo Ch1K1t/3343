@@ -1,21 +1,15 @@
 package CouponRedeemSystem.Coupon;
 
-import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Coupon.model.PurchasableCoupon;
 import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-
+import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.LazyDynaBean;
 
 public class CouponManager {
@@ -43,7 +37,11 @@ public class CouponManager {
     bean.set("shop", coupon.getShop());
     bean.set("active", coupon.isActive());
     try {
-      jsonFileManager.modifyJSON("Coupon/" + type, coupon.getCouponCode(), bean);
+      jsonFileManager.modifyJSON(
+        "Coupon/" + type,
+        coupon.getCouponCode(),
+        bean
+      );
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -57,30 +55,47 @@ public class CouponManager {
     }
   }
 
-  public Coupon getCoupon(String couponCode, String type) throws IOException, ParseException {
+  public Coupon getCoupon(String couponCode, String type)
+    throws IOException, ParseException {
     // Search for the JSON file
-    JSONObject couponJson = JsonFileManager.searchJSON(couponCode + ".json", null);
+    JSONObject couponJson = JsonFileManager.searchJSON(
+      couponCode + ".json",
+      null
+    );
 
     // Extract coupon details from JSON and return the Account object
     if (!couponJson.isEmpty()) {
-        return extractCouponFromJson(couponJson, type);
+      return extractCouponFromJson(couponJson, type);
     }
 
     // Return null if the coupon was not found
     return null;
   }
 
-  private Coupon extractCouponFromJson(JSONObject couponJson, String type) throws ParseException {
+  private Coupon extractCouponFromJson(JSONObject couponJson, String type)
+    throws ParseException {
     double value = couponJson.getDouble("value");
     boolean active = couponJson.getBoolean("active");
     String couponCode = couponJson.getString("code");
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
     Date expirationDate = sdf.parse(couponJson.getString("expiration_date"));
     switch (type) {
-      case "Redeemable": 
-        return new RedeemableCoupon(value, null, expirationDate, couponCode, active);
-      case "Purchasable": 
-        return new PurchasableCoupon(value, null, expirationDate, couponCode, active);
+      case "Redeemable":
+        return new RedeemableCoupon(
+          value,
+          null,
+          expirationDate,
+          couponCode,
+          active
+        );
+      case "Purchasable":
+        return new PurchasableCoupon(
+          value,
+          null,
+          expirationDate,
+          couponCode,
+          active
+        );
     }
     return null;
   }
