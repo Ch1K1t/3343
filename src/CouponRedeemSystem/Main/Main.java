@@ -3,9 +3,6 @@ package CouponRedeemSystem.Main;
 import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Page.HomePage;
-import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import net.sf.json.JSONObject;
-
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -26,7 +23,5 @@ public class Main {
     testUser.deleteCouponID("testCoupon");
     AccountManager.getInstance().update(testUser);
     */
-    Account testUser2 = AccountManager.getInstance().getAccount("tony");
-    System.out.println(testUser2.getUserName() + testUser2.getTelNo()); 
-  }
+    }
 }

@@ -2,7 +2,9 @@ package CouponRedeemSystem.Account;
 
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.model.Coupon;
+import CouponRedeemSystem.Role.model.Role;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
+import CouponRedeemSystem.System.Password.PasswordManager;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -19,7 +21,8 @@ import org.apache.commons.beanutils.LazyDynaBean;
 public class AccountManager {
 
     private static AccountManager instance;
-    CRSJsonFileManager JsonFileManager = CRSJsonFileManager.getInstance();
+    CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
+    PasswordManager passwordManager = PasswordManager.getInstance();
 
     private AccountManager() {
     }
@@ -34,6 +37,7 @@ public class AccountManager {
     public void create(Account account) {
         LazyDynaBean bean = new LazyDynaBean();
         bean.set("userName", account.getUserName());
+        bean.set("role", account.getRole());
         bean.set("age", account.getAge());
         bean.set("telNo", account.getTelNo());
         bean.set("points", account.getPoints());
@@ -41,7 +45,7 @@ public class AccountManager {
         bean.set("couponIDs", account.getCouponIDs());
 
         try {
-            JsonFileManager.modifyJSON("Account", account.getUserName(), bean);
+            jsonFileManager.modifyJSON("Account", account.getUserName(), bean);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -50,7 +54,7 @@ public class AccountManager {
     // Delete existing account
     public void delete(Account account) {
         try {
-            JsonFileManager.deleteJSON("Account", account.getUserName());
+            jsonFileManager.deleteJSON("Account", account.getUserName());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,7 +71,7 @@ public class AccountManager {
     
     public Account getAccount(String userName) throws IOException, ParseException {
         // Search for the JSON file
-        JSONObject accountJson = JsonFileManager.searchJSON(userName + ".json", null);
+        JSONObject accountJson = jsonFileManager.searchJSON(userName + ".json", null);
 
         // Extract account details from JSON and return the Account object
         if (!accountJson.isEmpty()) {
@@ -80,6 +84,7 @@ public class AccountManager {
 
     private Account extractAccountFromJson(JSONObject accountJson) throws ParseException {
         String userName = accountJson.getString("userName");
+        String role = accountJson.getString("role");
         int age = accountJson.getInt("age");
         int telNo = accountJson.getInt("telNo");
         double points = accountJson.getDouble("points");
@@ -90,6 +95,10 @@ public class AccountManager {
             couponIDs.add(couponIDsArray.getString(i));
         }
 
-        return new Account(userName, age, telNo, points, dateOfBirth, couponIDs);
+        return new Account(userName, role, age, telNo, points, dateOfBirth, couponIDs);
+    }
+
+    public void createAccount(String userName, String Password) throws IOException{
+        passwordManager.createNewPassword(userName, Password);
     }
 }
