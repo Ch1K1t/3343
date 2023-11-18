@@ -46,7 +46,8 @@ public class CouponManagerPage extends Page {
       intrinsicValue,
       shop,
       expirationDate,
-      couponCode
+      couponCode,
+      true
     );
 
     return coupon;
