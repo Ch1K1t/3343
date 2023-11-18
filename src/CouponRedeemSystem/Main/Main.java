@@ -1,14 +1,16 @@
 package CouponRedeemSystem.Main;
 
+import CouponRedeemSystem.Account.AccountManager;
+import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Page.CouponManagerPage;
+import CouponRedeemSystem.Page.HomePage;
 import java.io.IOException;
 import java.text.ParseException;
 
 public class Main {
 
   public static void main(String[] args) throws IOException, ParseException {
-    //new HomePage().execute();
-    new CouponManagerPage().execute();
+    new HomePage().execute();
     // Account testUser = new Account("hendry", 20, 213,"2003-01-01");
     // AccountManager.getInstance().create(testUser);
     // testUser.addPoints(1000);
