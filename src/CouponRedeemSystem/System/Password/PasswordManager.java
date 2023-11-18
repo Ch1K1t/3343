@@ -48,7 +48,9 @@ public class PasswordManager {
 	public String checkPasswordValid(String userName, String password) throws IOException {
 		JSONObject jsonObject = getPasswordRefTable();
 		String textBeforeEncrypt = (String) jsonObject.get(userName);
+		System.out.println(textBeforeEncrypt);
 		String text = mgr.decryption(textBeforeEncrypt);
+		System.out.println(text);
 		if (text.equals(password)) {
 			return userName;
 		} else {
