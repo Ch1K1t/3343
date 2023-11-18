@@ -16,13 +16,11 @@ public class Account {
   List<String> couponIDs;
 
   public Account(
-	String userName,
-    int age,
-    int telNo,
-    String dateOfBirth,
-	List<String> coupons
-  ) throws ParseException {
-	this.userName = userName;
+      String userName,
+      int age,
+      int telNo,
+      String dateOfBirth) throws ParseException {
+    this.userName = userName;
     this.age = age;
     this.telNo = telNo;
     this.points = 0;
@@ -31,17 +29,21 @@ public class Account {
   }
 
   public Account(
-	String userName,
-    int age,
-    int telNo,
-	double points,
-    String dateOfBirth,
-	List<String> coupons
-  ) throws ParseException {
-	return;
+      String userName,
+      int age,
+      int telNo,
+      double points,
+      String dateOfBirth,
+      List<String> coupons) throws ParseException {
+    this.userName = userName;
+    this.age = age;
+    this.telNo = telNo;
+    this.points = points;
+    this.dateOfBirth = new SimpleDateFormat("yyyy-MM-dd").parse(dateOfBirth);
+    couponIDs = new ArrayList<String>();
   }
 
-public String getUserName() {
+  public String getUserName() {
     return userName;
   }
 
@@ -87,5 +89,26 @@ public String getUserName() {
 
   public void setPoints(double score) {
     this.points = score;
+  }
+
+  public void addCouponID(String couponID) {
+    couponIDs.add(couponID);
+  }
+
+  public void deleteCouponID(String couponID) {
+    couponIDs.remove(couponID);
+  }
+
+  public void addPoints(double pointsToAdd) {
+    this.points += pointsToAdd;
+  }
+
+  public void deductPoints(double pointsToDeduct) {
+    if (pointsToDeduct > this.points) {
+      // Handle insufficient points scenario (throw an exception, log a message, etc.)
+      System.out.println("Insufficient points to deduct.");
+    } else {
+      this.points -= pointsToDeduct;
+    }
   }
 }

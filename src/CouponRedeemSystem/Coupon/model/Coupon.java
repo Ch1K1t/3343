@@ -80,7 +80,7 @@ public abstract class Coupon {
     // String[] newCouponList = new String[user.getCoupons().length + 1];
     // System.arraycopy(user.getCoupons(), 0, newCouponList, 0, user.getCoupons().length);
     // newCouponList[newCouponList.length - 1] = newCoupon;
-    
+    /* 
     // Add coupons to user's coupons history
     List<Coupon> coupons = coupon.getOwner().getCoupons();
     coupons.add(coupon);
@@ -93,6 +93,7 @@ public abstract class Coupon {
     } catch (IOException e) {
         e.printStackTrace();
     }
+    */
   }
 
   public double pointConversion() throws ParseException {
