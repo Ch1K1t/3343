@@ -40,10 +40,13 @@ public class ShopManager {
         }
     }
 
-    public void createShop(String shopName) {
+    public Shop createShop(String shopName) {
         Shop shop = new Shop(Integer.toString(noOfShops), shopName);
         noOfShops++;
         shops.add(shop);
-    } 
+        return shop;
+    }
 
+    //TODO: load shops from json?
+    
 }
