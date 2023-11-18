@@ -5,11 +5,9 @@ import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Coupon.model.PurchasableCoupon;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.model.Shop;
-import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.io.IOException;
 import java.util.Date;
 import java.util.regex.Pattern;
-import net.sf.json.JSONObject;
 
 public class CouponManagerPage extends Page {
 
