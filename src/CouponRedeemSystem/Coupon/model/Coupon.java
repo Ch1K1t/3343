@@ -4,15 +4,13 @@ import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import net.sf.json.JSONObject;
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
+import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.LazyDynaBean;
 
 public abstract class Coupon {
@@ -51,7 +49,7 @@ public abstract class Coupon {
 
       if (!coupon.isActive()) return;
       if (coupon.getExpirationDate().compareTo(currentDate) <= 0) return;
-  
+
       double points;
       points = coupon.pointConversion();
       double newPoints = coupon.getOwner().getPoints() + points;
@@ -64,7 +62,8 @@ public abstract class Coupon {
     }
   }
 
-  public static void pointsToCoupon(Account user, String couponCode) throws IOException, ParseException {
+  public static void pointsToCoupon(Account user, String couponCode)
+    throws IOException, ParseException {
     CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
     JSONObject json = jsonFileManager.searchJSON(couponCode, null);
     if (json == null) return;
@@ -74,9 +73,9 @@ public abstract class Coupon {
 
     Coupon coupon = new RedeemableCoupon(
       json.getDouble("value"),
-      null, 
-      expire, 
-      couponCode, 
+      null,
+      expire,
+      couponCode,
       json.getBoolean("active")
     );
     if (!coupon.isActive()) return;
@@ -89,7 +88,7 @@ public abstract class Coupon {
     coupon.setOwner(user);
     user.setPoints(user.getPoints() - coupon.point);
     coupon.setActive(false);
-    
+
     // Add coupons to user's coupons history
     List<String> coupons = coupon.getOwner().getCouponIDs();
     coupons.add(coupon.getCouponCode());
@@ -98,9 +97,13 @@ public abstract class Coupon {
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("owner", coupon.getOwner().getUserName());
     try {
-        jsonFileManager.modifyJSON("Coupon/Purchasable", coupon.getCouponCode(), bean);
+      jsonFileManager.modifyJSON(
+        "Coupon/Purchasable",
+        coupon.getCouponCode(),
+        bean
+      );
     } catch (IOException e) {
-        e.printStackTrace();
+      e.printStackTrace();
     }
   }
 

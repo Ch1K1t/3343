@@ -29,10 +29,16 @@ public class CouponManager {
   }
 
   // Create json record
-  public void create(String couponCode, String value, Date expirationDate, Shop shop, String type) {
+  public void create(
+    String couponCode,
+    double value,
+    Date expirationDate,
+    Shop shop,
+    String type
+  ) {
     JSONObject json;
     try {
-      json = jsonFileManager.searchJSON(couponCode, null);
+      json = jsonFileManager.searchJSON(couponCode + ".json");
       if (json != null) return;
     } catch (IOException e) {
       e.printStackTrace();
@@ -52,9 +58,12 @@ public class CouponManager {
     }
   }
 
-  public void delete(String couponCode, String type) {
+  public void delete(String couponCode) {
     try {
-      jsonFileManager.deleteJSON("Coupon/" + type, couponCode);
+      JSONObject jsonObject = jsonFileManager.searchJSON(couponCode + ".json");
+      if (jsonObject == null) return;
+      String type = jsonObject.getString("type");
+      jsonFileManager.deleteJSON("Coupon/" + type, couponCode + ".json");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -63,31 +72,41 @@ public class CouponManager {
   public Coupon getCoupon(String couponCode, String type)
     throws IOException, ParseException {
     // Search for the JSON file
-    JSONObject couponJson = JsonFileManager.searchJSON(
-      couponCode + ".json",
-      null
-    );
+    JSONObject couponJson = JsonFileManager.searchJSON(couponCode + ".json");
 
     // Extract coupon details from JSON and return the Account object
     if (!couponJson.isEmpty()) {
-        return extractCouponFromJson(couponJson);
+      return extractCouponFromJson(couponJson);
     }
 
     // Return null if the coupon was not found
     return null;
   }
 
-  private Coupon extractCouponFromJson(JSONObject couponJson) throws ParseException {
+  private Coupon extractCouponFromJson(JSONObject couponJson)
+    throws ParseException {
     double value = couponJson.getDouble("value");
     boolean active = couponJson.getBoolean("active");
     String couponCode = couponJson.getString("code");
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
     Date expirationDate = sdf.parse(couponJson.getString("expiration_date"));
     switch (couponJson.getString("type")) {
-      case "Redeemable": 
-        return new RedeemableCoupon(value, null, expirationDate, couponCode, active);
-      case "Purchasable": 
-        return new PurchasableCoupon(value, null, expirationDate, couponCode, active);
+      case "Redeemable":
+        return new RedeemableCoupon(
+          value,
+          null,
+          expirationDate,
+          couponCode,
+          active
+        );
+      case "Purchasable":
+        return new PurchasableCoupon(
+          value,
+          null,
+          expirationDate,
+          couponCode,
+          active
+        );
     }
     return null;
   }

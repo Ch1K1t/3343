@@ -26,40 +26,46 @@ public class AccountManager {
     return instance;
   }
 
-    public void createAccInfo(Account account) {
-        LazyDynaBean bean = new LazyDynaBean();
-        bean.set("userName", account.getUserName());
-        bean.set("role", account.getRole());
-        bean.set("age", account.getAge());
-        bean.set("telNo", account.getTelNo());
-        bean.set("points", account.getPoints());
-        bean.set("dateOfBirth", account.getDateOfBirth().toString());
-        bean.set("couponIDs", account.getCouponIDs());
+  public void createAccInfo(Account account) {
+    LazyDynaBean bean = new LazyDynaBean();
+    bean.set("userName", account.getUserName());
+    bean.set("role", account.getRole());
+    bean.set("age", account.getAge());
+    bean.set("telNo", account.getTelNo());
+    bean.set("points", account.getPoints());
+    bean.set("dateOfBirth", account.getDateOfBirth().toString());
+    bean.set("couponIDs", account.getCouponIDs());
 
-        try {
-            jsonFileManager.modifyJSON("Account", account.getUserName(), bean);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    try {
+      jsonFileManager.modifyJSON("Account", account.getUserName(), bean);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+  }
 
-       public void createAccInfo(String userName, String role, int age, int telNo, String dob) throws ParseException {
-        Account account = new Account(userName, role, age, telNo, dob);
-        LazyDynaBean bean = new LazyDynaBean();
-        bean.set("userName", account.getUserName());
-        bean.set("role", account.getRole());
-        bean.set("age", account.getAge());
-        bean.set("telNo", account.getTelNo());
-        bean.set("points", account.getPoints());
-        bean.set("dateOfBirth", account.getDateOfBirth());
-        bean.set("couponIDs", account.getCouponIDs());
+  public void createAccInfo(
+    String userName,
+    String role,
+    int age,
+    int telNo,
+    String dob
+  ) throws ParseException {
+    Account account = new Account(userName, role, age, telNo, dob);
+    LazyDynaBean bean = new LazyDynaBean();
+    bean.set("userName", account.getUserName());
+    bean.set("role", account.getRole());
+    bean.set("age", account.getAge());
+    bean.set("telNo", account.getTelNo());
+    bean.set("points", account.getPoints());
+    bean.set("dateOfBirth", account.getDateOfBirth());
+    bean.set("couponIDs", account.getCouponIDs());
 
-        try {
-            jsonFileManager.modifyJSON("Account", userName, bean);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    try {
+      jsonFileManager.modifyJSON("Account", userName, bean);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+  }
 
   // Delete existing account
   public void delete(Account account) {
@@ -75,13 +81,17 @@ public class AccountManager {
     // Delete the original JSON file
     delete(account);
 
-        // Save the updated account details
-        createAccInfo(account);
-    }
-    
-    public Account getAccount(String userName) throws IOException, ParseException {
-        // Search for the JSON file
-        JSONObject accountJson = jsonFileManager.searchJSON(userName + ".json", null);
+    // Save the updated account details
+    createAccInfo(account);
+  }
+
+  public Account getAccount(String userName)
+    throws IOException, ParseException {
+    // Search for the JSON file
+    JSONObject accountJson = jsonFileManager.searchJSON(
+      userName + ".json",
+      null
+    );
 
     // Extract account details from JSON and return the Account object
     if (!accountJson.isEmpty()) {
