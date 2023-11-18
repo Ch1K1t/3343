@@ -64,10 +64,7 @@ public class AccountManager {
   public Account getAccount(String userName)
     throws IOException, ParseException {
     // Search for the JSON file
-    JSONObject accountJson = jsonFileManager.searchJSON(
-      userName + ".json",
-      null
-    );
+    JSONObject accountJson = jsonFileManager.searchJSON(userName + ".json");
 
     // Extract account details from JSON and return the Account object
     if (!accountJson.isEmpty()) {

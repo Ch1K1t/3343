@@ -1,8 +1,5 @@
 package CouponRedeemSystem.Main;
 
-import CouponRedeemSystem.Account.AccountManager;
-import CouponRedeemSystem.Account.model.Account;
-import CouponRedeemSystem.Page.CouponManagerPage;
 import CouponRedeemSystem.Page.HomePage;
 import java.io.IOException;
 import java.text.ParseException;
