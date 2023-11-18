@@ -11,6 +11,6 @@ import net.sf.json.JSONObject;
 public class Main {
 
   public static void main(String[] args) throws IOException, ParseException {
-     
+     System.out.println("bruh bruh");
   }
 }
