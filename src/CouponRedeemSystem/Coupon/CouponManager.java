@@ -3,6 +3,7 @@ package CouponRedeemSystem.Coupon;
 import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Coupon.model.PurchasableCoupon;
 import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
+import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.io.IOException;
 import java.text.ParseException;
@@ -28,20 +29,16 @@ public class CouponManager {
   }
 
   // Create json record
-  public void create(Coupon coupon, String type) {
+  public void create(String couponCode, String value, Date expirationDate, Shop shop, String type) {
     LazyDynaBean bean = new LazyDynaBean();
-    bean.set("code", coupon.getCouponCode());
-    bean.set("value", coupon.getIntrinsicValue());
-    bean.set("expiration_date", coupon.getExpirationDate().toString());
+    bean.set("code", couponCode);
+    bean.set("value", value);
+    bean.set("expiration_date", expirationDate.toString());
     bean.set("owner", null);
-    bean.set("shop", coupon.getShop());
-    bean.set("active", coupon.isActive());
+    bean.set("shop", shop);
+    bean.set("active", true);
     try {
-      jsonFileManager.modifyJSON(
-        "Coupon/" + type,
-        coupon.getCouponCode(),
-        bean
-      );
+      jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
     } catch (IOException e) {
       e.printStackTrace();
     }
