@@ -39,7 +39,7 @@ public class Account {
     this.age = age;
     this.telNo = telNo;
     this.points = points;
-    this.dateOfBirth = new SimpleDateFormat("yyyy-MM-dd").parse(dateOfBirth);
+    this.dateOfBirth = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(dateOfBirth);
     couponIDs = new ArrayList<String>();
   }
 
