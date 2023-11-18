@@ -2,7 +2,7 @@ package CouponRedeemSystem.Page;
 
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Coupon.model.Coupon;
-import CouponRedeemSystem.Coupon.model.NormalCoupon;
+import CouponRedeemSystem.Coupon.model.PurchasableCoupon;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
@@ -15,15 +15,16 @@ public class CouponManagerPage extends Page {
 
   public void getInstruction() {
     System.out.println();
-    System.out.println("Please input the command e.g. !CreateCoupon:");
-    System.out.println("1. CreateCoupon");
-    System.out.println("2. DeleteCoupon");
-    System.out.println("2. Signout");
-    System.out.println("4. Exit");
+    System.out.println("Please input the command e.g. !CreatePurchasableCoupon:");
+    System.out.println("1. CreatePurchasableCoupon");
+    System.out.println("2. CreateRedeemableCoupon");
+    System.out.println("3. DeleteCoupon");
+    System.out.println("4. Signout");
+    System.out.println("5. Exit");
     System.out.println();
   }
 
-  public Coupon createCoupon() {
+  public void createCoupon(String type) {
     System.out.println("Please input the coupon's intrinsic value:");
 
     String value;
@@ -45,7 +46,7 @@ public class CouponManagerPage extends Page {
     System.out.println("Please input the coupon's code:");
     String couponCode = s.nextLine();
 
-    NormalCoupon coupon = new NormalCoupon(
+    PurchasableCoupon coupon = new PurchasableCoupon(
       intrinsicValue,
       shop,
       expirationDate,
@@ -53,7 +54,8 @@ public class CouponManagerPage extends Page {
       true
     );
 
-    return coupon;
+    CouponManager couponManager = CouponManager.getInstance();
+    couponManager.create(coupon, type);
   }
 
   public Coupon searchCoupon() throws IOException {
@@ -73,16 +75,17 @@ public class CouponManagerPage extends Page {
 
   public void execute() {
     String cmd;
-    CouponManager couponManager = CouponManager.getInstance();
 
     do {
       getInstruction();
       cmd = s.nextLine().toLowerCase();
 
       switch (cmd) {
-        case "!createcoupon":
-          Coupon coupon = createCoupon();
-          couponManager.create(coupon);
+        case "!CreatePurchasableCoupon":
+          createCoupon("Purchasable");
+          break;
+        case "!CreateRedeemableCoupon":
+          createCoupon("Redeemable");
           break;
         case "!deletecoupon":
           System.out.println("Coupon deleted");

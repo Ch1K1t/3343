@@ -3,9 +3,9 @@ package CouponRedeemSystem.Coupon.model;
 import CouponRedeemSystem.Shop.model.Shop;
 import java.util.Date;
 
-public class NormalCoupon extends Coupon {
+public class PurchasableCoupon extends Coupon {
 
-  public NormalCoupon(
+  public PurchasableCoupon(
     double intrinsicValue,
     Shop shop,
     Date expirationDate,
