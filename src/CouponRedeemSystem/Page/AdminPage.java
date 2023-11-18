@@ -90,8 +90,7 @@ public class AdminPage extends Page {
     String couponCode = s.nextLine();
 
     CouponManager couponManager = CouponManager.getInstance();
-    couponManager.delete(couponCode, "Purchasable");
-    couponManager.delete(couponCode, "Redeemable");
+    couponManager.delete(couponCode);
 
     System.out.println("Coupon deleted");
   }

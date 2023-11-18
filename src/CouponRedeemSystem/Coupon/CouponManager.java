@@ -31,14 +31,14 @@ public class CouponManager {
   // Create json record
   public void create(
     String couponCode,
-    String value,
+    double value,
     Date expirationDate,
     Shop shop,
     String type
   ) {
     JSONObject json;
     try {
-      json = jsonFileManager.searchJSON(couponCode);
+      json = jsonFileManager.searchJSON(couponCode + ".json");
       if (json != null) return;
     } catch (IOException e) {
       e.printStackTrace();
@@ -58,9 +58,12 @@ public class CouponManager {
     }
   }
 
-  public void delete(String couponCode, String type) {
+  public void delete(String couponCode) {
     try {
-      jsonFileManager.deleteJSON("Coupon/" + type, couponCode);
+      JSONObject jsonObject = jsonFileManager.searchJSON(couponCode + ".json");
+      if (jsonObject == null) return;
+      String type = jsonObject.getString("type");
+      jsonFileManager.deleteJSON("Coupon/" + type, couponCode + ".json");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -69,10 +72,7 @@ public class CouponManager {
   public Coupon getCoupon(String couponCode, String type)
     throws IOException, ParseException {
     // Search for the JSON file
-    JSONObject couponJson = JsonFileManager.searchJSON(
-      couponCode + ".json",
-      null
-    );
+    JSONObject couponJson = JsonFileManager.searchJSON(couponCode + ".json");
 
     // Extract coupon details from JSON and return the Account object
     if (!couponJson.isEmpty()) {
