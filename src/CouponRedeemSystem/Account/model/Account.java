@@ -1,6 +1,8 @@
 package CouponRedeemSystem.Account.model;
 
 import CouponRedeemSystem.Coupon.model.Coupon;
+import CouponRedeemSystem.Role.model.Role;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.List;
 
 public class Account {
   String userName;
+  String role;
   int age;
   int telNo;
   double points;
@@ -17,10 +20,12 @@ public class Account {
 
   public Account(
       String userName,
+      String role,
       int age,
       int telNo,
       String dateOfBirth) throws ParseException {
     this.userName = userName;
+    this.role = role;
     this.age = age;
     this.telNo = telNo;
     this.points = 0;
@@ -30,12 +35,14 @@ public class Account {
 
   public Account(
       String userName,
+      String role,
       int age,
       int telNo,
       double points,
       String dateOfBirth,
       List<String> coupons) throws ParseException {
     this.userName = userName;
+    this.role = role;
     this.age = age;
     this.telNo = telNo;
     this.points = points;
@@ -45,6 +52,10 @@ public class Account {
 
   public String getUserName() {
     return userName;
+  }
+
+  public String getRole(){
+    return role;
   }
 
   public int getAge() {
@@ -69,6 +80,10 @@ public class Account {
 
   public void setUserName(String userName) {
     this.userName = userName;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
   }
 
   public void setAge(int age) {
