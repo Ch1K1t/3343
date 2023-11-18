@@ -163,18 +163,26 @@ public class CRSJsonFileManager {
    * @return the JSON object
    * @throws IOException Signals that an I/O exception has occurred.
    */
+  public JSONObject searchJSON(String fileName) throws IOException {
+    return searchJSON(fileName, null);
+  }
+
   public JSONObject searchJSON(String fileName, File[] fileList)
     throws IOException {
-    File jsonFile = searchFile(fileName, null);
+    File jsonFile = searchFile(fileName);
+    if (jsonFile == null) {
+      System.out.println("File not found!");
+      return new JSONObject();
+    }
     if (jsonFile.isDirectory()) {
-      System.out.println("JSON not Found! Return emmpty json");
+      System.out.println("JSON not Found! Return empty json");
       return new JSONObject();
     }
     return convertFileTextToJSON(jsonFile);
   }
 
   /**
-   * Searh file.
+   * Search file.
    *
    * @param fileName the file name
    * @return the file
@@ -195,9 +203,9 @@ public class CRSJsonFileManager {
         returnFile = searchFile(fileName, file.listFiles());
       } else if (file.getName().equals(fileName)) {
         returnFile = file;
+        return returnFile;
       }
     }
-    System.out.println("File not found!");
     return returnFile;
   }
 
