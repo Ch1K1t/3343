@@ -43,6 +43,24 @@ public class AccountManager {
         }
     }
 
+       public void createAccInfo(String userName, String role, int age, int telNo, String dob) throws ParseException {
+        Account account = new Account(userName, role, age, telNo, dob);
+        LazyDynaBean bean = new LazyDynaBean();
+        bean.set("userName", account.getUserName());
+        bean.set("role", account.getRole());
+        bean.set("age", account.getAge());
+        bean.set("telNo", account.getTelNo());
+        bean.set("points", account.getPoints());
+        bean.set("dateOfBirth", account.getDateOfBirth());
+        bean.set("couponIDs", account.getCouponIDs());
+
+        try {
+            jsonFileManager.modifyJSON("Account", userName, bean);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
   // Delete existing account
   public void delete(Account account) {
     try {
