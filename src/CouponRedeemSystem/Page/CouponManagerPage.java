@@ -52,7 +52,7 @@ public class CouponManagerPage extends Page {
     );
 
     CouponManager couponManager = CouponManager.getInstance();
-    couponManager.create(coupon, type);
+    // couponManager.create(coupon, type);
   }
 
   public Coupon searchCoupon() {
