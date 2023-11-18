@@ -9,9 +9,9 @@ import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Coupon.model.NormalCoupon;
 
 public class Shop {
-    String shopId;
-    String shopName;
-    ArrayList<String> approvedCouponId; //check Id when transact to validate the coupons
+    private String shopId;
+    private String shopName;
+    private ArrayList<String> approvedCouponId; //check Id when transact to validate the coupons
 
 
     public Shop(String shopId, String shopName) {
@@ -74,4 +74,6 @@ public class Shop {
     public String getShopId() {return shopId;}
     
     public ArrayList<String> getApprovedCouponId() {return approvedCouponId;}
+
+    public String getShopName() {return shopName;}
 }
