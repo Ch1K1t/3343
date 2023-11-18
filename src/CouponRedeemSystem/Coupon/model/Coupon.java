@@ -85,12 +85,12 @@ public abstract class Coupon {
     coupon.setActive(false);
     
     // Add coupons to user's coupons history
-    List<Coupon> coupons = coupon.getOwner().getCoupons();
-    coupons.add(coupon);
+    List<String> coupons = coupon.getOwner().getCouponIDs();
+    coupons.add(coupon.getCouponCode());
     coupon.getOwner().setCoupons(coupons);
     // Modify coupon owner
     LazyDynaBean bean = new LazyDynaBean();
-    bean.set("owner", coupon.getOwner().getUserId());
+    bean.set("owner", coupon.getOwner().getUserName());
     try {
         jsonFileManager.modifyJSON("Coupon", coupon.getCouponCode(), bean);
     } catch (IOException e) {

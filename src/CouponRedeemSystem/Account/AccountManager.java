@@ -65,15 +65,12 @@ public class AccountManager {
     }
 
 	// Load account details from JSON file
-	private Account loadAccountDetailsFromFolder(String UserName) {
-		try {
-			JSONObject accountJson = JsonFileManager.searchJSON("Data/Account/"+UserName, null);
-			if (!accountJson.isEmpty()) {
-				return extractAccountFromJson(accountJson);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private Account loadAccountDetailsFromFolder(String UserName) throws IOException {
+		JSONObject accountJson = JsonFileManager.searchJSON("Data/Account/"+UserName, null);
+        if (!accountJson.isEmpty()) {
+            return extractAccountFromJson(accountJson);
+        }
+        return null;
 	}
 
 	// Extract the JSON to an Account object
