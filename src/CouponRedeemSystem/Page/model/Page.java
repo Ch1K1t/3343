@@ -13,6 +13,9 @@ public abstract class Page {
   }
 
   public void exit() {
+    System.out.println("Thank you for using Coupon Redeem System");
+    System.out.println("Goodbye");
+    System.out.println();
     s.close();
     System.exit(0);
   }

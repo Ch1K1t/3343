@@ -29,7 +29,13 @@ public class CouponManager {
   }
 
   // Create json record
-  public void create(String couponCode, String value, Date expirationDate, Shop shop, String type) {
+  public void create(
+    String couponCode,
+    Double value,
+    Date expirationDate,
+    Shop shop,
+    String type
+  ) {
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("code", couponCode);
     bean.set("value", value);
