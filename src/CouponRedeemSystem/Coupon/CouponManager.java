@@ -31,11 +31,18 @@ public class CouponManager {
   // Create json record
   public void create(
     String couponCode,
-    Double value,
+    String value,
     Date expirationDate,
     Shop shop,
     String type
   ) {
+    JSONObject json;
+    try {
+      json = jsonFileManager.searchJSON(couponCode);
+      if (json != null) return;
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("code", couponCode);
     bean.set("value", value);
@@ -43,6 +50,7 @@ public class CouponManager {
     bean.set("owner", null);
     bean.set("shop", shop);
     bean.set("active", true);
+    bean.set("type", type);
     try {
       jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
     } catch (IOException e) {
@@ -68,21 +76,21 @@ public class CouponManager {
 
     // Extract coupon details from JSON and return the Account object
     if (!couponJson.isEmpty()) {
-      return extractCouponFromJson(couponJson, type);
+      return extractCouponFromJson(couponJson);
     }
 
     // Return null if the coupon was not found
     return null;
   }
 
-  private Coupon extractCouponFromJson(JSONObject couponJson, String type)
+  private Coupon extractCouponFromJson(JSONObject couponJson)
     throws ParseException {
     double value = couponJson.getDouble("value");
     boolean active = couponJson.getBoolean("active");
     String couponCode = couponJson.getString("code");
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
     Date expirationDate = sdf.parse(couponJson.getString("expiration_date"));
-    switch (type) {
+    switch (couponJson.getString("type")) {
       case "Redeemable":
         return new RedeemableCoupon(
           value,
