@@ -30,7 +30,7 @@ public class Account {
     this.telNo = telNo;
     this.points = 0;
     this.dateOfBirth = new SimpleDateFormat("yyyy-MM-dd").parse(dateOfBirth);
-    couponIDs = new ArrayList<String>();
+    this.couponIDs = new ArrayList<String>();
   }
 
   public Account(
@@ -47,7 +47,7 @@ public class Account {
     this.telNo = telNo;
     this.points = points;
     this.dateOfBirth = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(dateOfBirth);
-    couponIDs = new ArrayList<String>();
+    this.couponIDs = new ArrayList<String>();
   }
 
   public String getUserName() {
