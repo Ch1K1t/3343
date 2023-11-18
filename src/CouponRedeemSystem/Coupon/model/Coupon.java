@@ -96,6 +96,7 @@ public abstract class Coupon {
     } catch (IOException e) {
         e.printStackTrace();
     }
+    */
   }
 
   public double pointConversion() throws ParseException {
