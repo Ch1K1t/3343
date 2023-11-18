@@ -8,36 +8,39 @@ import java.util.Date;
 import java.util.List;
 
 public class Account {
-
-  int userId;
+  String userName;
   int age;
   int telNo;
   double points;
   Date dateOfBirth;
-  String userName;
-  String address;
-  List<Coupon> coupons;
+  List<String> couponIDs;
 
   public Account(
-    int userId,
-    int age,
-    int telNo,
-    String dateOfBirth,
-    String userName,
-    String address
-  ) throws ParseException {
-    this.userId = userId;
+      String userName,
+      int age,
+      int telNo,
+      String dateOfBirth) throws ParseException {
+    this.userName = userName;
     this.age = age;
     this.telNo = telNo;
     this.points = 0;
     this.dateOfBirth = new SimpleDateFormat("yyyy-MM-dd").parse(dateOfBirth);
-    this.userName = userName;
-    this.address = address;
-    coupons = new ArrayList<Coupon>();
+    couponIDs = new ArrayList<String>();
   }
 
-  public int getUserId() {
-    return userId;
+  public Account(
+      String userName,
+      int age,
+      int telNo,
+      double points,
+      String dateOfBirth,
+      List<String> coupons) throws ParseException {
+    this.userName = userName;
+    this.age = age;
+    this.telNo = telNo;
+    this.points = points;
+    this.dateOfBirth = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(dateOfBirth);
+    couponIDs = new ArrayList<String>();
   }
 
   public String getUserName() {
@@ -56,20 +59,12 @@ public class Account {
     return dateOfBirth;
   }
 
-  public String getAddress() {
-    return address;
-  }
-
-  public List<Coupon> getCoupons() {
-    return coupons;
+  public List<String> getCouponIDs() {
+    return couponIDs;
   }
 
   public double getPoints() {
     return points;
-  }
-
-  public void setUserId(int userId) {
-    this.userId = userId;
   }
 
   public void setUserName(String userName) {
@@ -88,15 +83,32 @@ public class Account {
     this.dateOfBirth = dateOfBirth;
   }
 
-  public void setCoupons(List<Coupon> coupons) {
-    this.coupons = coupons;
-  }
-
-  public void setAddress(String address) {
-    this.address = address;
+  public void setCoupons(List<String> coupons) {
+    this.couponIDs = coupons;
   }
 
   public void setPoints(double score) {
     this.points = score;
+  }
+
+  public void addCouponID(String couponID) {
+    couponIDs.add(couponID);
+  }
+
+  public void deleteCouponID(String couponID) {
+    couponIDs.remove(couponID);
+  }
+
+  public void addPoints(double pointsToAdd) {
+    this.points += pointsToAdd;
+  }
+
+  public void deductPoints(double pointsToDeduct) {
+    if (pointsToDeduct > this.points) {
+      // Handle insufficient points scenario (throw an exception, log a message, etc.)
+      System.out.println("Insufficient points to deduct.");
+    } else {
+      this.points -= pointsToDeduct;
+    }
   }
 }

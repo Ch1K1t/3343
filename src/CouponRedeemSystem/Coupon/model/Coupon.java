@@ -3,6 +3,7 @@ package CouponRedeemSystem.Coupon.model;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
+import net.sf.json.JSONObject;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -27,28 +28,24 @@ public abstract class Coupon {
     double intrinsicValue,
     Shop shop,
     Date expirationDate,
-    String couponCode
+    String couponCode,
+    boolean active
   ) {
     this.intrinsicValue = intrinsicValue;
     this.shop = shop;
     this.expirationDate = expirationDate;
     this.couponCode = couponCode;
-    this.active = true;
+    this.active = active;
     this.owner = null;
     // hardcode
     this.point = 100;
   }
 
   public static void couponToPoints(Coupon coupon) {
-    CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
-
     Date currentDate = new Date();
 
     if (!coupon.isActive()) return;
     if (coupon.getExpirationDate().compareTo(currentDate) <= 0) return;
-    boolean exist =
-      jsonFileManager.searchFile(coupon.getCouponCode(), null) == null;
-    if (!exist) return;
 
     double points;
     try {
@@ -61,33 +58,39 @@ public abstract class Coupon {
     }
   }
 
-  public static void pointsToCoupon(Account user, Coupon coupon) {
+  public static void pointsToCoupon(Account user, String couponCode) throws IOException, ParseException {
     CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
+    JSONObject json = jsonFileManager.searchJSON(couponCode, null);
+    if (json == new JSONObject()) return;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+    Date expire = sdf.parse(json.get("expiration_date").toString());
+
+    Coupon coupon = new NormalCoupon(
+      Double.parseDouble(json.get("value").toString()), 
+      null, 
+      expire, 
+      couponCode, 
+      Boolean.parseBoolean(json.get("active").toString())
+    );
     if (!coupon.isActive()) return;
 
     // May not be necessary
     Date currentDate = new Date();
     if (coupon.getExpirationDate().compareTo(currentDate) <= 0) return;
-
-    boolean exist =
-      jsonFileManager.searchFile(coupon.getCouponCode(), null) == null;
-    if (!exist) return;
     if (user.getPoints() < coupon.point) return;
+
     coupon.setOwner(user);
     user.setPoints(user.getPoints() - coupon.point);
-    
-    // String newCoupon = coupon.getCouponCode().toString();
-    // String[] newCouponList = new String[user.getCoupons().length + 1];
-    // System.arraycopy(user.getCoupons(), 0, newCouponList, 0, user.getCoupons().length);
-    // newCouponList[newCouponList.length - 1] = newCoupon;
+    coupon.setActive(false);
     
     // Add coupons to user's coupons history
-    List<Coupon> coupons = coupon.getOwner().getCoupons();
-    coupons.add(coupon);
+    List<String> coupons = coupon.getOwner().getCouponIDs();
+    coupons.add(coupon.getCouponCode());
     coupon.getOwner().setCoupons(coupons);
     // Modify coupon owner
     LazyDynaBean bean = new LazyDynaBean();
-    bean.set("owner", coupon.getOwner().getUserId());
+    bean.set("owner", coupon.getOwner().getUserName());
     try {
         jsonFileManager.modifyJSON("Coupon", coupon.getCouponCode(), bean);
     } catch (IOException e) {

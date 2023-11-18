@@ -9,8 +9,9 @@ public class NormalCoupon extends Coupon {
     double intrinsicValue,
     Shop shop,
     Date expirationDate,
-    String couponCode
+    String couponCode,
+    boolean active
   ) {
-    super(intrinsicValue, shop, expirationDate, couponCode);
+    super(intrinsicValue, shop, expirationDate, couponCode, active);
   }
 }
