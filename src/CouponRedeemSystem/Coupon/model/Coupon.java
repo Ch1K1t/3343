@@ -21,14 +21,15 @@ public abstract class Coupon {
   boolean active;
   String couponCode;
   Account owner;
-  double point;
+  Double points;
 
   public Coupon(
     double intrinsicValue,
     Shop shop,
     Date expirationDate,
     String couponCode,
-    boolean active
+    boolean active,
+    double points
   ) {
     this.intrinsicValue = intrinsicValue;
     this.shop = shop;
@@ -36,8 +37,7 @@ public abstract class Coupon {
     this.couponCode = couponCode;
     this.active = active;
     this.owner = null;
-    // hardcode
-    this.point = 100;
+    this.points = points;
   }
 
   public static void couponToPoints(String couponCode) {
@@ -92,13 +92,13 @@ public abstract class Coupon {
       return;
     }
 
-    if (user.getPoints() < coupon.point) {
+    if (user.getPoints() < coupon.points) {
       System.out.println("Insufficient points!");
       return;
     }
 
     coupon.setOwner(user);
-    user.setPoints(user.getPoints() - coupon.point);
+    user.setPoints(user.getPoints() - coupon.points);
     coupon.setActive(false);
 
     // Add coupons to user's coupons history
