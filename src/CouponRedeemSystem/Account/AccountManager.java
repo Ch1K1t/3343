@@ -129,8 +129,8 @@ public class AccountManager {
       role,
       age,
       telNo,
-      points,
       dateOfBirth,
+      points,
       couponIDs
     );
   }

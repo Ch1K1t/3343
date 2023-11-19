@@ -7,16 +7,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import CouponRedeemSystem.Role.model.Role;
-
 public class Account {
 
   String userName;
-  Role role;
+  String role;
   int age;
   int telNo;
-  double points;
   Date dateOfBirth;
+  double points;
   List<String> couponIDs;
 
   public Account(
@@ -27,11 +25,11 @@ public class Account {
     String dateOfBirth
   ) throws ParseException {
     this.userName = userName;
-    this.role = null;
+    this.role = role;
     this.age = age;
     this.telNo = telNo;
-    this.points = 0;
     this.dateOfBirth = new SimpleDateFormat("dd/MM/yyyy").parse(dateOfBirth);
+    this.points = 0;
     this.couponIDs = new ArrayList<String>();
   }
 
@@ -40,8 +38,8 @@ public class Account {
     String role,
     int age,
     int telNo,
-    double points,
     String dateOfBirth,
+    double points,
     List<String> coupons
   ) throws ParseException {
     this.userName = userName;
@@ -52,7 +50,6 @@ public class Account {
     this.dateOfBirth =
       new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
         .parse(dateOfBirth);
-
     this.couponIDs = coupons;
   }
 
@@ -60,7 +57,7 @@ public class Account {
     return userName;
   }
 
-  public Role getRole() {
+  public String getRole() {
     return role;
   }
 
@@ -88,7 +85,7 @@ public class Account {
     this.userName = userName;
   }
 
-  public void setRole(Role role) {
+  public void setRole(String role) {
     this.role = role;
   }
 
