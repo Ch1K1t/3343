@@ -10,9 +10,8 @@ public class RedeemableCoupon extends Coupon {
     Shop shop,
     Date expirationDate,
     String couponCode,
-    boolean active,
-    double points
+    boolean active
   ) {
-    super(intrinsicValue, shop, expirationDate, couponCode, active, points);
+    super(intrinsicValue, shop, expirationDate, couponCode, active);
   }
 }

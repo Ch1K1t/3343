@@ -57,41 +57,49 @@ public class AccountManager {
     bean.set("age", account.getAge());
     bean.set("telNo", account.getTelNo());
     bean.set("points", account.getPoints());
-    bean.set("dateOfBirth", account.getDateOfBirth());
+    bean.set("dateOfBirth", account.getDateOfBirth().toString());
     bean.set("couponIDs", account.getCouponIDs());
 
     try {
       jsonFileManager.modifyJSON("Account", userName, bean);
+      System.out.println("Account created");
     } catch (IOException e) {
       e.printStackTrace();
+      System.out.println("Error");
     }
   }
 
   // Delete existing account
-  public void delete(Account account) {
+  public void delete(String userName) {
     try {
+      Account account = getAccount(userName);
       jsonFileManager.deleteJSON("Account", account.getUserName());
     } catch (IOException e) {
+      e.printStackTrace();
+    } catch (ParseException e) {
       e.printStackTrace();
     }
   }
 
   // Update existing account
-  public void update(Account account) {
-    // Delete the original JSON file
-    delete(account);
+  public void update(String userName) {
+    try {
+      Account account = getAccount(userName);
 
-    // Save the updated account details
-    createAccInfo(account);
+      // Delete the original JSON file
+      delete(userName);
+
+      // Save the updated account details
+      createAccInfo(account);
+    } catch (IOException | ParseException e) {
+      e.printStackTrace();
+    }
   }
 
   public Account getAccount(String userName)
     throws IOException, ParseException {
     // Search for the JSON file
-    JSONObject accountJson = jsonFileManager.searchJSON(
-      userName + ".json",
-      null
-    );
+    JSONObject accountJson = jsonFileManager.searchJSON(userName + ".json");
 
     // Extract account details from JSON and return the Account object
     if (!accountJson.isEmpty()) {
