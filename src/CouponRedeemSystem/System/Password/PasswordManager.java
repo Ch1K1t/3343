@@ -45,16 +45,16 @@ public class PasswordManager {
       .modifyJSON("Password", "Reference Table", jsonObject);
   }
 
-  public String checkPasswordValid(String userName, String password)
+  public boolean checkPasswordValid(String userName, String password)
     throws IOException {
     JSONObject jsonObject = getPasswordRefTable();
     String textBeforeEncrypt = (String) jsonObject.get(userName);
     String text = mgr.decryption(textBeforeEncrypt);
     if (text.equals(password)) {
-      return userName;
+      return true;
     } else {
       System.out.println("Password is not found!");
-      return null;
+      return false;
     }
   }
 }

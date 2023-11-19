@@ -8,5 +8,10 @@ public class Main {
 
   public static void main(String[] args) throws IOException, ParseException {
     new HomePage().execute();
+    // File[] fileArr = new File("Data/Coupon/Purchasable").listFiles();
+    // for (File file : fileArr) {
+    //   System.out.println(file.getName());
+    // }
+
   }
 }
