@@ -1,7 +1,6 @@
 package CouponRedeemSystem.Main;
 
-import CouponRedeemSystem.Discount.DiscountManager;
-import CouponRedeemSystem.Discount.model.Discount;
+import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Page.HomePage;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 
@@ -15,6 +14,8 @@ import java.util.Scanner;
 public class Main {
 
   public static void main(String[] args) throws IOException, ParseException {
-	  DiscountManager.getInstance().updateActiveDiscountList();
+    // new HomePage().execute();
+    CouponManager manager = CouponManager.getInstance();
+    manager.delete("246");
   }
 }
