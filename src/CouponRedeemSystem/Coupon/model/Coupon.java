@@ -24,6 +24,7 @@ public abstract class Coupon {
   String couponCode;
   Account owner;
   Double points;
+  String type;
 
   // Purchasable Coupon
   public Coupon(
@@ -41,6 +42,7 @@ public abstract class Coupon {
     this.active = active;
     this.owner = null;
     this.points = points;
+    this.type = "Purchasable";
   }
 
   // Redeemable Coupon
@@ -56,6 +58,7 @@ public abstract class Coupon {
     this.expirationDate = expirationDate;
     this.couponCode = couponCode;
     this.active = active;
+    this.type = "Redeemable";
   }
 
   public static void couponToPoints(String couponCode, Account account) {
@@ -64,6 +67,11 @@ public abstract class Coupon {
       Coupon coupon = couponManager.getCoupon(couponCode);
       if (coupon == null) {
         System.out.println("No coupon found!");
+        return;
+      }
+
+      if (coupon.type == "Purchasable") {
+        System.out.println("This coupon is not redeemable!");
         return;
       }
 
