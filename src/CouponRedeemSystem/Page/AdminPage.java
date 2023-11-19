@@ -70,13 +70,40 @@ public class AdminPage extends Page {
       String couponCode = s.nextLine();
 
       CouponManager couponManager = CouponManager.getInstance();
-      couponManager.create(
-        couponCode,
-        intrinsicValue,
-        expirationDate,
-        shop,
-        type
-      );
+      if (type == "Purchasable") {
+        System.out.println();
+        System.out.println(
+          "Please input the coupon's purchasing value:"
+        );
+        String pointsStr;
+        boolean isPointsDouble;
+        do {
+          pointsStr = s.nextLine();
+          isPointsDouble = Pattern.matches("[\\d.]+", value);
+          if (!isPointsDouble) {
+            System.out.println("Invalid value, please input again:");
+          }
+        } while (!isDouble);
+        double points = Double.parseDouble(pointsStr);
+        couponManager.create(
+          couponCode,
+          intrinsicValue,
+          expirationDate,
+          shop,
+          type,
+          points
+        );
+      } else {
+        couponManager.create(
+          couponCode,
+          intrinsicValue,
+          expirationDate,
+          shop,
+          type,
+          null
+        );
+      }
+
 
       System.out.println("Coupon created");
     } catch (ParseException e) {

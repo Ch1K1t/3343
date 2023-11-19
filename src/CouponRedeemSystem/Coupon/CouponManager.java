@@ -34,15 +34,9 @@ public class CouponManager {
     double value,
     Date expirationDate,
     Shop shop,
-    String type
+    String type,
+    Double points
   ) {
-    JSONObject json;
-    try {
-      json = jsonFileManager.searchJSON(couponCode + ".json");
-      if (json != null) return;
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("code", couponCode);
     bean.set("value", value);
@@ -51,6 +45,9 @@ public class CouponManager {
     bean.set("shop", shop);
     bean.set("active", true);
     bean.set("type", type);
+    if (type == "Purchasable") {
+      bean.set("points", points);
+    }
     try {
       jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
     } catch (IOException e) {

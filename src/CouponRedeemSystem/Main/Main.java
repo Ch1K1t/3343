@@ -9,8 +9,6 @@ import java.text.ParseException;
 public class Main {
 
   public static void main(String[] args) throws IOException, ParseException {
-    // new HomePage().execute();
-    CouponManager manager = CouponManager.getInstance();
-    manager.delete("246");
+    new HomePage().execute();
   }
 }
