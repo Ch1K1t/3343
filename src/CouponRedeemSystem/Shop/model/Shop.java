@@ -1,6 +1,4 @@
 package CouponRedeemSystem.Shop.model;
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -9,7 +7,6 @@ import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Coupon.model.PurchasableCoupon;
-import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import net.sf.json.JSONObject;
 
 public class Shop {
@@ -30,25 +27,20 @@ public class Shop {
         CouponManager couponManager = CouponManager.getInstance();
         //check if user has coupon
         if (user.getCouponIDs().contains(couponId)) {
-            //check coupon in JSON file
-            try {
-                if (couponManager.getCoupon(couponId) == null) {
-                    System.out.println("Coupon not found in database.");
-                } else {
-                    Coupon coupon = couponManager.getCoupon(couponId);
-                    // check not template coupon
-                    if (coupon instanceof PurchasableCoupon) {
-                        // verify
-                        if (coupon.getOwner() == user 
-                            && coupon.getExpirationDate().after(new Date()) 
-                            && coupon.getShop() == this 
-                            && coupon.isActive()) 
-                            System.out.println("Transaction is successful");
-                    } else 
-                        System.out.println("Transaction is unsuccessful, coupon is not purchasable.");
-                }
-            } catch (IOException | ParseException e) {
-                e.printStackTrace();
+            if (couponManager.getCoupon(couponId) == null) {
+                System.out.println("Coupon not found in database.");
+            } else {
+                Coupon coupon = couponManager.getCoupon(couponId);
+                // check not template coupon
+                if (coupon instanceof PurchasableCoupon) {
+                    // verify
+                    if (coupon.getOwner() == user 
+                        && coupon.getExpirationDate().after(new Date()) 
+                        && coupon.getShop() == this 
+                        && coupon.isActive()) 
+                        System.out.println("Transaction is successful");
+                } else 
+                    System.out.println("Transaction is unsuccessful, coupon is not purchasable.");
             }
         } else {
             System.out.println("Coupon not found in user's possession.");
@@ -79,12 +71,13 @@ public class Shop {
         return currentDate.before(expirationDate);
     }
 
+    //TODO: need check applicable with Purchaseable Coupon
     public void loadApprovedCoupons(JSONObject couponObject) {
         JSONObject approvedCoupon = couponObject.getJSONObject("approvedCoupons");
         for (Object c: approvedCoupon.keySet()) {
             String couponCode = (String) c;
             JSONObject couponfromJson = approvedCoupon.getJSONObject(couponCode);
-            Coupon coupon = new RedeemableCoupon(couponfromJson.getDouble("intrinsicValue"), this, null, couponfromJson.getString("couponCode"), false, -1);
+            Coupon coupon = new PurchasableCoupon(couponfromJson.getDouble("intrinsicValue"), this, null, couponfromJson.getString("couponCode"), false, -1);
             approvedCoupons.put(couponCode, coupon);
         }
     }
