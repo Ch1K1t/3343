@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.beanutils.LazyDynaBean;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 
 import CouponRedeemSystem.Discount.model.Discount;
@@ -29,8 +31,8 @@ public class DiscountManager {
 	}
 	
 	public Discount createDiscountByDay(String discountName, Date startDate, int day, double valueOff) throws ParseException, IOException {
-		Date startDateInSDF = sdf.parse(startDate.toString());
-		Date expireDate = sdf.parse(DateUtils.addDays(startDate, day).toString());
+		String startDateInSDF = sdf.format(startDate);
+		String expireDate = sdf.format(DateUtils.addDays(startDate, day));
 		Discount discount = new Discount(discountName, startDateInSDF, expireDate, valueOff);
 		
 		storeNewDiscount(discount);
@@ -39,16 +41,18 @@ public class DiscountManager {
 	}
 	
 	public Discount createDiscountByMonth(String discountName, Date startDate, int day, double valueOff) throws ParseException, IOException {
-		Date startDateInSDF = sdf.parse(startDate.toString());
-		Date expireDate = sdf.parse(DateUtils.addDays(startDate, day).toString());
+		String startDateInSDF = sdf.format(startDate);
+		String expireDate = sdf.format(DateUtils.addDays(startDate, day));
 		Discount discount = new Discount(discountName, startDateInSDF, expireDate, valueOff);
+		
+		System.out.println(discount.getJSONString());
 		
 		storeNewDiscount(discount);
 		
 		return discount;
 	}
 	
-	public void updateActiveDiscountList() throws IOException {
+	public void updateActiveDiscountList() throws IOException, ParseException {
 		CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
 		JSONObject discountJson = mgr.searchJSON("Discount List.json");
 		JSONObject activeDiscountJsonObject = new JSONObject();
@@ -70,7 +74,8 @@ public class DiscountManager {
 	
 	private void storeNewDiscount(Discount discount) throws IOException {
 		CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
-		JSONObject discountJsonObject = discount.getJSONObject();
+		JSONObject discountJsonObject = new JSONObject();
+		discountJsonObject.put(discount.getId(), discount.getJSONObject());
 		mgr.modifyJSON("Discount", "Discount List", discountJsonObject);
 	}
 	
@@ -79,4 +84,5 @@ public class DiscountManager {
 		JSONObject discountJson = mgr.searchJSON("Discount List.json");
 		discountJson.put(id, discount.getJSONObject());
 	}
+	
 }

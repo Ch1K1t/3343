@@ -221,6 +221,8 @@ public class CRSJsonFileManager {
   public JSONObject convertFileTextToJSON(File file) throws IOException {
     InputStream iStream = new FileInputStream(file);
     String jsonText = IOUtils.toString(iStream);
+    if (jsonText.isBlank())
+    	jsonText = "{}";
     return (JSONObject) JSONSerializer.toJSON(jsonText);
   }
 }

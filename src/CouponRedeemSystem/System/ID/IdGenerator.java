@@ -42,6 +42,8 @@ public class IdGenerator {
 		
 		allIdJson.put(idName, id+ 1);
 		
+		mgr.modifyJSON("ID", "SysNextId", allIdJson);
+		
 		return id;
 	}
 }
