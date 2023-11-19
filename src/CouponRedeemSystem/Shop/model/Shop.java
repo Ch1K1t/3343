@@ -27,12 +27,14 @@ public class Shop {
 
     public void transaction(Account user, String couponId) throws IOException, ParseException {
         CouponManager couponManager = CouponManager.getInstance();
+        //check if user has coupon
         if (user.getCouponIDs().contains(couponId)) {
+            //check coupon in JSON file
             if (couponManager.getCoupon(couponId) == null) {
                 System.out.println("Coupon not found in database.");
-                return;
             } else {
                 Coupon coupon = couponManager.getCoupon(couponId);
+                // check not template coupon
                 if (coupon instanceof PurchasableCoupon) {
                     // verify
                     if (coupon.getOwner() == user 
@@ -45,7 +47,6 @@ public class Shop {
             }
         } else {
             System.out.println("Coupon not found in user's possession.");
-            return;
         }
     }
 

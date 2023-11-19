@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import CouponRedeemSystem.Role.model.Role;
+
 public class Account {
 
   String userName;
-  String role;
+  Role role;
   int age;
   int telNo;
   double points;
@@ -24,7 +26,7 @@ public class Account {
     String dateOfBirth
   ) throws ParseException {
     this.userName = userName;
-    this.role = role;
+    this.role = null;
     this.age = age;
     this.telNo = telNo;
     this.points = 0;
@@ -42,7 +44,7 @@ public class Account {
     List<String> coupons
   ) throws ParseException {
     this.userName = userName;
-    this.role = role;
+    this.role = null;
     this.age = age;
     this.telNo = telNo;
     this.points = points;
@@ -55,7 +57,7 @@ public class Account {
     return userName;
   }
 
-  public String getRole() {
+  public Role getRole() {
     return role;
   }
 
@@ -83,7 +85,7 @@ public class Account {
     this.userName = userName;
   }
 
-  public void setRole(String role) {
+  public void setRole(Role role) {
     this.role = role;
   }
 

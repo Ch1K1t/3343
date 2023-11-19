@@ -1,5 +1,5 @@
 package CouponRedeemSystem.Role.model;
 
-public class Customer {
+public class Customer extends Role{
     
 }
