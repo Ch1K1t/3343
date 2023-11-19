@@ -6,6 +6,7 @@ import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -121,17 +122,18 @@ public abstract class Coupon {
       return;
     }
 
-    user.deductPoints(coupon.points);
-    coupon.setOwner(user);
-    user.setPoints(user.getPoints() - coupon.points);
-    coupon.setActive(false);
-
     // Add coupons to user's coupons history
     List<String> coupons = coupon.getOwner().getCouponIDs();
     if (coupons.size() > 10) {
       System.out.println("You have reached the account's purchasing limit!");
       return;
     }
+
+    user.deductPoints(coupon.points);
+    coupon.setOwner(user);
+    user.setPoints(user.getPoints() - coupon.points);
+    coupon.setActive(false);
+
     coupons.add(coupon.getCouponCode());
     coupon.getOwner().setCoupons(coupons);
 
@@ -164,7 +166,10 @@ public abstract class Coupon {
       // (Coupon Value + (Days to Expiration * Weight)) * Conversion Rate
       // Remarks: conversion rate refers to the amount of points rewarded per dollar
       // 1 -> 1 point per dollar
-      return (this.getIntrinsicValue() + (daysBeforeExpire * 0.5)) * 1;
+      DecimalFormat df = new DecimalFormat("###.##");
+      return Double.parseDouble(
+        df.format((this.getIntrinsicValue() + (daysBeforeExpire * 0.5)) * 1)
+      );
     } catch (ParseException e) {
       e.printStackTrace();
       return null;
