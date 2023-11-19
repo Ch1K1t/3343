@@ -171,7 +171,7 @@ public class CRSJsonFileManager {
     throws IOException {
     File jsonFile = searchFile(fileName);
     if (jsonFile == null || jsonFile.isDirectory()) {
-      System.out.println("File not found! Return empty json");
+      System.out.println("File not found!");
       return null;
     }
     return convertFileTextToJSON(jsonFile);
