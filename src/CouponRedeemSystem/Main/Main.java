@@ -53,16 +53,9 @@ public class Main {
     // System.out.println(objType.equals("Purchasable"));
     System.out.println(strType.equals("Purchasable"));
 
-    File file = jsonFileManager.createJson("Coupon/" + strType, code);
-    System.out.println(file);
-    Scanner s2 = new Scanner(file);
-    while (s2.hasNextLine()) {
-      System.out.println(s2.nextLine());
-    }
-    file.delete();
-    
+    CRSJsonFileManager.getInstance().deleteJSON("Coupon/" + strType, code);
+
     s.close();
-    s2.close();
   }
 
   public static void main(String[] args) throws IOException, ParseException {
@@ -70,9 +63,6 @@ public class Main {
     // new AdminPage().execute();
 
     // create();
-    // delete();
-
-    CouponManager couponManager = CouponManager.getInstance();
-    couponManager.delete("123");
+    delete();
   }
 }
