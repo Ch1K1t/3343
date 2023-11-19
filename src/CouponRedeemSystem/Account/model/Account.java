@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Account {
 
@@ -28,7 +29,7 @@ public class Account {
     this.age = age;
     this.telNo = telNo;
     this.points = 0;
-    this.dateOfBirth = new SimpleDateFormat("yyyy-MM-dd").parse(dateOfBirth);
+    this.dateOfBirth = new SimpleDateFormat("dd/MM/yyyy").parse(dateOfBirth);
     this.couponIDs = new ArrayList<String>();
   }
 
@@ -47,8 +48,10 @@ public class Account {
     this.telNo = telNo;
     this.points = points;
     this.dateOfBirth =
-      new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(dateOfBirth);
-    this.couponIDs = new ArrayList<String>();
+      new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        .parse(dateOfBirth);
+
+    this.couponIDs = coupons;
   }
 
   public String getUserName() {

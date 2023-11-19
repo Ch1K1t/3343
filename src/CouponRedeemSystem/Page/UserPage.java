@@ -2,9 +2,13 @@ package CouponRedeemSystem.Page;
 
 import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Account.model.Account;
+import CouponRedeemSystem.Coupon.CouponManager;
+import CouponRedeemSystem.Coupon.model.Coupon;
+import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import CouponRedeemSystem.Page.model.Page;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.List;
 
 public class UserPage extends Page {
 
@@ -38,13 +42,23 @@ public class UserPage extends Page {
   }
 
   public void redeemCoupon() {
-    
+    try {
+      AccountManager accountManager = AccountManager.getInstance();
+      Account account = accountManager.getAccount(username);
+
+      System.out.println("Please input the coupon's id:");
+      String couponID = s.nextLine();
+      Coupon.couponToPoints(couponID, account);
+    } catch (IOException | ParseException e) {
+      e.printStackTrace();
+    }
   }
 
   public void execute() {
     String cmd;
 
     do {
+      getInstruction();
       cmd = s.nextLine().toLowerCase();
 
       switch (cmd) {

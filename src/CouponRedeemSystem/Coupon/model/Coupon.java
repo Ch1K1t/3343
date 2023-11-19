@@ -1,5 +1,6 @@
 package CouponRedeemSystem.Coupon.model;
 
+import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Shop.model.Shop;
@@ -23,6 +24,7 @@ public abstract class Coupon {
   Account owner;
   Double points;
 
+  // Purchasable Coupon
   public Coupon(
     double intrinsicValue,
     Shop shop,
@@ -40,9 +42,24 @@ public abstract class Coupon {
     this.points = points;
   }
 
-  public static void couponToPoints(String couponCode) {
-    CouponManager couponManager = CouponManager.getInstance();
+  // Redeemable Coupon
+  public Coupon(
+    double intrinsicValue,
+    Shop shop,
+    Date expirationDate,
+    String couponCode,
+    boolean active
+  ) {
+    this.intrinsicValue = intrinsicValue;
+    this.shop = shop;
+    this.expirationDate = expirationDate;
+    this.couponCode = couponCode;
+    this.active = active;
+  }
+
+  public static void couponToPoints(String couponCode, Account account) {
     try {
+      CouponManager couponManager = CouponManager.getInstance();
       Coupon coupon = couponManager.getCoupon(couponCode);
       if (coupon == null) {
         System.out.println("No coupon found!");
@@ -55,17 +72,29 @@ public abstract class Coupon {
       }
 
       Date currentDate = new Date();
-      if (coupon.getExpirationDate().compareTo(currentDate) <= 0) {
+      if (coupon.getExpirationDate().compareTo(currentDate) < 0) {
         System.out.println("Coupon has expired!");
         return;
       }
 
       double points = coupon.pointConversion();
-      coupon.getOwner().setPoints(coupon.getOwner().getPoints() + points);
-      coupon.setActive(false);
+      CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
+      JSONObject jsonObject = jsonFileManager.searchJSON(
+        account.getUserName() + ".json"
+      );
+      jsonObject.put("points", account.getPoints() + points);
+      jsonFileManager.modifyJSON("Account", account.getUserName(), jsonObject);
+
+      jsonObject = jsonFileManager.searchJSON(couponCode + ".json");
+      jsonObject.put("active", false);
+      jsonFileManager.modifyJSON(
+        "Coupon/" + jsonObject.getString("type"),
+        couponCode,
+        jsonObject
+      );
+
+      System.out.println("Coupon redeemed successfully!");
     } catch (IOException e) {
-      e.printStackTrace();
-    } catch (ParseException e) {
       e.printStackTrace();
     }
   }
@@ -124,16 +153,26 @@ public abstract class Coupon {
     }
   }
 
-  public double pointConversion() throws ParseException {
-    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
-    Date currentDate = sdf.parse(new Date().toString());
-    Date expire = sdf.parse(expirationDate.toString());
+  public Double pointConversion() {
+    try {
+      SimpleDateFormat sdf = new SimpleDateFormat(
+        "EEE MMM dd HH:mm:ss z yyyy",
+        Locale.ENGLISH
+      );
+      Date currentDate = sdf.parse(new Date().toString());
+      Date expire = sdf.parse(expirationDate.toString());
 
-    long daysBeforeExpire = Math.abs(expire.getTime() - currentDate.getTime());
-    // (Coupon Value + (Days to Expiration * Weight)) * Conversion Rate
-    // Remarks: conversion rate refers to the amount of points rewarded per dollar
-    // 1 -> 1 point per dollar
-    return (this.getIntrinsicValue() + (daysBeforeExpire * 0.5)) * 1;
+      long daysBeforeExpire = Math.abs(
+        expire.getTime() - currentDate.getTime()
+      );
+      // (Coupon Value + (Days to Expiration * Weight)) * Conversion Rate
+      // Remarks: conversion rate refers to the amount of points rewarded per dollar
+      // 1 -> 1 point per dollar
+      return (this.getIntrinsicValue() + (daysBeforeExpire * 0.5)) * 1;
+    } catch (ParseException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   public double getIntrinsicValue() {

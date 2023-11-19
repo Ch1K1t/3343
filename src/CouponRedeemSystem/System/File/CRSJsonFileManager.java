@@ -92,8 +92,6 @@ public class CRSJsonFileManager {
     throws IOException {
     File file = createJson(dirName, fileName);
     FileWriter fileWriter = new FileWriter(file);
-    System.out.println(content.toString());
-    System.out.println(file.getAbsolutePath());
     fileWriter.write(content.toString());
     fileWriter.close();
   }

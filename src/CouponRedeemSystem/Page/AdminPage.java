@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 public class AdminPage extends Page {
 
@@ -31,7 +30,7 @@ public class AdminPage extends Page {
       boolean isDouble;
       do {
         value = s.nextLine();
-        isDouble = Pattern.matches("[\\d.]+", value);
+        isDouble = value.matches("[\\d.]+");
         if (!isDouble) {
           System.out.println("Invalid value, please input again:");
         }
@@ -48,19 +47,22 @@ public class AdminPage extends Page {
       );
       String expirationDateString;
       boolean isDate;
+      boolean isAfterToday;
+      Date expirationDate;
+      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
       do {
         expirationDateString = s.nextLine();
         isDate =
-          Pattern.matches(
-            "^((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|2[0-1])[0-9]{2})$",
-            expirationDateString
+          expirationDateString.matches(
+            "^((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|2[0-1])[0-9]{2})$"
           );
-        if (!isDate) {
+        expirationDate = sdf.parse(expirationDateString);
+        isAfterToday = expirationDate.after(new Date());
+
+        if (!isDate || !isAfterToday) {
           System.out.println("Invalid date, please input again:");
         }
-      } while (!isDate);
-      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-      Date expirationDate = sdf.parse(expirationDateString);
+      } while (!isDate || !isAfterToday);
 
       System.out.println();
       System.out.println("Please input the coupon's code:");
@@ -75,34 +77,29 @@ public class AdminPage extends Page {
         boolean isPointsDouble;
         do {
           pointsStr = s.nextLine();
-          isPointsDouble = Pattern.matches("[\\d.]+", value);
+          isPointsDouble = value.matches("[\\d.]+");
           if (!isPointsDouble) {
             System.out.println("Invalid value, please input again:");
           }
         } while (!isDouble);
         double points = Double.parseDouble(pointsStr);
-        result =
-          couponManager.create(
-            couponCode,
-            intrinsicValue,
-            expirationDate,
-            shop,
-            type,
-            points
-          );
+        couponManager.create(
+          couponCode,
+          intrinsicValue,
+          expirationDate,
+          shop,
+          type,
+          points
+        );
       } else {
-        result =
-          couponManager.create(
-            couponCode,
-            intrinsicValue,
-            expirationDate,
-            shop,
-            type,
-            null
-          );
+        couponManager.create(
+          couponCode,
+          intrinsicValue,
+          expirationDate,
+          shop,
+          type
+        );
       }
-
-      System.out.println(result);
     } catch (ParseException e) {
       e.printStackTrace();
     }
@@ -115,8 +112,7 @@ public class AdminPage extends Page {
 
     CouponManager couponManager = CouponManager.getInstance();
 
-    String result = couponManager.delete(couponCode);
-    System.out.println(result);
+    couponManager.delete(couponCode);
   }
 
   public void execute() {
