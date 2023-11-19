@@ -2,9 +2,7 @@ package CouponRedeemSystem.Page;
 
 import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Account.model.Account;
-import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Coupon.model.Coupon;
-import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.io.File;

@@ -14,6 +14,7 @@ public class SigninPage extends Page {
       System.out.println();
       System.out.println("Please input your username:");
       String username = s.nextLine();
+      System.out.println();
       System.out.println("Please input your password:");
       String password = s.nextLine();
 
@@ -40,9 +41,7 @@ public class SigninPage extends Page {
           new AdminPage().execute();
           break;
       }
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (ParseException e) {
+    } catch (IOException | ParseException e) {
       e.printStackTrace();
     }
   }

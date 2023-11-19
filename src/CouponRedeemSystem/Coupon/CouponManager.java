@@ -132,7 +132,7 @@ public class CouponManager {
       boolean active = couponJson.getBoolean("active");
       String couponCode = couponJson.getString("code");
       SimpleDateFormat sdf = new SimpleDateFormat(
-        "EEE MMM dd HH:mm:ss z yyyy",
+        "EEE MMM dd HH:mm:ss zzz yyyy",
         Locale.ENGLISH
       );
       Date expirationDate = sdf.parse(couponJson.getString("expiration_date"));

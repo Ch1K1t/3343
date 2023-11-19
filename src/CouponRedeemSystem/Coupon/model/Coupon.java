@@ -159,15 +159,16 @@ public abstract class Coupon {
   public Double pointConversion() {
     try {
       SimpleDateFormat sdf = new SimpleDateFormat(
-        "EEE MMM dd HH:mm:ss z yyyy",
+        "EEE MMM dd HH:mm:ss zzz yyyy",
         Locale.ENGLISH
       );
       Date currentDate = sdf.parse(new Date().toString());
       Date expire = sdf.parse(expirationDate.toString());
 
-      long daysBeforeExpire = Math.abs(
-        expire.getTime() - currentDate.getTime()
-      );
+      System.out.println(expire.getTime());
+      System.out.println(currentDate.getTime());
+      double daysBeforeExpire =
+        Math.abs(expire.getTime() - currentDate.getTime()) / Math.pow(10, 9);
       // (Coupon Value + (Days to Expiration * Weight)) * Conversion Rate
       // Remarks: conversion rate refers to the amount of points rewarded per dollar
       // 1 -> 1 point per dollar
