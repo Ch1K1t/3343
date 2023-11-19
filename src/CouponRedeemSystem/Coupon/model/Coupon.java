@@ -39,7 +39,7 @@ public abstract class Coupon {
     this.points = points;
   }
 
-  public static void couponToPoints(String couponCode) {
+  public static void couponToPoints(String couponCode, Account account) {
     CouponManager couponManager = CouponManager.getInstance();
     try {
       Coupon coupon = couponManager.getCoupon(couponCode);
@@ -60,7 +60,7 @@ public abstract class Coupon {
       }
 
       double points = coupon.pointConversion();
-      coupon.getOwner().setPoints(coupon.getOwner().getPoints() + points);
+      account.setPoints(account.getPoints() + points);
       coupon.setActive(false);
     } catch (IOException e) {
       e.printStackTrace();

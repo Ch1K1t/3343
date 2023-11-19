@@ -16,6 +16,7 @@ public class Shop {
     private String shopId;
     private String shopName;
     private HashMap<String, Coupon> approvedCoupons;
+    //approved coupon -> purchasable coupon
 
 
     public Shop(String shopId, String shopName) {
@@ -25,25 +26,29 @@ public class Shop {
         this.approvedCoupons = new HashMap<>();
     }
 
-    public void transaction(Account user, String couponId) throws IOException, ParseException {
+    public void transaction(Account user, String couponId) {
         CouponManager couponManager = CouponManager.getInstance();
         //check if user has coupon
         if (user.getCouponIDs().contains(couponId)) {
             //check coupon in JSON file
-            if (couponManager.getCoupon(couponId) == null) {
-                System.out.println("Coupon not found in database.");
-            } else {
-                Coupon coupon = couponManager.getCoupon(couponId);
-                // check not template coupon
-                if (coupon instanceof PurchasableCoupon) {
-                    // verify
-                    if (coupon.getOwner() == user 
-                        && coupon.getExpirationDate().after(new Date()) 
-                        && coupon.getShop() == this 
-                        && coupon.isActive()) 
-                        System.out.println("Transaction is successful");
-                } else 
-                    System.out.println("Transaction is unsuccessful, coupon is not purchasable.");
+            try {
+                if (couponManager.getCoupon(couponId) == null) {
+                    System.out.println("Coupon not found in database.");
+                } else {
+                    Coupon coupon = couponManager.getCoupon(couponId);
+                    // check not template coupon
+                    if (coupon instanceof PurchasableCoupon) {
+                        // verify
+                        if (coupon.getOwner() == user 
+                            && coupon.getExpirationDate().after(new Date()) 
+                            && coupon.getShop() == this 
+                            && coupon.isActive()) 
+                            System.out.println("Transaction is successful");
+                    } else 
+                        System.out.println("Transaction is unsuccessful, coupon is not purchasable.");
+                }
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
             }
         } else {
             System.out.println("Coupon not found in user's possession.");
@@ -56,14 +61,7 @@ public class Shop {
         return approvedCoupons.containsKey(couponCode) && expirationDate.after(currentDate);
     }
 
-    public void createCoupon(double intrinsicValue, String couponCode) throws ParseException {
-        while (intrinsicValue < 0) {
-            intrinsicValue = getNewIntrinsicValue();
-        }
-        Coupon coupon = new RedeemableCoupon(intrinsicValue, this, null, couponCode, false, -1); //create a new Coupon without owner
-        coupon.setShop(this);
-        //map coupon code to coupon
-        //to create customer coupon, need duplicate template object and set other attributes
+    public void appendApprovedCoupons(String couponCode, Coupon coupon) {
         approvedCoupons.put(couponCode, coupon);
     }
     
