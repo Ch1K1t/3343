@@ -52,7 +52,6 @@ public class Main {
     // String type = s.nextLine();
 
     jsonFileManager.deleteJSON("Coupon/" + type, code);
-
     // s.close();
   }
 
