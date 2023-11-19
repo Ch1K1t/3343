@@ -1,14 +1,13 @@
 package CouponRedeemSystem.Shop.model;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Scanner;
 
+import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Coupon.model.Coupon;
-import CouponRedeemSystem.Coupon.model.NormalCoupon;
-import net.sf.json.JSONArray;
+import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import net.sf.json.JSONObject;
 
 public class Shop {
@@ -25,7 +24,12 @@ public class Shop {
     }
 
     //TODO: Transaction
-    public void transaction() {
+    public void transaction(List<String> userPossessedCouponIds, String couponId) {
+        CouponManager couponManager = CouponManager.getInstance();
+        if (userPossessedCouponIds.contains(couponId)) {
+            couponManager.getCoupon(couponId, couponId);
+        }
+
 
     }
 
@@ -39,7 +43,7 @@ public class Shop {
         while (intrinsicValue < 0) {
             intrinsicValue = getNewIntrinsicValue();
         }
-        Coupon coupon = new NormalCoupon(intrinsicValue, null, null, couponCode, false); //create a new Coupon without owner
+        Coupon coupon = new RedeemableCoupon(intrinsicValue, null, null, couponCode, false); //create a new Coupon without owner
         coupon.setShop(this);
         //map coupon code to coupon
         //to create customer coupon, need duplicate template object and set other attributes
@@ -60,10 +64,14 @@ public class Shop {
         return currentDate.before(expirationDate);
     }
 
-    public void loadApprovedCouponId(JSONObject couponObject) {
-        //need manually parse JSONObject to HashMap each by each
+    public void loadApprovedCoupons(JSONObject couponObject) {
         JSONObject approvedCoupon = couponObject.getJSONObject("approvedCoupons");
-        
+        for (Object c: approvedCoupon.keySet()) {
+            String couponCode = (String) c;
+            JSONObject couponfromJson = approvedCoupon.getJSONObject(couponCode);
+            Coupon coupon = new RedeemableCoupon(couponfromJson.getDouble("intrinsicValue"), this, null, couponfromJson.getString("couponCode"), false);
+            approvedCoupons.put(couponCode, coupon);
+        }
     }
 
     public String getShopId() {return shopId;}

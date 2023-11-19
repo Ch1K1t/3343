@@ -44,8 +44,7 @@ public class ShopManager {
             JSONObject shop = array.getJSONObject(i);
             Shop s = new Shop(shop.getString("shopId"), shop.getString("shopName"));
             // load approve coupons in shop
-            // JSONObject approvedCoupons = shop.getJSONObject("approvedCoupons");
-            // s.loadApprovedCouponId(approvedCoupons);
+            s.loadApprovedCoupons(shop);
             shops.add(s);
         }
         noOfShops = object.getInt("number of Shops");
