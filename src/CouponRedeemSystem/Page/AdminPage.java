@@ -1,11 +1,8 @@
 package CouponRedeemSystem.Page;
 
 import CouponRedeemSystem.Coupon.CouponManager;
-import CouponRedeemSystem.Coupon.model.Coupon;
-import CouponRedeemSystem.Coupon.model.PurchasableCoupon;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.model.Shop;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -72,9 +69,7 @@ public class AdminPage extends Page {
       CouponManager couponManager = CouponManager.getInstance();
       if (type == "Purchasable") {
         System.out.println();
-        System.out.println(
-          "Please input the coupon's purchasing value:"
-        );
+        System.out.println("Please input the coupon's purchasing value:");
         String pointsStr;
         boolean isPointsDouble;
         do {
@@ -103,7 +98,6 @@ public class AdminPage extends Page {
           null
         );
       }
-
 
       System.out.println("Coupon created");
     } catch (ParseException e) {

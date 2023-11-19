@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.LazyDynaBean;
 
 public abstract class Coupon {
@@ -21,14 +20,15 @@ public abstract class Coupon {
   boolean active;
   String couponCode;
   Account owner;
-  double point;
+  Double points;
 
   public Coupon(
     double intrinsicValue,
     Shop shop,
     Date expirationDate,
     String couponCode,
-    boolean active
+    boolean active,
+    double points
   ) {
     this.intrinsicValue = intrinsicValue;
     this.shop = shop;
@@ -36,8 +36,7 @@ public abstract class Coupon {
     this.couponCode = couponCode;
     this.active = active;
     this.owner = null;
-    // hardcode
-    this.point = 100;
+    this.points = points;
   }
 
   public static void couponToPoints(String couponCode) {
@@ -48,7 +47,7 @@ public abstract class Coupon {
         System.out.println("No coupon found!");
         return;
       }
-      
+
       if (!coupon.isActive()) {
         System.out.println("Coupon has been used!");
         return;
@@ -92,9 +91,9 @@ public abstract class Coupon {
       return;
     }
 
-    user.deductPoints(coupon.point);
+    user.deductPoints(coupon.points);
     coupon.setOwner(user);
-    user.setPoints(user.getPoints() - coupon.point);
+    user.setPoints(user.getPoints() - coupon.points);
     coupon.setActive(false);
 
     // Add coupons to user's coupons history
@@ -105,7 +104,7 @@ public abstract class Coupon {
     }
     coupons.add(coupon.getCouponCode());
     coupon.getOwner().setCoupons(coupons);
-    
+
     // Modify coupon owner
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("owner", coupon.getOwner().getUserName());

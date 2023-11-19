@@ -1,5 +1,3 @@
 package CouponRedeemSystem.System.Authorization;
 
-public class AuthorizationManager {
-
-}
+public class AuthorizationManager {}
