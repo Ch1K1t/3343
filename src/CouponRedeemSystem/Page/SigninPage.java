@@ -12,7 +12,7 @@ public class SigninPage extends Page {
     String password = s.nextLine();
 
     if (username.equals("user") && password.equals("user")) {
-      new UserPage().execute();
+      new UserPage(username).execute();
     } else if (username.equals("admin") && password.equals("admin")) {
       new AdminPage().execute();
     } else {

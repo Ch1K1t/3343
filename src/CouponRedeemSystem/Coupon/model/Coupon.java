@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.LazyDynaBean;
 
 public abstract class Coupon {
@@ -21,14 +20,15 @@ public abstract class Coupon {
   boolean active;
   String couponCode;
   Account owner;
-  double point;
+  Double points;
 
   public Coupon(
     double intrinsicValue,
     Shop shop,
     Date expirationDate,
     String couponCode,
-    boolean active
+    boolean active,
+    double points
   ) {
     this.intrinsicValue = intrinsicValue;
     this.shop = shop;
@@ -36,19 +36,18 @@ public abstract class Coupon {
     this.couponCode = couponCode;
     this.active = active;
     this.owner = null;
-    // hardcode
-    this.point = 100;
+    this.points = points;
   }
 
   public static void couponToPoints(String couponCode) {
     CouponManager couponManager = CouponManager.getInstance();
     try {
-      Coupon coupon = couponManager.getCoupon(couponCode, "Redeemable");
+      Coupon coupon = couponManager.getCoupon(couponCode);
       if (coupon == null) {
         System.out.println("No coupon found!");
         return;
       }
-      
+
       if (!coupon.isActive()) {
         System.out.println("Coupon has been used!");
         return;
@@ -74,7 +73,7 @@ public abstract class Coupon {
     throws IOException, ParseException {
     CouponManager couponManager = CouponManager.getInstance();
     CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
-    Coupon coupon = couponManager.getCoupon(couponCode, "Purchasable");
+    Coupon coupon = couponManager.getCoupon(couponCode);
     if (coupon == null) {
       System.out.println("No coupon found!");
       return;
@@ -92,20 +91,24 @@ public abstract class Coupon {
       return;
     }
 
-    if (user.getPoints() < coupon.point) {
+    if (user.getPoints() < coupon.points) {
       System.out.println("Insufficient points!");
       return;
     }
 
     coupon.setOwner(user);
-    user.setPoints(user.getPoints() - coupon.point);
+    user.setPoints(user.getPoints() - coupon.points);
     coupon.setActive(false);
 
     // Add coupons to user's coupons history
     List<String> coupons = coupon.getOwner().getCouponIDs();
+    if (coupons.size() > 10) {
+      System.out.println("You have reached the account's purchasing limit!");
+      return;
+    }
     coupons.add(coupon.getCouponCode());
     coupon.getOwner().setCoupons(coupons);
-    
+
     // Modify coupon owner
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("owner", coupon.getOwner().getUserName());
