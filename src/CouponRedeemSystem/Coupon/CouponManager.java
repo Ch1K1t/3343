@@ -29,7 +29,7 @@ public class CouponManager {
   }
 
   // Create json record
-  public void create(
+  public String create(
     String couponCode,
     double value,
     Date expirationDate,
@@ -37,39 +37,53 @@ public class CouponManager {
     String type,
     Double points
   ) {
-    LazyDynaBean bean = new LazyDynaBean();
-    bean.set("code", couponCode);
-    bean.set("value", value);
-    bean.set("expiration_date", expirationDate.toString());
-    bean.set("owner", null);
-    bean.set("shop", shop);
-    bean.set("active", true);
-    bean.set("type", type);
-    if (type == "Purchasable") {
-      bean.set("points", points);
-    } else {
-      // -1 for non purchasable type indicating it cannot be exchanged with a value
-      bean.set("points", -1);
-    }
     try {
+      JSONObject json;
+      json = jsonFileManager.searchJSON(couponCode + ".json");
+      if (json != null) {
+        return "Coupon code " + couponCode + " already exists";
+      }
+
+      LazyDynaBean bean = new LazyDynaBean();
+      bean.set("code", couponCode);
+      bean.set("value", value);
+      bean.set("expiration_date", expirationDate.toString());
+      bean.set("owner", null);
+      bean.set("shop", shop);
+      bean.set("active", true);
+      bean.set("type", type);
+
+      if (type == "Purchasable") {
+        bean.set("points", points);
+      } else {
+        // -1 for non purchasable type indicating it cannot be exchanged with a value
+        bean.set("points", -1);
+      }
       jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
+      return "Coupon created";
     } catch (IOException e) {
       e.printStackTrace();
+      return "Error";
     }
   }
 
-  public void delete(String couponCode) {
+  public String delete(String couponCode) {
     try {
       JSONObject jsonObject = jsonFileManager.searchJSON(couponCode + ".json");
-      if (jsonObject == null) return;
+      if (jsonObject == null) {
+        return "Coupon code " + couponCode + " does not exist";
+      }
       String type = jsonObject.getString("type");
+
       jsonFileManager.deleteJSON("Coupon/" + type, couponCode);
+      return "Coupon deleted";
     } catch (IOException e) {
       e.printStackTrace();
+      return "Error";
     }
   }
 
-  public Coupon getCoupon(String couponCode, String type)
+  public Coupon getCoupon(String couponCode)
     throws IOException, ParseException {
     // Search for the JSON file
     JSONObject couponJson = JsonFileManager.searchJSON(couponCode + ".json");

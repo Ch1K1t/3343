@@ -14,9 +14,9 @@ public class AdminPage extends Page {
   public void getInstruction() {
     System.out.println();
     System.out.println("Please select the command and input the number:");
-    System.out.println("1. CreatePurchasableCoupon");
-    System.out.println("2. CreateRedeemableCoupon");
-    System.out.println("3. DeleteCoupon");
+    System.out.println("1. Create Purchasable Coupon");
+    System.out.println("2. Create Redeemable Coupon");
+    System.out.println("3. Delete Coupon");
     System.out.println("4. Signout");
     System.out.println("5. Exit");
     System.out.println();
@@ -67,6 +67,7 @@ public class AdminPage extends Page {
       String couponCode = s.nextLine();
 
       CouponManager couponManager = CouponManager.getInstance();
+      String result = "";
       if (type == "Purchasable") {
         System.out.println();
         System.out.println("Please input the coupon's purchasing value:");
@@ -80,26 +81,28 @@ public class AdminPage extends Page {
           }
         } while (!isDouble);
         double points = Double.parseDouble(pointsStr);
-        couponManager.create(
-          couponCode,
-          intrinsicValue,
-          expirationDate,
-          shop,
-          type,
-          points
-        );
+        result =
+          couponManager.create(
+            couponCode,
+            intrinsicValue,
+            expirationDate,
+            shop,
+            type,
+            points
+          );
       } else {
-        couponManager.create(
-          couponCode,
-          intrinsicValue,
-          expirationDate,
-          shop,
-          type,
-          null
-        );
+        result =
+          couponManager.create(
+            couponCode,
+            intrinsicValue,
+            expirationDate,
+            shop,
+            type,
+            null
+          );
       }
 
-      System.out.println("Coupon created");
+      System.out.println(result);
     } catch (ParseException e) {
       e.printStackTrace();
     }
@@ -111,9 +114,9 @@ public class AdminPage extends Page {
     String couponCode = s.nextLine();
 
     CouponManager couponManager = CouponManager.getInstance();
-    couponManager.delete(couponCode);
 
-    System.out.println("Coupon deleted");
+    String result = couponManager.delete(couponCode);
+    System.out.println(result);
   }
 
   public void execute() {
@@ -143,6 +146,6 @@ public class AdminPage extends Page {
           System.out.println("Unknown command");
           break;
       }
-    } while (!cmd.equals("!signout"));
+    } while (!cmd.equals("4"));
   }
 }
