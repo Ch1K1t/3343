@@ -60,7 +60,9 @@ public class Main {
       System.out.println(s2.nextLine());
     }
     file.delete();
+    
     s.close();
+    s2.close();
   }
 
   public static void main(String[] args) throws IOException, ParseException {
