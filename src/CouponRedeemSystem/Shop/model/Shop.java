@@ -1,63 +1,52 @@
 package CouponRedeemSystem.Shop.model;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Coupon.model.NormalCoupon;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 public class Shop {
     private String shopId;
     private String shopName;
-    private ArrayList<String> approvedCouponId; //check Id when transact to validate the coupons
+    private HashMap<String, Coupon> approvedCoupons;
 
 
     public Shop(String shopId, String shopName) {
         super();
         this.shopName = shopName;
         this.shopId = shopId;
-        this.approvedCouponId = new ArrayList<>();
+        this.approvedCoupons = new HashMap<>();
     }
 
     //TODO: Transaction
+    public void transaction() {
 
-    //TODO: check validity of coupons
-    public boolean validate(String couponCode, Date expirationDate) {
-        boolean valid = false;
-        java.util.Date currentDate = new Date();
-        for (String id :approvedCouponId) {
-            if (id == couponCode) 
-                break;
-        }
-        return !valid && expirationDate.before(currentDate);
     }
 
-    //
-    public void createCoupon(double intrinsicValue, Date expirationDate, String couponCode) throws ParseException {
-        while (isBeforeCurrentDate(expirationDate)) {
-            expirationDate = getNewDate();
-        }
+    public boolean validate(String couponCode, Date expirationDate) {
+        java.util.Date currentDate = new Date();
+        //if coupon code found in map and not expired, valid
+        return approvedCoupons.containsKey(couponCode) && expirationDate.after(currentDate);
+    }
+
+    public void createCoupon(double intrinsicValue, String couponCode) throws ParseException {
         while (intrinsicValue < 0) {
             intrinsicValue = getNewIntrinsicValue();
         }
-        Coupon coupon = new NormalCoupon(intrinsicValue, null, expirationDate, couponCode); //create a new Coupon without owner
+        Coupon coupon = new NormalCoupon(intrinsicValue, null, null, couponCode, false); //create a new Coupon without owner
         coupon.setShop(this);
-        approvedCouponId.add(coupon.getCouponCode());
+        //map coupon code to coupon
+        //to create customer coupon, need duplicate template object and set other attributes
+        approvedCoupons.put(couponCode, coupon);
     }
     
-    public Date getNewDate() throws ParseException {
-        Scanner s = new Scanner(System.in);
-        System.out.println("Date inputted must be after today, please try again.");
-        System.out.println("Please input the date in yyyy-MM-dd format.");
-        String date = s.nextLine();
-        Date dateObject = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-        s.close();
-        return dateObject;
-    }
-    
-    private double getNewIntrinsicValue() { //is this manual inputted?
+    public double getNewIntrinsicValue() { //is this manual inputted?
         Scanner s = new Scanner(System.in);
         System.out.println("Intrinsic value inputted must be after today, please try again.");
         System.out.println("Please input the date in yyyy-MM-dd format.");
@@ -66,14 +55,18 @@ public class Shop {
         return value;
     }
     
-    private boolean isBeforeCurrentDate(Date expirationDate) {
+    public boolean isBeforeCurrentDate(Date expirationDate) {
         Date currentDate = new Date();
         return currentDate.before(expirationDate);
     }
 
+    public void loadApprovedCouponId(JSONObject couponObject) {
+        //need manually parse JSONObject to HashMap each by each
+        JSONObject approvedCoupon = couponObject.getJSONObject("approvedCoupons");
+        
+    }
+
     public String getShopId() {return shopId;}
-    
-    public ArrayList<String> getApprovedCouponId() {return approvedCouponId;}
 
     public String getShopName() {return shopName;}
 }
