@@ -29,43 +29,50 @@ public class CouponManager {
   }
 
   // Create json record
-  public void create(
+  public String create(
     String couponCode,
     double value,
     Date expirationDate,
     Shop shop,
     String type
   ) {
-    JSONObject json;
     try {
+      JSONObject json;
       json = jsonFileManager.searchJSON(couponCode + ".json");
-      if (json != null) return;
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    LazyDynaBean bean = new LazyDynaBean();
-    bean.set("code", couponCode);
-    bean.set("value", value);
-    bean.set("expiration_date", expirationDate.toString());
-    bean.set("owner", null);
-    bean.set("shop", shop);
-    bean.set("active", true);
-    bean.set("type", type);
-    try {
+      if (json != null) {
+        return "Coupon code " + couponCode + " already exists";
+      }
+
+      LazyDynaBean bean = new LazyDynaBean();
+      bean.set("code", couponCode);
+      bean.set("value", value);
+      bean.set("expiration_date", expirationDate.toString());
+      bean.set("owner", null);
+      bean.set("shop", shop);
+      bean.set("active", true);
+      bean.set("type", type);
+
       jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
+      return "Coupon created";
     } catch (IOException e) {
       e.printStackTrace();
+      return "Error";
     }
   }
 
-  public void delete(String couponCode) {
+  public String delete(String couponCode) {
     try {
       JSONObject jsonObject = jsonFileManager.searchJSON(couponCode + ".json");
-      if (jsonObject == null) return;
+      if (jsonObject == null) {
+        return "Coupon code " + couponCode + " does not exist";
+      }
       String type = jsonObject.getString("type");
-      jsonFileManager.deleteJSON("Coupon/" + type, couponCode + ".json");
+
+      jsonFileManager.deleteJSON("Coupon/" + type, couponCode);
+      return "Coupon deleted";
     } catch (IOException e) {
       e.printStackTrace();
+      return "Error";
     }
   }
 

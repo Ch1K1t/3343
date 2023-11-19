@@ -1,11 +1,8 @@
 package CouponRedeemSystem.Page;
 
 import CouponRedeemSystem.Coupon.CouponManager;
-import CouponRedeemSystem.Coupon.model.Coupon;
-import CouponRedeemSystem.Coupon.model.PurchasableCoupon;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.model.Shop;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -70,7 +67,7 @@ public class AdminPage extends Page {
       String couponCode = s.nextLine();
 
       CouponManager couponManager = CouponManager.getInstance();
-      couponManager.create(
+      String result = couponManager.create(
         couponCode,
         intrinsicValue,
         expirationDate,
@@ -78,7 +75,7 @@ public class AdminPage extends Page {
         type
       );
 
-      System.out.println("Coupon created");
+      System.out.println(result);
     } catch (ParseException e) {
       e.printStackTrace();
     }
@@ -90,9 +87,9 @@ public class AdminPage extends Page {
     String couponCode = s.nextLine();
 
     CouponManager couponManager = CouponManager.getInstance();
-    couponManager.delete(couponCode);
+    String result = couponManager.delete(couponCode);
 
-    System.out.println("Coupon deleted");
+    System.out.println(result);
   }
 
   public void execute() {
