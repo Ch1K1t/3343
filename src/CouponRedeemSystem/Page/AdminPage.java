@@ -7,16 +7,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 public class AdminPage extends Page {
 
   public void getInstruction() {
     System.out.println();
     System.out.println("Please select the command and input the number:");
-    System.out.println("1. CreatePurchasableCoupon");
-    System.out.println("2. CreateRedeemableCoupon");
-    System.out.println("3. DeleteCoupon");
+    System.out.println("1. Create Purchasable Coupon");
+    System.out.println("2. Create Redeemable Coupon");
+    System.out.println("3. Delete Coupon");
     System.out.println("4. Signout");
     System.out.println("5. Exit");
     System.out.println();
@@ -31,7 +30,7 @@ public class AdminPage extends Page {
       boolean isDouble;
       do {
         value = s.nextLine();
-        isDouble = Pattern.matches("[\\d.]+", value);
+        isDouble = value.matches("[\\d.]+");
         if (!isDouble) {
           System.out.println("Invalid value, please input again:");
         }
@@ -48,25 +47,29 @@ public class AdminPage extends Page {
       );
       String expirationDateString;
       boolean isDate;
+      boolean isAfterToday;
+      Date expirationDate;
+      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
       do {
         expirationDateString = s.nextLine();
         isDate =
-          Pattern.matches(
-            "^((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|2[0-1])[0-9]{2})$",
-            expirationDateString
+          expirationDateString.matches(
+            "^((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|2[0-1])[0-9]{2})$"
           );
-        if (!isDate) {
+        expirationDate = sdf.parse(expirationDateString);
+        isAfterToday = expirationDate.after(new Date());
+
+        if (!isDate || !isAfterToday) {
           System.out.println("Invalid date, please input again:");
         }
-      } while (!isDate);
-      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-      Date expirationDate = sdf.parse(expirationDateString);
+      } while (!isDate || !isAfterToday);
 
       System.out.println();
       System.out.println("Please input the coupon's code:");
       String couponCode = s.nextLine();
 
       CouponManager couponManager = CouponManager.getInstance();
+      String result = "";
       if (type == "Purchasable") {
         System.out.println();
         System.out.println("Please input the coupon's purchasing value:");
@@ -74,7 +77,7 @@ public class AdminPage extends Page {
         boolean isPointsDouble;
         do {
           pointsStr = s.nextLine();
-          isPointsDouble = Pattern.matches("[\\d.]+", value);
+          isPointsDouble = value.matches("[\\d.]+");
           if (!isPointsDouble) {
             System.out.println("Invalid value, please input again:");
           }
@@ -94,12 +97,9 @@ public class AdminPage extends Page {
           intrinsicValue,
           expirationDate,
           shop,
-          type,
-          null
+          type
         );
       }
-
-      System.out.println("Coupon created");
     } catch (ParseException e) {
       e.printStackTrace();
     }
@@ -111,9 +111,8 @@ public class AdminPage extends Page {
     String couponCode = s.nextLine();
 
     CouponManager couponManager = CouponManager.getInstance();
-    couponManager.delete(couponCode);
 
-    System.out.println("Coupon deleted");
+    couponManager.delete(couponCode);
   }
 
   public void execute() {
@@ -143,6 +142,6 @@ public class AdminPage extends Page {
           System.out.println("Unknown command");
           break;
       }
-    } while (!cmd.equals("!signout"));
+    } while (!cmd.equals("4"));
   }
 }

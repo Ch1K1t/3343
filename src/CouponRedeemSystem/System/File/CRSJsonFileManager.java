@@ -91,8 +91,6 @@ public class CRSJsonFileManager {
     throws IOException {
     File file = createJson(dirName, fileName);
     FileWriter fileWriter = new FileWriter(file);
-    System.out.println(content.toString());
-    System.out.println(file.getAbsolutePath());
     fileWriter.write(content.toString());
     fileWriter.close();
   }
@@ -220,8 +218,8 @@ public class CRSJsonFileManager {
   public JSONObject convertFileTextToJSON(File file) throws IOException {
     InputStream iStream = new FileInputStream(file);
     String jsonText = IOUtils.toString(iStream);
-    iStream.close();
     if (jsonText.isBlank()) jsonText = "{}";
+    iStream.close();
     return (JSONObject) JSONSerializer.toJSON(jsonText);
   }
 }

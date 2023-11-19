@@ -1,8 +1,0 @@
-{
-  "userName": "tony",
-  "age": 20,
-  "telNo": 213,
-  "points": 950,
-  "dateOfBirth": "Wed Jan 01 00:00:00 HKT 2003",
-  "couponIDs": ["testCoupon2"]
-}
