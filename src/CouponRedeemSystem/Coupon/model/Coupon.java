@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.LazyDynaBean;
 
 public abstract class Coupon {
