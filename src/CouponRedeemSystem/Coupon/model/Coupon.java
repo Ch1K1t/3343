@@ -92,11 +92,7 @@ public abstract class Coupon {
       return;
     }
 
-    if (user.getPoints() < coupon.point) {
-      System.out.println("Insufficient points!");
-      return;
-    }
-
+    user.deductPoints(coupon.point);
     coupon.setOwner(user);
     user.setPoints(user.getPoints() - coupon.point);
     coupon.setActive(false);
