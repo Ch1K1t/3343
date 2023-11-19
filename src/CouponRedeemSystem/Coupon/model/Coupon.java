@@ -103,6 +103,10 @@ public abstract class Coupon {
 
     // Add coupons to user's coupons history
     List<String> coupons = coupon.getOwner().getCouponIDs();
+    if (coupons.size() > 10) {
+      System.out.println("You have reached the account's purchasing limit!");
+      return;
+    }
     coupons.add(coupon.getCouponCode());
     coupon.getOwner().setCoupons(coupons);
     
