@@ -1,8 +1,10 @@
 package CouponRedeemSystem.Main;
 
 import CouponRedeemSystem.Coupon.CouponManager;
+import CouponRedeemSystem.Page.HomePage;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,7 +19,14 @@ public class Main {
     CouponManager couponManager = CouponManager.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
     Date expirationDate = sdf.parse("11/11/2022");
-    couponManager.create("123", 10, expirationDate, null, "Purchasable");
+    couponManager.create(
+      "123",
+      (double) 10,
+      expirationDate,
+      null,
+      "Purchasable",
+      (double) -1
+    );
   }
 
   /*

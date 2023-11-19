@@ -171,7 +171,7 @@ public class CRSJsonFileManager {
     throws IOException {
     File jsonFile = searchFile(fileName);
     if (jsonFile == null || jsonFile.isDirectory()) {
-      System.out.println("File not found! Return empty json");
+      System.out.println("File not found!");
       return null;
     }
     return convertFileTextToJSON(jsonFile);
@@ -221,6 +221,8 @@ public class CRSJsonFileManager {
   public JSONObject convertFileTextToJSON(File file) throws IOException {
     InputStream iStream = new FileInputStream(file);
     String jsonText = IOUtils.toString(iStream);
+    if (jsonText.isBlank())
+    	jsonText = "{}";
     return (JSONObject) JSONSerializer.toJSON(jsonText);
   }
 }

@@ -34,7 +34,8 @@ public class CouponManager {
     double value,
     Date expirationDate,
     Shop shop,
-    String type
+    String type,
+    Double points
   ) {
     try {
       JSONObject json;
@@ -52,6 +53,12 @@ public class CouponManager {
       bean.set("active", true);
       bean.set("type", type);
 
+      if (type == "Purchasable") {
+        bean.set("points", points);
+      } else {
+        // -1 for non purchasable type indicating it cannot be exchanged with a value
+        bean.set("points", -1);
+      }
       jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
       return "Coupon created";
     } catch (IOException e) {
@@ -95,6 +102,7 @@ public class CouponManager {
     double value = couponJson.getDouble("value");
     boolean active = couponJson.getBoolean("active");
     String couponCode = couponJson.getString("code");
+    double points = couponJson.getDouble("points");
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
     Date expirationDate = sdf.parse(couponJson.getString("expiration_date"));
     switch (couponJson.getString("type")) {
@@ -104,7 +112,8 @@ public class CouponManager {
           null,
           expirationDate,
           couponCode,
-          active
+          active,
+          points
         );
       case "Purchasable":
         return new PurchasableCoupon(
@@ -112,7 +121,8 @@ public class CouponManager {
           null,
           expirationDate,
           couponCode,
-          active
+          active,
+          points
         );
     }
     return null;
