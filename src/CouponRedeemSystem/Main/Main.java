@@ -1,17 +1,17 @@
 package CouponRedeemSystem.Main;
 
 import CouponRedeemSystem.Page.HomePage;
+import CouponRedeemSystem.Page.UserPage;
+import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.io.IOException;
 import java.text.ParseException;
+import net.sf.json.JSONObject;
 
 public class Main {
 
   public static void main(String[] args) throws IOException, ParseException {
-    new HomePage().execute();
-    // File[] fileArr = new File("Data/Coupon/Purchasable").listFiles();
-    // for (File file : fileArr) {
-    //   System.out.println(file.getName());
-    // }
+    // new HomePage().execute();
+    new UserPage("test01").execute();
 
   }
 }

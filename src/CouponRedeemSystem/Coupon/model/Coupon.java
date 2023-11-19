@@ -1,6 +1,5 @@
 package CouponRedeemSystem.Coupon.model;
 
-import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Shop.model.Shop;
@@ -12,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import net.sf.json.JSONObject;
-import org.apache.commons.beanutils.LazyDynaBean;
 
 public abstract class Coupon {
 
@@ -99,55 +97,51 @@ public abstract class Coupon {
     }
   }
 
-  public static void pointsToCoupon(Account user, String couponCode)
-    throws IOException, ParseException {
-    CouponManager couponManager = CouponManager.getInstance();
-    CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
-    Coupon coupon = couponManager.getCoupon(couponCode);
-    if (coupon == null) {
-      System.out.println("No coupon found!");
-      return;
-    }
-
-    if (!coupon.isActive()) {
-      System.out.println("Coupon is not available!");
-      return;
-    }
-
-    // May not be necessary
-    Date currentDate = new Date();
-    if (coupon.getExpirationDate().compareTo(currentDate) <= 0) {
-      System.out.println("Coupon has expired!");
-      return;
-    }
-
-    if (user.getPoints() < coupon.points) {
-      System.out.println("Insufficient points!");
-      return;
-    }
-
-    coupon.setOwner(user);
-    user.setPoints(user.getPoints() - coupon.points);
-    coupon.setActive(false);
-
-    // Add coupons to user's coupons history
-    List<String> coupons = coupon.getOwner().getCouponIDs();
-    if (coupons.size() > 10) {
-      System.out.println("You have reached the account's purchasing limit!");
-      return;
-    }
-    coupons.add(coupon.getCouponCode());
-    coupon.getOwner().setCoupons(coupons);
-
-    // Modify coupon owner
-    LazyDynaBean bean = new LazyDynaBean();
-    bean.set("owner", coupon.getOwner().getUserName());
+  public static void pointsToCoupon(String couponCode, Account account) {
     try {
-      jsonFileManager.modifyJSON(
-        "Coupon/Purchasable",
-        coupon.getCouponCode(),
-        bean
+      CouponManager couponManager = CouponManager.getInstance();
+      CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
+      Coupon coupon = couponManager.getCoupon(couponCode);
+      if (coupon == null) {
+        System.out.println("No coupon found!");
+        return;
+      }
+
+      if (!coupon.isActive()) {
+        System.out.println("Coupon is not available!");
+        return;
+      }
+
+      // May not be necessary
+      Date currentDate = new Date();
+      if (coupon.getExpirationDate().before(currentDate)) {
+        System.out.println("Coupon has expired!");
+        return;
+      }
+
+      if (account.getPoints() < coupon.points) {
+        System.out.println("Insufficient points!");
+        return;
+      }
+
+      // Add coupons to user's coupons history
+      List<String> coupons = account.getCouponIDs();
+      if (coupons.size() > 10) {
+        System.out.println("You have reached the account's purchasing limit!");
+        return;
+      }
+
+      JSONObject accountJSON = jsonFileManager.searchJSON(
+        account.getUserName() + ".json"
       );
+      accountJSON.put("points", account.getPoints() - coupon.points);
+      coupons.add(coupon.getCouponCode());
+      accountJSON.put("couponIDs", coupons);
+      jsonFileManager.modifyJSON("Account", account.getUserName(), accountJSON);
+
+      JSONObject couponJSON = jsonFileManager.searchJSON(couponCode + ".json");
+      couponJSON.put("owner", account);
+      jsonFileManager.modifyJSON("Coupon/Purchasable", couponCode, couponJSON);
     } catch (IOException e) {
       e.printStackTrace();
     }

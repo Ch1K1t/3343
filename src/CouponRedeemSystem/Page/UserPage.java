@@ -6,9 +6,11 @@ import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import CouponRedeemSystem.Page.model.Page;
+import CouponRedeemSystem.System.File.CRSJsonFileManager;
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.List;
+import net.sf.json.JSONObject;
 
 public class UserPage extends Page {
 
@@ -33,7 +35,26 @@ public class UserPage extends Page {
       AccountManager accountManager = AccountManager.getInstance();
       Account account = accountManager.getAccount(username);
       System.out.println("Your balance is " + account.getPoints());
+      File[] fileArr = new File("Data/Coupon/Purchasable").listFiles();
+
+      CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
+      System.out.println("The available coupons are:");
+      for (File file : fileArr) {
+        JSONObject jsonObject = jsonFileManager.convertFileTextToJSON(file);
+        if (jsonObject.getString("owner").equals("null")) {
+          System.out.println(
+            String.format(
+              "%-" + 15 + "s",
+              "Code: " + jsonObject.getString("code")
+            ) +
+            "Required Points: " +
+            jsonObject.getString("points")
+          );
+        }
+      }
       System.out.println("Please input the coupon's id:");
+      String couponID = s.nextLine();
+      Coupon.pointsToCoupon(couponID, account);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (ParseException e) {

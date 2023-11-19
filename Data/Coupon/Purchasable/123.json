@@ -1,1 +1,10 @@
-{"code":"123","value":1,"expiration_date":"Sat Nov 11 00:00:00 HKT 2000","owner":null,"shop":null,"active":true,"type":"Purchasable","points":10}
+{
+  "code": "123",
+  "value": 1,
+  "expiration_date": "Sat Nov 11 00:00:00 HKT 2000",
+  "owner": null,
+  "shop": null,
+  "active": false,
+  "type": "Purchasable",
+  "points": 10
+}
