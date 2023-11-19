@@ -40,9 +40,9 @@ public class DiscountManager {
 		return discount;
 	}
 	
-	public Discount createDiscountByMonth(String discountName, Date startDate, int day, double valueOff) throws ParseException, IOException {
+	public Discount createDiscountByMonth(String discountName, Date startDate, int month, double valueOff) throws ParseException, IOException {
 		String startDateInSDF = sdf.format(startDate);
-		String expireDate = sdf.format(DateUtils.addDays(startDate, day));
+		String expireDate = sdf.format(DateUtils.addMonths(startDate, month));
 		Discount discount = new Discount(discountName, startDateInSDF, expireDate, valueOff);
 		
 		System.out.println(discount.getJSONString());
