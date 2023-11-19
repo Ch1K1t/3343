@@ -22,7 +22,7 @@ public class Main {
       (double) 10,
       expirationDate,
       null,
-      "Purchasable",
+      "Redeemable",
       (double) -1
     );
   }
@@ -37,25 +37,23 @@ public class Main {
   public static void delete() throws IOException {
     CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
 
-    Scanner s = new Scanner(System.in);
+    // Scanner s = new Scanner(System.in);
 
     String code = "123";
     // String code = s.nextLine();
 
-    // String type = "Purchasable";
+    String type = "Redeemable";
     // Object objType = jsonFileManager.searchJSON(code + ".json").get("type");
     JSONObject jsonObject = jsonFileManager.searchJSON(code + ".json");
+    System.out.println(jsonObject);
 
-    String strType = jsonObject.getString("type");
+    // String strType = jsonObject.getString("type");
 
     // String type = s.nextLine();
 
-    // System.out.println(objType.equals("Purchasable"));
-    System.out.println(strType.equals("Purchasable"));
+    jsonFileManager.deleteJSON("Coupon/" + type, code);
 
-    CRSJsonFileManager.getInstance().deleteJSON("Coupon/" + strType, code);
-
-    s.close();
+    // s.close();
   }
 
   public static void main(String[] args) throws IOException, ParseException {
