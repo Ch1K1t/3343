@@ -1,12 +1,14 @@
 package CouponRedeemSystem.Shop.model;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
 
+import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Coupon.model.Coupon;
+import CouponRedeemSystem.Coupon.model.PurchasableCoupon;
 import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import net.sf.json.JSONObject;
 
@@ -23,14 +25,28 @@ public class Shop {
         this.approvedCoupons = new HashMap<>();
     }
 
-    //TODO: Transaction
-    public void transaction(List<String> userPossessedCouponIds, String couponId) {
+    public void transaction(Account user, String couponId) throws IOException, ParseException {
         CouponManager couponManager = CouponManager.getInstance();
-        if (userPossessedCouponIds.contains(couponId)) {
-            couponManager.getCoupon(couponId, couponId);
+        if (user.getCouponIDs().contains(couponId)) {
+            if (couponManager.getCoupon(couponId) == null) {
+                System.out.println("Coupon not found in database.");
+                return;
+            } else {
+                Coupon coupon = couponManager.getCoupon(couponId);
+                if (coupon instanceof PurchasableCoupon) {
+                    // verify
+                    if (coupon.getOwner() == user 
+                        && coupon.getExpirationDate().after(new Date()) 
+                        && coupon.getShop() == this 
+                        && coupon.isActive()) 
+                        System.out.println("Transaction is successful");
+                } else 
+                    System.out.println("Transaction is unsuccessful, coupon is not purchasable.");
+            }
+        } else {
+            System.out.println("Coupon not found in user's possession.");
+            return;
         }
-
-
     }
 
     public boolean validate(String couponCode, Date expirationDate) {
@@ -43,7 +59,7 @@ public class Shop {
         while (intrinsicValue < 0) {
             intrinsicValue = getNewIntrinsicValue();
         }
-        Coupon coupon = new RedeemableCoupon(intrinsicValue, null, null, couponCode, false); //create a new Coupon without owner
+        Coupon coupon = new RedeemableCoupon(intrinsicValue, this, null, couponCode, false, -1); //create a new Coupon without owner
         coupon.setShop(this);
         //map coupon code to coupon
         //to create customer coupon, need duplicate template object and set other attributes
@@ -69,7 +85,7 @@ public class Shop {
         for (Object c: approvedCoupon.keySet()) {
             String couponCode = (String) c;
             JSONObject couponfromJson = approvedCoupon.getJSONObject(couponCode);
-            Coupon coupon = new RedeemableCoupon(couponfromJson.getDouble("intrinsicValue"), this, null, couponfromJson.getString("couponCode"), false);
+            Coupon coupon = new RedeemableCoupon(couponfromJson.getDouble("intrinsicValue"), this, null, couponfromJson.getString("couponCode"), false, -1);
             approvedCoupons.put(couponCode, coupon);
         }
     }
