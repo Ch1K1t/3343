@@ -63,7 +63,7 @@ public class CouponManager {
       JSONObject jsonObject = jsonFileManager.searchJSON(couponCode + ".json");
       if (jsonObject == null) return;
       String type = jsonObject.getString("type");
-      jsonFileManager.deleteJSON("Coupon/" + type, couponCode + ".json");
+      jsonFileManager.deleteJSON("Coupon/" + type, couponCode);
     } catch (IOException e) {
       e.printStackTrace();
     }
