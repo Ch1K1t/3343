@@ -1,6 +1,5 @@
 package CouponRedeemSystem.Account.model;
 
-import CouponRedeemSystem.Coupon.model.Coupon;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,7 +7,9 @@ import java.util.Date;
 import java.util.List;
 
 public class Account {
+
   String userName;
+  String role;
   int age;
   int telNo;
   double points;
@@ -16,35 +17,46 @@ public class Account {
   List<String> couponIDs;
 
   public Account(
-      String userName,
-      int age,
-      int telNo,
-      String dateOfBirth) throws ParseException {
+    String userName,
+    String role,
+    int age,
+    int telNo,
+    String dateOfBirth
+  ) throws ParseException {
     this.userName = userName;
+    this.role = role;
     this.age = age;
     this.telNo = telNo;
     this.points = 0;
     this.dateOfBirth = new SimpleDateFormat("yyyy-MM-dd").parse(dateOfBirth);
-    couponIDs = new ArrayList<String>();
+    this.couponIDs = new ArrayList<String>();
   }
 
   public Account(
-      String userName,
-      int age,
-      int telNo,
-      double points,
-      String dateOfBirth,
-      List<String> coupons) throws ParseException {
+    String userName,
+    String role,
+    int age,
+    int telNo,
+    double points,
+    String dateOfBirth,
+    List<String> coupons
+  ) throws ParseException {
     this.userName = userName;
+    this.role = role;
     this.age = age;
     this.telNo = telNo;
     this.points = points;
-    this.dateOfBirth = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(dateOfBirth);
-    couponIDs = new ArrayList<String>();
+    this.dateOfBirth =
+      new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(dateOfBirth);
+    this.couponIDs = new ArrayList<String>();
   }
 
   public String getUserName() {
     return userName;
+  }
+
+  public String getRole() {
+    return role;
   }
 
   public int getAge() {
@@ -69,6 +81,10 @@ public class Account {
 
   public void setUserName(String userName) {
     this.userName = userName;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
   }
 
   public void setAge(int age) {

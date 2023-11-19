@@ -4,20 +4,28 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.logging.Log;
 
 public class EncryptionManager {
 	private static EncryptionManager instance;
 	
-	private SecretKey key;
+	private String encoding = "utf-8";
+	
+	private String keyStr = "3343334333433343";
+	
+	private String IV = "3343334333433343";
+	
+	private SecretKeySpec key;
 	
 	private Cipher cipher;
 	
 	private EncryptionManager() {
 		try {
-			this.key = generateKey("AES");
-			this.cipher = Cipher.getInstance("AES");
+			this.key = generateKey();
+			this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -31,21 +39,14 @@ public class EncryptionManager {
 		return instance;
 	}
 	
-	private SecretKey generateKey(String encryptType) {
-		try {
-			KeyGenerator keyGenerator = KeyGenerator.getInstance(encryptType);
-			SecretKey key = keyGenerator.generateKey();
-			return key;
-		} catch (Exception e) {
-			System.out.println(e);
-			return null;
-		}
+	private SecretKeySpec generateKey() {
+		return new SecretKeySpec(keyStr.getBytes(), "AES");
 	}
 	
 	public String encryption(String textToEncrypt) {
 		try {
-			byte[] text = textToEncrypt.getBytes();
-			cipher.init(Cipher.ENCRYPT_MODE, key);
+			byte[] text = textToEncrypt.getBytes(encoding);
+			cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(IV.getBytes()));
 			String textEncrypted = Base64.getEncoder().encodeToString(cipher.doFinal(text));
 			
 			return textEncrypted;
@@ -57,7 +58,7 @@ public class EncryptionManager {
 	
 	public String decryption(String textToDecrypt) {
 		try {
-			cipher.init(Cipher.DECRYPT_MODE, key);
+			cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(IV.getBytes()));
 			byte[] textDecrypted = cipher.doFinal(Base64.getDecoder().decode(textToDecrypt));
 			String result = new String(textDecrypted);
 			

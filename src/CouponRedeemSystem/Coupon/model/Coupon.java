@@ -1,17 +1,16 @@
 package CouponRedeemSystem.Coupon.model;
 
 import CouponRedeemSystem.Account.model.Account;
+import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import net.sf.json.JSONObject;
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
+import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.LazyDynaBean;
 
 public abstract class Coupon {
@@ -41,60 +40,83 @@ public abstract class Coupon {
     this.point = 100;
   }
 
-  public static void couponToPoints(Coupon coupon) {
-    Date currentDate = new Date();
-
-    if (!coupon.isActive()) return;
-    if (coupon.getExpirationDate().compareTo(currentDate) <= 0) return;
-
-    double points;
+  public static void couponToPoints(String couponCode) {
+    CouponManager couponManager = CouponManager.getInstance();
     try {
-      points = coupon.pointConversion();
-      double newPoints = coupon.getOwner().getPoints() + points;
-      coupon.getOwner().setPoints(newPoints);
+      Coupon coupon = couponManager.getCoupon(couponCode, "Redeemable");
+      if (coupon == null) {
+        System.out.println("No coupon found!");
+        return;
+      }
+      
+      if (!coupon.isActive()) {
+        System.out.println("Coupon has been used!");
+        return;
+      }
+
+      Date currentDate = new Date();
+      if (coupon.getExpirationDate().compareTo(currentDate) <= 0) {
+        System.out.println("Coupon has expired!");
+        return;
+      }
+
+      double points = coupon.pointConversion();
+      coupon.getOwner().setPoints(coupon.getOwner().getPoints() + points);
       coupon.setActive(false);
+    } catch (IOException e) {
+      e.printStackTrace();
     } catch (ParseException e) {
       e.printStackTrace();
     }
   }
 
-  public static void pointsToCoupon(Account user, String couponCode) throws IOException, ParseException {
+  public static void pointsToCoupon(Account user, String couponCode)
+    throws IOException, ParseException {
+    CouponManager couponManager = CouponManager.getInstance();
     CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
-    JSONObject json = jsonFileManager.searchJSON(couponCode, null);
-    if (json == new JSONObject()) return;
+    Coupon coupon = couponManager.getCoupon(couponCode, "Purchasable");
+    if (coupon == null) {
+      System.out.println("No coupon found!");
+      return;
+    }
 
-    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
-    Date expire = sdf.parse(json.get("expiration_date").toString());
-
-    Coupon coupon = new NormalCoupon(
-      Double.parseDouble(json.get("value").toString()), 
-      null, 
-      expire, 
-      couponCode, 
-      Boolean.parseBoolean(json.get("active").toString())
-    );
-    if (!coupon.isActive()) return;
+    if (!coupon.isActive()) {
+      System.out.println("Coupon is not available!");
+      return;
+    }
 
     // May not be necessary
     Date currentDate = new Date();
-    if (coupon.getExpirationDate().compareTo(currentDate) <= 0) return;
-    if (user.getPoints() < coupon.point) return;
+    if (coupon.getExpirationDate().compareTo(currentDate) <= 0) {
+      System.out.println("Coupon has expired!");
+      return;
+    }
+
+    if (user.getPoints() < coupon.point) {
+      System.out.println("Insufficient points!");
+      return;
+    }
 
     coupon.setOwner(user);
     user.setPoints(user.getPoints() - coupon.point);
     coupon.setActive(false);
-    
+
     // Add coupons to user's coupons history
     List<String> coupons = coupon.getOwner().getCouponIDs();
     coupons.add(coupon.getCouponCode());
     coupon.getOwner().setCoupons(coupons);
+    
     // Modify coupon owner
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("owner", coupon.getOwner().getUserName());
     try {
-        jsonFileManager.modifyJSON("Coupon", coupon.getCouponCode(), bean);
+      jsonFileManager.modifyJSON(
+        "Coupon/Purchasable",
+        coupon.getCouponCode(),
+        bean
+      );
     } catch (IOException e) {
-        e.printStackTrace();
+      e.printStackTrace();
     }
   }
 
