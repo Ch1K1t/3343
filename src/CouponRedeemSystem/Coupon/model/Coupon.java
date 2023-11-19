@@ -77,18 +77,18 @@ public abstract class Coupon {
 
       double points = coupon.pointConversion();
       CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
-      JSONObject jsonObject = jsonFileManager.searchJSON(
+      JSONObject accountJSON = jsonFileManager.searchJSON(
         account.getUserName() + ".json"
       );
-      jsonObject.put("points", account.getPoints() + points);
-      jsonFileManager.modifyJSON("Account", account.getUserName(), jsonObject);
+      accountJSON.put("points", account.getPoints() + points);
+      jsonFileManager.modifyJSON("Account", account.getUserName(), accountJSON);
 
-      jsonObject = jsonFileManager.searchJSON(couponCode + ".json");
-      jsonObject.put("active", false);
+      JSONObject couponJSON = jsonFileManager.searchJSON(couponCode + ".json");
+      couponJSON.put("active", false);
       jsonFileManager.modifyJSON(
-        "Coupon/" + jsonObject.getString("type"),
+        "Coupon/" + couponJSON.getString("type"),
         couponCode,
-        jsonObject
+        couponJSON
       );
 
       System.out.println("Coupon redeemed successfully!");
@@ -140,7 +140,7 @@ public abstract class Coupon {
       jsonFileManager.modifyJSON("Account", account.getUserName(), accountJSON);
 
       JSONObject couponJSON = jsonFileManager.searchJSON(couponCode + ".json");
-      couponJSON.put("owner", account);
+      couponJSON.put("owner", account.getUserName());
       jsonFileManager.modifyJSON("Coupon/Purchasable", couponCode, couponJSON);
     } catch (IOException e) {
       e.printStackTrace();

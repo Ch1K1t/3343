@@ -3,7 +3,7 @@
   "role": "user",
   "age": 20,
   "telNo": 12345678,
-  "points": 9.0875751e8,
+  "points":10,
   "dateOfBirth": "Fri Nov 11 00:00:00 HKT 2022",
   "couponIDs": []
 }

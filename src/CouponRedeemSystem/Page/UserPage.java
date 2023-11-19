@@ -34,10 +34,12 @@ public class UserPage extends Page {
     try {
       AccountManager accountManager = AccountManager.getInstance();
       Account account = accountManager.getAccount(username);
+      System.out.println();
       System.out.println("Your balance is " + account.getPoints());
       File[] fileArr = new File("Data/Coupon/Purchasable").listFiles();
 
       CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
+      System.out.println();
       System.out.println("The available coupons are:");
       for (File file : fileArr) {
         JSONObject jsonObject = jsonFileManager.convertFileTextToJSON(file);
@@ -52,7 +54,8 @@ public class UserPage extends Page {
           );
         }
       }
-      System.out.println("Please input the coupon's id:");
+      System.out.println();
+      System.out.println("Please input the coupon's code:");
       String couponID = s.nextLine();
       Coupon.pointsToCoupon(couponID, account);
     } catch (IOException e) {
