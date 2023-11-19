@@ -10,7 +10,6 @@ import net.sf.json.JSONSerializer;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.io.IOUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class CRSJsonFileManager.
  */
@@ -222,8 +221,7 @@ public class CRSJsonFileManager {
     InputStream iStream = new FileInputStream(file);
     String jsonText = IOUtils.toString(iStream);
     iStream.close();
-    if (jsonText.isBlank())
-    	jsonText = "{}";
+    if (jsonText.isBlank()) jsonText = "{}";
     return (JSONObject) JSONSerializer.toJSON(jsonText);
   }
 }

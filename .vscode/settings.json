@@ -8,5 +8,8 @@
     "redeemcoupon",
     "signin",
     "Signout"
-  ]
+  ],
+  "[java]": {
+    "editor.defaultFormatter": "mwpb.java-prettier-formatter"
+  }
 }

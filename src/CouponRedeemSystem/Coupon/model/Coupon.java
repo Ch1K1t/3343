@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.LazyDynaBean;
 
 public abstract class Coupon {
@@ -48,7 +47,7 @@ public abstract class Coupon {
         System.out.println("No coupon found!");
         return;
       }
-      
+
       if (!coupon.isActive()) {
         System.out.println("Coupon has been used!");
         return;
@@ -109,7 +108,7 @@ public abstract class Coupon {
     }
     coupons.add(coupon.getCouponCode());
     coupon.getOwner().setCoupons(coupons);
-    
+
     // Modify coupon owner
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("owner", coupon.getOwner().getUserName());
