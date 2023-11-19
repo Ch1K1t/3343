@@ -43,12 +43,12 @@ public abstract class Coupon {
   public static void couponToPoints(String couponCode) {
     CouponManager couponManager = CouponManager.getInstance();
     try {
-      Coupon coupon = couponManager.getCoupon(couponCode, "Redeemable");
+      Coupon coupon = couponManager.getCoupon(couponCode);
       if (coupon == null) {
         System.out.println("No coupon found!");
         return;
       }
-      
+
       if (!coupon.isActive()) {
         System.out.println("Coupon has been used!");
         return;
@@ -74,7 +74,7 @@ public abstract class Coupon {
     throws IOException, ParseException {
     CouponManager couponManager = CouponManager.getInstance();
     CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
-    Coupon coupon = couponManager.getCoupon(couponCode, "Purchasable");
+    Coupon coupon = couponManager.getCoupon(couponCode);
     if (coupon == null) {
       System.out.println("No coupon found!");
       return;
@@ -109,7 +109,7 @@ public abstract class Coupon {
     }
     coupons.add(coupon.getCouponCode());
     coupon.getOwner().setCoupons(coupons);
-    
+
     // Modify coupon owner
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("owner", coupon.getOwner().getUserName());

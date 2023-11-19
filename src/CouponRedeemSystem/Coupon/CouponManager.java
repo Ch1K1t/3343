@@ -83,7 +83,7 @@ public class CouponManager {
     }
   }
 
-  public Coupon getCoupon(String couponCode, String type)
+  public Coupon getCoupon(String couponCode)
     throws IOException, ParseException {
     // Search for the JSON file
     JSONObject couponJson = JsonFileManager.searchJSON(couponCode + ".json");

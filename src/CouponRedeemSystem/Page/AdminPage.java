@@ -14,9 +14,9 @@ public class AdminPage extends Page {
   public void getInstruction() {
     System.out.println();
     System.out.println("Please select the command and input the number:");
-    System.out.println("1. CreatePurchasableCoupon");
-    System.out.println("2. CreateRedeemableCoupon");
-    System.out.println("3. DeleteCoupon");
+    System.out.println("1. Create Purchasable Coupon");
+    System.out.println("2. Create Redeemable Coupon");
+    System.out.println("3. Delete Coupon");
     System.out.println("4. Signout");
     System.out.println("5. Exit");
     System.out.println();
@@ -114,8 +114,8 @@ public class AdminPage extends Page {
     String couponCode = s.nextLine();
 
     CouponManager couponManager = CouponManager.getInstance();
-    String result = couponManager.delete(couponCode);
 
+    String result = couponManager.delete(couponCode);
     System.out.println(result);
   }
 
@@ -146,6 +146,6 @@ public class AdminPage extends Page {
           System.out.println("Unknown command");
           break;
       }
-    } while (!cmd.equals("!signout"));
+    } while (!cmd.equals("4"));
   }
 }
