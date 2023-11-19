@@ -5,6 +5,7 @@ import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,6 +22,7 @@ public abstract class Coupon {
   String couponCode;
   Account owner;
   Double points;
+  String type;
 
   // Purchasable Coupon
   public Coupon(
@@ -38,6 +40,7 @@ public abstract class Coupon {
     this.active = active;
     this.owner = null;
     this.points = points;
+    this.type = "Purchasable";
   }
 
   // Redeemable Coupon
@@ -53,6 +56,7 @@ public abstract class Coupon {
     this.expirationDate = expirationDate;
     this.couponCode = couponCode;
     this.active = active;
+    this.type = "Redeemable";
   }
 
   public static void couponToPoints(String couponCode, Account account) {
@@ -61,6 +65,11 @@ public abstract class Coupon {
       Coupon coupon = couponManager.getCoupon(couponCode);
       if (coupon == null) {
         System.out.println("No coupon found!");
+        return;
+      }
+
+      if (coupon.type == "Purchasable") {
+        System.out.println("This coupon is not redeemable!");
         return;
       }
 
@@ -162,7 +171,10 @@ public abstract class Coupon {
       // (Coupon Value + (Days to Expiration * Weight)) * Conversion Rate
       // Remarks: conversion rate refers to the amount of points rewarded per dollar
       // 1 -> 1 point per dollar
-      return (this.getIntrinsicValue() + (daysBeforeExpire * 0.5)) * 1;
+      DecimalFormat df = new DecimalFormat("###.##");
+      return Double.parseDouble(
+        df.format((this.getIntrinsicValue() + (daysBeforeExpire * 0.5)) * 1)
+      );
     } catch (ParseException e) {
       e.printStackTrace();
       return null;
