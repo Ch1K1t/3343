@@ -2,8 +2,6 @@ package CouponRedeemSystem.Discount;
 
 import CouponRedeemSystem.Discount.model.Discount;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import net.sf.json.JSONObject;
@@ -30,7 +28,7 @@ public class DiscountManager {
     Date startDate,
     int day,
     double valueOff
-  ) throws ParseException, IOException {
+  ) {
     String startDateInSDF = sdf.format(startDate);
     String expireDate = sdf.format(DateUtils.addDays(startDate, day));
     Discount discount = new Discount(
@@ -50,7 +48,7 @@ public class DiscountManager {
     Date startDate,
     int month,
     double valueOff
-  ) throws ParseException, IOException {
+  ) {
     String startDateInSDF = sdf.format(startDate);
     String expireDate = sdf.format(DateUtils.addMonths(startDate, month));
     Discount discount = new Discount(
@@ -67,7 +65,7 @@ public class DiscountManager {
     return discount;
   }
 
-  public void updateActiveDiscountList() throws IOException, ParseException {
+  public void updateActiveDiscountList() {
     CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
     JSONObject discountJson = mgr.searchJSON("Discount List.json");
     JSONObject activeDiscountJsonObject = new JSONObject();
@@ -94,14 +92,14 @@ public class DiscountManager {
     );
   }
 
-  private void storeNewDiscount(Discount discount) throws IOException {
+  private void storeNewDiscount(Discount discount) {
     CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
     JSONObject discountJsonObject = new JSONObject();
     discountJsonObject.put(discount.getId(), discount.getJSONObject());
     mgr.modifyJSON("Discount", "Discount List", discountJsonObject);
   }
 
-  private void modifyDiscount(String id, Discount discount) throws IOException {
+  private void modifyDiscount(String id, Discount discount) {
     CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
     JSONObject discountJson = mgr.searchJSON("Discount List.json");
     discountJson.put(id, discount.getJSONObject());

@@ -4,7 +4,6 @@ import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,7 +30,8 @@ public abstract class Coupon {
     Date expirationDate,
     String couponCode,
     boolean active,
-    double points
+    double points,
+    String type
   ) {
     this.intrinsicValue = intrinsicValue;
     this.shop = shop;
@@ -40,120 +40,22 @@ public abstract class Coupon {
     this.active = active;
     this.owner = null;
     this.points = points;
-    this.type = "Purchasable";
+    this.type = type;
   }
 
   // Redeemable Coupon
   public Coupon(
     double intrinsicValue,
-    Shop shop,
     Date expirationDate,
     String couponCode,
-    boolean active
+    boolean active,
+    String type
   ) {
     this.intrinsicValue = intrinsicValue;
-    this.shop = shop;
     this.expirationDate = expirationDate;
     this.couponCode = couponCode;
     this.active = active;
-    this.type = "Redeemable";
-  }
-
-  public static void couponToPoints(String couponCode, Account account) {
-    try {
-      CouponManager couponManager = CouponManager.getInstance();
-      Coupon coupon = couponManager.getCoupon(couponCode);
-      if (coupon == null) {
-        System.out.println("No coupon found!");
-        return;
-      }
-
-      if (coupon.type == "Purchasable") {
-        System.out.println("This coupon is not redeemable!");
-        return;
-      }
-
-      if (!coupon.isActive()) {
-        System.out.println("Coupon has been used!");
-        return;
-      }
-
-      Date currentDate = new Date();
-      if (coupon.getExpirationDate().compareTo(currentDate) < 0) {
-        System.out.println("Coupon has expired!");
-        return;
-      }
-
-      double points = coupon.pointConversion();
-      CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
-      JSONObject accountJSON = jsonFileManager.searchJSON(
-        account.getUserName() + ".json"
-      );
-      accountJSON.put("points", account.getPoints() + points);
-      jsonFileManager.modifyJSON("Account", account.getUserName(), accountJSON);
-
-      JSONObject couponJSON = jsonFileManager.searchJSON(couponCode + ".json");
-      couponJSON.put("active", false);
-      jsonFileManager.modifyJSON(
-        "Coupon/" + couponJSON.getString("type"),
-        couponCode,
-        couponJSON
-      );
-
-      System.out.println("Coupon redeemed successfully!");
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public static void pointsToCoupon(String couponCode, Account account) {
-    try {
-      CouponManager couponManager = CouponManager.getInstance();
-      CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
-      Coupon coupon = couponManager.getCoupon(couponCode);
-      if (coupon == null) {
-        System.out.println("No coupon found!");
-        return;
-      }
-
-      if (!coupon.isActive()) {
-        System.out.println("Coupon is not available!");
-        return;
-      }
-
-      // May not be necessary
-      Date currentDate = new Date();
-      if (coupon.getExpirationDate().before(currentDate)) {
-        System.out.println("Coupon has expired!");
-        return;
-      }
-
-      if (account.getPoints() < coupon.points) {
-        System.out.println("Insufficient points!");
-        return;
-      }
-
-      // Add coupons to user's coupons history
-      List<String> coupons = account.getCouponIDs();
-      if (coupons.size() > 10) {
-        System.out.println("You have reached the account's purchasing limit!");
-        return;
-      }
-
-      JSONObject accountJSON = jsonFileManager.searchJSON(
-        account.getUserName() + ".json"
-      );
-      accountJSON.put("points", account.getPoints() - coupon.points);
-      coupons.add(coupon.getCouponCode());
-      accountJSON.put("couponIDs", coupons);
-      jsonFileManager.modifyJSON("Account", account.getUserName(), accountJSON);
-
-      JSONObject couponJSON = jsonFileManager.searchJSON(couponCode + ".json");
-      couponJSON.put("owner", account.getUserName());
-      jsonFileManager.modifyJSON("Coupon/Purchasable", couponCode, couponJSON);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    this.type = type;
   }
 
   public Double pointConversion() {
@@ -228,5 +130,21 @@ public abstract class Coupon {
 
   public void setOwner(Account owner) {
     this.owner = owner;
+  }
+
+  public Double getPoints() {
+    return points;
+  }
+
+  public void setPoints(Double points) {
+    this.points = points;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
   }
 }

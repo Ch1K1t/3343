@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class ShopPage extends Page {
+public class StaffPage extends Page {
 
   public void getInstruction() {
     System.out.println();
@@ -23,6 +23,8 @@ public class ShopPage extends Page {
 
   public void createCoupon(String type) {
     try {
+      CouponManager couponManager = CouponManager.getInstance();
+
       System.out.println();
       System.out.println("Please input the coupon's intrinsic value:");
 
@@ -38,25 +40,21 @@ public class ShopPage extends Page {
       double intrinsicValue = Double.parseDouble(value);
 
       System.out.println();
-      System.out.println("Please input the coupon's shop:");
-      Shop shop = null;
-
-      System.out.println();
       System.out.println(
         "Please input the coupon's expiration date (dd/MM/yyyy):"
       );
-      String expirationDateString;
+      String expirationDateStr;
+      Date expirationDate;
       boolean isDate;
       boolean isAfterToday;
-      Date expirationDate;
       SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
       do {
-        expirationDateString = s.nextLine();
+        expirationDateStr = s.nextLine();
         isDate =
-          expirationDateString.matches(
+          expirationDateStr.matches(
             "^((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|2[0-1])[0-9]{2})$"
           );
-        expirationDate = sdf.parse(expirationDateString);
+        expirationDate = sdf.parse(expirationDateStr);
         isAfterToday = expirationDate.after(new Date());
 
         if (!isDate || !isAfterToday) {
@@ -68,9 +66,11 @@ public class ShopPage extends Page {
       System.out.println("Please input the coupon's code:");
       String couponCode = s.nextLine();
 
-      CouponManager couponManager = CouponManager.getInstance();
-      String result = "";
-      if (type == "Purchasable") {
+      if (type.equals("Purchasable")) {
+        System.out.println();
+        System.out.println("Please input the coupon's shop:");
+        Shop shop = null;
+
         System.out.println();
         System.out.println("Please input the coupon's purchasing value:");
         String pointsStr;
@@ -83,22 +83,17 @@ public class ShopPage extends Page {
           }
         } while (!isDouble);
         double points = Double.parseDouble(pointsStr);
+
         couponManager.create(
           couponCode,
           intrinsicValue,
           expirationDate,
           shop,
-          type,
-          points
-        );
-      } else {
-        couponManager.create(
-          couponCode,
-          intrinsicValue,
-          expirationDate,
-          shop,
+          points,
           type
         );
+      } else {
+        couponManager.create(couponCode, intrinsicValue, expirationDate, type);
       }
     } catch (ParseException e) {
       e.printStackTrace();
@@ -116,16 +111,17 @@ public class ShopPage extends Page {
   }
 
   public void execute() {
-    getInstruction();
-    String command;
+    String cmd;
+
     do {
-      command = s.nextLine();
-      switch (command) {
+      getInstruction();
+      cmd = s.nextLine();
+      switch (cmd) {
         case "1":
-          createCoupon("purchasable");
+          createCoupon("Purchasable");
           break;
         case "2":
-          createCoupon("redeemable");
+          createCoupon("Redeemable");
           break;
         case "3":
           deleteCoupon();
@@ -140,6 +136,6 @@ public class ShopPage extends Page {
           System.out.println("Invalid command, please input again:");
           break;
       }
-    } while (!command.equals("4"));
+    } while (!cmd.equals("4"));
   }
 }

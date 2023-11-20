@@ -53,17 +53,22 @@ public class CRSJsonFileManager {
    * @return the file
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public File createJson(String dirName, String fileName) throws IOException {
-    String pathStr = getDirectoryPath(dirName);
-    File dir = new File(pathStr);
-    if (!dir.exists()) {
-      dir.mkdir();
+  public File createJson(String dirName, String fileName) {
+    try {
+      String pathStr = getDirectoryPath(dirName);
+      File dir = new File(pathStr);
+      if (!dir.exists()) {
+        dir.mkdir();
+      }
+      File file = new File(pathStr + "/" + fileName + ".json");
+      if (!file.exists()) {
+        file.createNewFile();
+      }
+      return file;
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
     }
-    File file = new File(pathStr + "/" + fileName + ".json");
-    if (!file.exists()) {
-      file.createNewFile();
-    }
-    return file;
   }
 
   /**
@@ -74,8 +79,7 @@ public class CRSJsonFileManager {
    * @param content  the content
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public void modifyJSON(String dirName, String fileName, DynaBean content)
-    throws IOException {
+  public void modifyJSON(String dirName, String fileName, DynaBean content) {
     modifyJSON(dirName, fileName, JSONObject.fromObject(content));
   }
 
@@ -87,12 +91,15 @@ public class CRSJsonFileManager {
    * @param content  the content
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public void modifyJSON(String dirName, String fileName, JSONObject content)
-    throws IOException {
-    File file = createJson(dirName, fileName);
-    FileWriter fileWriter = new FileWriter(file);
-    fileWriter.write(content.toString());
-    fileWriter.close();
+  public void modifyJSON(String dirName, String fileName, JSONObject content) {
+    try {
+      File file = createJson(dirName, fileName);
+      FileWriter fileWriter = new FileWriter(file);
+      fileWriter.write(content.toString());
+      fileWriter.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -109,7 +116,7 @@ public class CRSJsonFileManager {
     String fileName,
     String key,
     Object obj
-  ) throws IOException {
+  ) {
     File file = createJson(dirName, fileName);
     JSONObject jsonObject = convertFileTextToJSON(file);
     if (jsonObject.containsKey(key)) {
@@ -126,7 +133,7 @@ public class CRSJsonFileManager {
    * @param fileName the file name
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public void deleteJSON(String dirName, String fileName) throws IOException {
+  public void deleteJSON(String dirName, String fileName) {
     File file = createJson(dirName, fileName);
     if (!file.delete()) {
       System.out.println("Delete is failed!");
@@ -141,8 +148,7 @@ public class CRSJsonFileManager {
    * @param key      the key
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public void removeElement(String dirName, String fileName, String key)
-    throws IOException {
+  public void removeElement(String dirName, String fileName, String key) {
     File file = createJson(dirName, fileName);
     JSONObject jsonObject = convertFileTextToJSON(file);
     if (jsonObject.containsKey(key)) {
@@ -160,15 +166,13 @@ public class CRSJsonFileManager {
    * @return the JSON object
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public JSONObject searchJSON(String fileName) throws IOException {
+  public JSONObject searchJSON(String fileName) {
     return searchJSON(fileName, null);
   }
 
-  public JSONObject searchJSON(String fileName, File[] fileList)
-    throws IOException {
+  public JSONObject searchJSON(String fileName, File[] fileList) {
     File jsonFile = searchFile(fileName);
     if (jsonFile == null || jsonFile.isDirectory()) {
-      System.out.println("File not found!");
       return null;
     }
     return convertFileTextToJSON(jsonFile);
@@ -180,6 +184,11 @@ public class CRSJsonFileManager {
    * @param fileName the file name
    * @return the file
    */
+
+  public File searchFile(String fileName) {
+    File rootDirectory = new File("Data");
+    return searchFile(fileName + ".json", rootDirectory);
+  }
 
   public File searchFile(String fileName, File directory) {
     if (directory == null || !directory.isDirectory()) {
@@ -203,11 +212,6 @@ public class CRSJsonFileManager {
     return null;
   }
 
-  public File searchFile(String fileName) {
-    File rootDirectory = new File("Data");
-    return searchFile(fileName, rootDirectory);
-  }
-
   /**
    * Convert file text to JSON.
    *
@@ -215,11 +219,16 @@ public class CRSJsonFileManager {
    * @return the JSON object
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public JSONObject convertFileTextToJSON(File file) throws IOException {
-    InputStream iStream = new FileInputStream(file);
-    String jsonText = IOUtils.toString(iStream);
-    if (jsonText.isBlank()) jsonText = "{}";
-    iStream.close();
-    return (JSONObject) JSONSerializer.toJSON(jsonText);
+  public JSONObject convertFileTextToJSON(File file) {
+    try {
+      InputStream iStream = new FileInputStream(file);
+      String jsonText = IOUtils.toString(iStream);
+      if (jsonText.isBlank()) jsonText = "{}";
+      iStream.close();
+      return (JSONObject) JSONSerializer.toJSON(jsonText);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 }

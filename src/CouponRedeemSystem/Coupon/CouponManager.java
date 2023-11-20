@@ -5,7 +5,6 @@ import CouponRedeemSystem.Coupon.model.PurchasableCoupon;
 import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,130 +29,126 @@ public class CouponManager {
   // Create json record for purchasable coupon
   public void create(
     String couponCode,
-    double value,
+    double intrinsicValue,
     Date expirationDate,
     Shop shop,
-    String type,
-    Double points
+    Double points,
+    String type
   ) {
-    try {
-      JSONObject json;
-      json = jsonFileManager.searchJSON(couponCode + ".json");
-      if (json != null) {
-        System.out.println("Coupon code " + couponCode + " already exists");
-      }
-
-      LazyDynaBean bean = new LazyDynaBean();
-      bean.set("code", couponCode);
-      bean.set("value", value);
-      bean.set("expiration_date", expirationDate.toString());
-      bean.set("owner", null);
-      bean.set("shop", shop);
-      bean.set("active", true);
-      bean.set("type", type);
-      bean.set("points", points);
-
-      jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
-      System.out.println("Coupon created");
-    } catch (IOException e) {
-      e.printStackTrace();
-      System.out.println("Error");
+    JSONObject json = jsonFileManager.searchJSON(couponCode);
+    if (json != null) {
+      System.out.println("Coupon code " + couponCode + " already exists");
     }
+
+    Coupon coupon = new PurchasableCoupon(
+      intrinsicValue,
+      null,
+      expirationDate,
+      couponCode,
+      true,
+      points,
+      type
+    );
+    LazyDynaBean bean = new LazyDynaBean();
+    bean.set("couponCode", coupon.getCouponCode());
+    bean.set("intrinsicValue", coupon.getIntrinsicValue());
+    bean.set("expirationDate", coupon.getExpirationDate().toString());
+    bean.set("owner", coupon.getOwner());
+    bean.set("shop", coupon.getShop());
+    bean.set("active", coupon.isActive());
+    bean.set("type", coupon.getType());
+    bean.set("points", coupon.getPoints());
+
+    jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
+    System.out.println("Coupon created");
   }
 
   // Create json record for redeemable coupon
   public void create(
     String couponCode,
-    double value,
+    double intrinsicValue,
     Date expirationDate,
-    Shop shop,
     String type
   ) {
-    try {
-      JSONObject json;
-      json = jsonFileManager.searchJSON(couponCode + ".json");
-      if (json != null) {
-        System.out.println("Coupon code " + couponCode + " already exists");
-      }
-
-      LazyDynaBean bean = new LazyDynaBean();
-      bean.set("code", couponCode);
-      bean.set("value", value);
-      bean.set("expiration_date", expirationDate.toString());
-      bean.set("shop", shop);
-      bean.set("active", true);
-      bean.set("type", type);
-
-      jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
-      System.out.println("Coupon created");
-    } catch (IOException e) {
-      e.printStackTrace();
-      System.out.println("Error");
+    JSONObject json = jsonFileManager.searchJSON(couponCode);
+    if (json != null) {
+      System.out.println("Coupon code " + couponCode + " already exists");
     }
+
+    Coupon coupon = new RedeemableCoupon(
+      intrinsicValue,
+      expirationDate,
+      couponCode,
+      true,
+      type
+    );
+    LazyDynaBean bean = new LazyDynaBean();
+    bean.set("couponCode", coupon.getCouponCode());
+    bean.set("intrinsicValue", coupon.getIntrinsicValue());
+    bean.set("expirationDate", coupon.getExpirationDate().toString());
+    bean.set("owner", coupon.getOwner());
+    bean.set("shop", coupon.getShop());
+    bean.set("active", coupon.isActive());
+    bean.set("type", coupon.getType());
+
+    jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
+    System.out.println("Coupon created");
   }
 
   public void delete(String couponCode) {
-    try {
-      JSONObject jsonObject = jsonFileManager.searchJSON(couponCode + ".json");
-      if (jsonObject == null) {
-        System.out.println("Coupon code " + couponCode + " does not exist");
-      }
-      String type = jsonObject.getString("type");
-
-      jsonFileManager.deleteJSON("Coupon/" + type, couponCode);
-      System.out.println("Coupon deleted");
-    } catch (IOException e) {
-      e.printStackTrace();
-      System.out.println("Error");
+    JSONObject jsonObject = jsonFileManager.searchJSON(couponCode);
+    if (jsonObject == null) {
+      System.out.println("Coupon code " + couponCode + " does not exist");
+      return;
     }
+    String type = jsonObject.getString("type");
+
+    jsonFileManager.deleteJSON("Coupon/" + type, couponCode);
+    System.out.println("Coupon deleted");
   }
 
   public Coupon getCoupon(String couponCode) {
-    // Search for the JSON file
-    try {
-      JSONObject couponJson = jsonFileManager.searchJSON(couponCode + ".json");
+    JSONObject couponJson = jsonFileManager.searchJSON(couponCode);
 
+    if (couponJson == null) {
+      System.out.println("Coupon " + couponCode + " does not exist");
+      return null;
+    } else {
       // Extract coupon details from JSON and return the Account object
-      if (!couponJson.isEmpty()) {
-        return extractCouponFromJson(couponJson);
-      }
-
-      // Return null if the coupon was not found
-      return null;
-    } catch (IOException e) {
-      e.printStackTrace();
-      return null;
+      return extractCouponFromJson(couponJson);
     }
   }
 
   private Coupon extractCouponFromJson(JSONObject couponJson) {
     try {
-      double value = couponJson.getDouble("value");
+      double intrinsicValue = couponJson.getDouble("intrinsicValue");
       boolean active = couponJson.getBoolean("active");
-      String couponCode = couponJson.getString("code");
+      String couponCode = couponJson.getString("couponCode");
       SimpleDateFormat sdf = new SimpleDateFormat(
         "EEE MMM dd HH:mm:ss zzz yyyy",
         Locale.ENGLISH
       );
-      Date expirationDate = sdf.parse(couponJson.getString("expiration_date"));
-      switch (couponJson.getString("type")) {
+      Date expirationDate = sdf.parse(couponJson.getString("expirationDate"));
+      String type = couponJson.getString("type");
+      switch (type) {
         case "Redeemable":
           return new RedeemableCoupon(
-            value,
-            null,
+            intrinsicValue,
             expirationDate,
             couponCode,
-            active
+            active,
+            type
           );
         case "Purchasable":
           double points = couponJson.getDouble("points");
           return new PurchasableCoupon(
-            value,
+            intrinsicValue,
             null,
             expirationDate,
             couponCode,
             active,
-            points
+            points,
+            type
           );
         default:
           return null;
@@ -161,6 +156,33 @@ public class CouponManager {
     } catch (ParseException e) {
       e.printStackTrace();
       return null;
+    }
+  }
+
+  public void generateDemoCoupon() {
+    try {
+      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+      Date expirationDate = sdf.parse("11/11/2025");
+      create(
+        "P1",
+        Double.parseDouble("1"),
+        expirationDate,
+        null,
+        Double.parseDouble("1"),
+        "Purchasable"
+      );
+      create(
+        "P2",
+        Double.parseDouble("1"),
+        expirationDate,
+        null,
+        Double.parseDouble("1"),
+        "Purchasable"
+      );
+      create("R1", Double.parseDouble("1"), expirationDate, "Redeemable");
+      create("R2", Double.parseDouble("1"), expirationDate, "Redeemable");
+    } catch (ParseException e) {
+      e.printStackTrace();
     }
   }
 }

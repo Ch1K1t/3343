@@ -2,7 +2,6 @@ package CouponRedeemSystem.System.ID;
 
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.io.File;
-import java.io.IOException;
 import net.sf.json.JSONObject;
 
 public class IdGenerator {
@@ -22,10 +21,10 @@ public class IdGenerator {
     return "ID\\SysNextIdd.json";
   }
 
-  public int getNextId(String idName) throws IOException {
+  public int getNextId(String idName) {
     CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
 
-    File file = mgr.searchFile("SysNextId.json", null);
+    File file = mgr.searchFile("SysNextId");
 
     if (file == null) {
       file = mgr.createJson("ID", "SysNextId");

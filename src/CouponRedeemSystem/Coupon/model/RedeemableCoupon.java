@@ -1,17 +1,16 @@
 package CouponRedeemSystem.Coupon.model;
 
-import CouponRedeemSystem.Shop.model.Shop;
 import java.util.Date;
 
 public class RedeemableCoupon extends Coupon {
 
   public RedeemableCoupon(
     double intrinsicValue,
-    Shop shop,
     Date expirationDate,
     String couponCode,
-    boolean active
+    boolean active,
+    String type
   ) {
-    super(intrinsicValue, shop, expirationDate, couponCode, active);
+    super(intrinsicValue, expirationDate, couponCode, active, type);
   }
 }

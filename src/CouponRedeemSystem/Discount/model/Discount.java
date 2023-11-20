@@ -1,7 +1,6 @@
 package CouponRedeemSystem.Discount.model;
 
 import CouponRedeemSystem.System.ID.IdGenerator;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,7 +24,7 @@ public class Discount {
     String startDate,
     String expireDate,
     double valueOff
-  ) throws IOException, ParseException {
+  ) {
     this.id = IdGenerator.getInstance().getNextId("DiscountId");
     this.discountName = discountName;
     this.startDate = startDate;
@@ -34,10 +33,14 @@ public class Discount {
     updateStatus();
   }
 
-  public void updateStatus() throws ParseException {
-    this.active =
-      sdf.parse(startDate).compareTo(new Date()) <= 0 &&
-      sdf.parse(expireDate).compareTo(new Date()) > 0;
+  public void updateStatus() {
+    try {
+      this.active =
+        sdf.parse(startDate).compareTo(new Date()) <= 0 &&
+        sdf.parse(expireDate).compareTo(new Date()) > 0;
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
   }
 
   public JSONObject getJSONObject() {

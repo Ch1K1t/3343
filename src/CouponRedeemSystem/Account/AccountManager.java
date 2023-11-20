@@ -3,8 +3,6 @@ package CouponRedeemSystem.Account;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import CouponRedeemSystem.System.Password.PasswordManager;
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.json.JSONArray;
@@ -36,20 +34,17 @@ public class AccountManager {
     bean.set("dateOfBirth", account.getDateOfBirth().toString());
     bean.set("couponIDs", account.getCouponIDs());
 
-    try {
-      jsonFileManager.modifyJSON("Account", account.getUserName(), bean);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    jsonFileManager.modifyJSON("Account", account.getUserName(), bean);
   }
 
+  // Create new user account
   public void createAccInfo(
     String userName,
     String role,
     int age,
     int telNo,
     String dob
-  ) throws ParseException {
+  ) {
     Account account = new Account(userName, role, age, telNo, dob);
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("userName", account.getUserName());
@@ -60,58 +55,51 @@ public class AccountManager {
     bean.set("dateOfBirth", account.getDateOfBirth().toString());
     bean.set("couponIDs", account.getCouponIDs());
 
-    try {
-      jsonFileManager.modifyJSON("Account", userName, bean);
-      System.out.println("Account created");
-    } catch (IOException e) {
-      e.printStackTrace();
-      System.out.println("Error");
-    }
+    jsonFileManager.modifyJSON("Account", userName, bean);
+    System.out.println("Account created");
+  }
+
+  // Create new admin and shop manager account
+  public void createAccInfo(String userName, String role) {
+    Account account = new Account(userName, role);
+    LazyDynaBean bean = new LazyDynaBean();
+    bean.set("userName", account.getUserName());
+    bean.set("role", account.getRole());
+
+    jsonFileManager.modifyJSON("Account", userName, bean);
+    System.out.println("Account created");
   }
 
   // Delete existing account
   public void delete(String userName) {
-    try {
-      Account account = getAccount(userName);
-      jsonFileManager.deleteJSON("Account", account.getUserName());
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
+    Account account = getAccount(userName);
+    jsonFileManager.deleteJSON("Account", account.getUserName());
   }
 
   // Update existing account
   public void update(String userName) {
-    try {
-      Account account = getAccount(userName);
+    Account account = getAccount(userName);
 
-      // Delete the original JSON file
-      delete(userName);
+    // Delete the original JSON file
+    delete(userName);
 
-      // Save the updated account details
-      createAccInfo(account);
-    } catch (IOException | ParseException e) {
-      e.printStackTrace();
-    }
+    // Save the updated account details
+    createAccInfo(account);
   }
 
-  public Account getAccount(String userName)
-    throws IOException, ParseException {
-    // Search for the JSON file
-    JSONObject accountJson = jsonFileManager.searchJSON(userName + ".json");
+  public Account getAccount(String userName) {
+    JSONObject accountJson = jsonFileManager.searchJSON(userName);
 
-    // Extract account details from JSON and return the Account object
-    if (!accountJson.isEmpty()) {
+    if (accountJson == null) {
+      System.out.println("Account " + userName + " does not exist");
+      return null;
+    } else {
+      // Extract account details from JSON and return the Account object
       return extractAccountFromJson(accountJson);
     }
-
-    // Return null if the account was not found
-    return null;
   }
 
-  private Account extractAccountFromJson(JSONObject accountJson)
-    throws ParseException {
+  private Account extractAccountFromJson(JSONObject accountJson) {
     String userName = accountJson.getString("userName");
     String role = accountJson.getString("role");
     int age = accountJson.getInt("age");
@@ -135,8 +123,13 @@ public class AccountManager {
     );
   }
 
-  public void createAccount(String userName, String Password)
-    throws IOException {
+  public void createAccount(String userName, String Password) {
     passwordManager.createNewPassword(userName, Password);
+  }
+
+  public void generateDemoAccount() {
+    createAccInfo("admin", "admin");
+    createAccInfo("shopManager", "shopManager");
+    createAccInfo("user", "user", 20, 12345678, "1999-01-01");
   }
 }

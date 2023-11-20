@@ -6,16 +6,15 @@ import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
 import net.sf.json.JSONObject;
 
 public class UserPage extends Page {
 
-  private String username;
+  private Account account;
 
   public UserPage(String username) {
-    this.username = username;
+    AccountManager accountManager = AccountManager.getInstance();
+    this.account = accountManager.getAccount(username);
   }
 
   public void getInstruction() {
@@ -29,51 +28,37 @@ public class UserPage extends Page {
   }
 
   public void purchaseCoupon() {
-    try {
-      AccountManager accountManager = AccountManager.getInstance();
-      Account account = accountManager.getAccount(username);
-      System.out.println();
-      System.out.println("Your balance is " + account.getPoints());
-      File[] fileArr = new File("Data/Coupon/Purchasable").listFiles();
+    CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
 
-      CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
-      System.out.println();
-      System.out.println("The available coupons are:");
-      for (File file : fileArr) {
-        JSONObject jsonObject = jsonFileManager.convertFileTextToJSON(file);
-        if (jsonObject.getString("owner").equals("null")) {
-          System.out.println(
-            String.format(
-              "%-" + 15 + "s",
-              "Code: " + jsonObject.getString("code")
-            ) +
-            "Required Points: " +
-            jsonObject.getString("points")
-          );
-        }
+    System.out.println();
+    System.out.println("Your balance is " + account.getPoints());
+    File[] fileArr = new File("Data/Coupon/Purchasable").listFiles();
+
+    System.out.println();
+    System.out.println("The available coupons are:");
+    for (File file : fileArr) {
+      JSONObject jsonObject = jsonFileManager.convertFileTextToJSON(file);
+      if (jsonObject.getString("owner").equals("null")) {
+        System.out.println(
+          String.format(
+            "%-" + 15 + "s",
+            "Code: " + jsonObject.getString("code")
+          ) +
+          "Required Points: " +
+          jsonObject.getString("points")
+        );
       }
-      System.out.println();
-      System.out.println("Please input the coupon's code:");
-      String couponID = s.nextLine();
-      Coupon.pointsToCoupon(couponID, account);
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (ParseException e) {
-      e.printStackTrace();
     }
+    System.out.println();
+    System.out.println("Please input the coupon's code:");
+    String couponID = s.nextLine();
+    account.pointsToCoupon(couponID);
   }
 
   public void redeemCoupon() {
-    try {
-      AccountManager accountManager = AccountManager.getInstance();
-      Account account = accountManager.getAccount(username);
-
-      System.out.println("Please input the coupon's id:");
-      String couponID = s.nextLine();
-      Coupon.couponToPoints(couponID, account);
-    } catch (IOException | ParseException e) {
-      e.printStackTrace();
-    }
+    System.out.println("Please input the coupon's id:");
+    String couponID = s.nextLine();
+    account.couponToPoints(couponID);
   }
 
   public void execute() {

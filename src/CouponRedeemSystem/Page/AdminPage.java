@@ -8,10 +8,11 @@ public class AdminPage extends Page {
     System.out.println();
     System.out.println("Please select the command and input the number:");
     System.out.println("1. Create Admin Account");
-    System.out.println("2. Create Shop Account");
-    System.out.println("3. Create User Account");
-    System.out.println("4. Signout");
-    System.out.println("5. Exit");
+    System.out.println("2. Create Shop Manager Account");
+    System.out.println("3. Create Staff Account");
+    System.out.println("4. Create User Account");
+    System.out.println("5. Signout");
+    System.out.println("6. Exit");
     System.out.println();
   }
 
@@ -24,18 +25,21 @@ public class AdminPage extends Page {
 
       switch (cmd) {
         case "1":
-          createAccount("admin");
+          createAccount("Admin");
           break;
         case "2":
-          createAccount("shop");
+          createAccount("Shop Manager");
           break;
         case "3":
-          createAccount("user");
+          createAccount("Staff");
           break;
         case "4":
-          System.out.println("Signout successfully");
+          createAccount("User");
           break;
         case "5":
+          System.out.println("Signout successfully");
+          break;
+        case "6":
           exit();
           break;
         default:

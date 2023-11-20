@@ -25,7 +25,7 @@ public class HomePage extends Page {
           new SigninPage().execute();
           break;
         case "2":
-          createAccount("user");
+          createAccount("User");
           break;
         case "3":
           exit();

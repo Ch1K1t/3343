@@ -1,9 +1,9 @@
 {
-  "userName": "test01",
+  "userName": "user",
   "role": "user",
-  "age": 20,
+  "age": 10,
   "telNo": 12345678,
-  "points": 20.91,
+  "points": 42.14,
   "dateOfBirth": "Fri Nov 11 00:00:00 HKT 2022",
   "couponIDs": []
 }

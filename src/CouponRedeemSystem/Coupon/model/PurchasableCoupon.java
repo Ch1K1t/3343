@@ -11,8 +11,17 @@ public class PurchasableCoupon extends Coupon {
     Date expirationDate,
     String couponCode,
     boolean active,
-    double points
+    double points,
+    String type
   ) {
-    super(intrinsicValue, shop, expirationDate, couponCode, active, points);
+    super(
+      intrinsicValue,
+      shop,
+      expirationDate,
+      couponCode,
+      active,
+      points,
+      type
+    );
   }
 }
