@@ -23,11 +23,11 @@ public class Main {
 
   public static void main(String[] args) {
     // new HomePage().execute();
-    // new UserPage("user").execute();
+    new UserPage("user").execute();
     // new AdminPage().execute();
     // new StaffPage().execute();
 
-    initializeCoupon();
-    initializeUser();
+    // initializeCoupon();
+    // initializeUser();
   }
 }
