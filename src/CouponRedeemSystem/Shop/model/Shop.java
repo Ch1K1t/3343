@@ -34,7 +34,7 @@ public class Shop {
         if (coupon instanceof PurchasableCoupon) {
           // verify
           if (
-            coupon.getOwner() == user &&
+            // coupon.getOwner() == user &&
             coupon.getExpirationDate().after(new Date()) &&
             coupon.getShop() == this &&
             coupon.isActive()

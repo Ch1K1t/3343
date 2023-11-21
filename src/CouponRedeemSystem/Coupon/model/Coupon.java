@@ -1,6 +1,5 @@
 package CouponRedeemSystem.Coupon.model;
 
-import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Shop.model.Shop;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -14,7 +13,7 @@ public abstract class Coupon {
   Date expirationDate;
   boolean active;
   String couponCode;
-  Account owner;
+  String owner;
   Double points;
   String type;
 
@@ -66,8 +65,6 @@ public abstract class Coupon {
   public Double pointConversion() {
     Date currentDate = new Date();
 
-    System.out.println(this.expirationDate.getTime());
-    System.out.println(currentDate.getTime());
     double daysBeforeExpire =
       Math.abs(this.expirationDate.getTime() - currentDate.getTime()) /
       Math.pow(10, 9);
@@ -120,11 +117,11 @@ public abstract class Coupon {
     this.couponCode = couponCode;
   }
 
-  public Account getOwner() {
+  public String getOwner() {
     return owner;
   }
 
-  public void setOwner(Account owner) {
+  public void setOwner(String owner) {
     this.owner = owner;
   }
 

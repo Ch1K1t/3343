@@ -16,6 +16,8 @@ public class SigninPage extends Page {
     String password = strInput("password");
 
     if (!passwordManager.checkPasswordValid(username, password)) return;
+    System.out.println();
+    System.out.println("Signin successfully");
 
     Account account = accountManager.getAccount(username);
     String role = account.getRole();
@@ -28,6 +30,9 @@ public class SigninPage extends Page {
         new AdminPage().execute();
         break;
       case "Shop Manager":
+        new ShopManagerPage().execute();
+        break;
+      case "Staff":
         new StaffPage().execute();
         break;
     }

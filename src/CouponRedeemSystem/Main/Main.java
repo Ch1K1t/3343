@@ -27,7 +27,7 @@ public class Main {
     // new AdminPage().execute();
     // new StaffPage().execute();
 
-    // initializeCoupon();
-    // initializeUser();
+    initializeCoupon();
+    initializeUser();
   }
 }

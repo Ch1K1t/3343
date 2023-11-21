@@ -21,14 +21,14 @@ public class PasswordManager {
   }
 
   public String getPasswordRefTablePath() {
-    return "Password\\Reference Table.json";
+    return "Password\\ReferenceTable.json";
   }
 
   private JSONObject getPasswordRefTable() {
     CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
-    File file = mgr.searchFile("Reference Table");
+    File file = mgr.searchFile("ReferenceTable");
     if (file == null) {
-      file = mgr.createJson("Password", "Reference Table");
+      file = mgr.createJson("Password", "ReferenceTable");
     }
     return mgr.convertFileTextToJSON(file);
   }
@@ -40,7 +40,7 @@ public class PasswordManager {
 
     CRSJsonFileManager
       .getInstance()
-      .modifyJSON("Password", "Reference Table", jsonObject);
+      .modifyJSON("Password", "ReferenceTable", jsonObject);
   }
 
   public boolean checkPasswordValid(String userName, String password) {

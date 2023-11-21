@@ -62,6 +62,7 @@ public class AccountManager {
     bean.set("couponIDs", account.getCouponIDs());
 
     jsonFileManager.modifyJSON("Account", userName, bean);
+    System.out.println();
     System.out.println("Account created");
   }
 
@@ -73,6 +74,7 @@ public class AccountManager {
     bean.set("role", account.getRole());
 
     jsonFileManager.modifyJSON("Account", userName, bean);
+    System.out.println();
     System.out.println("Account created");
   }
 
@@ -109,6 +111,9 @@ public class AccountManager {
     try {
       String userName = accountJson.getString("userName");
       String role = accountJson.getString("role");
+      if (!role.equals("User")) {
+        return new Account(userName, role);
+      }
       int age = accountJson.getInt("age");
       String telNo = accountJson.getString("telNo");
       double points = accountJson.getDouble("points");
@@ -149,15 +154,19 @@ public class AccountManager {
     boolean notExist;
     notExist = createAccount("admin", "admin");
     if (notExist) {
-      createAccInfo("admin", "admin");
+      createAccInfo("admin", "Admin");
     }
     notExist = createAccount("shop", "shop");
     if (notExist) {
-      createAccInfo("shop", "shop");
+      createAccInfo("shop", "Shop Manager");
+    }
+    notExist = createAccount("staff", "staff");
+    if (notExist) {
+      createAccInfo("staff", "Staff");
     }
     notExist = createAccount("user", "user");
     if (notExist) {
-      createAccInfo("user", "user", 20, "12345678", "01/01/2000");
+      createAccInfo("user", "User", 20, "12345678", "01/01/2000");
     }
   }
 }

@@ -41,7 +41,7 @@ public class Account {
     }
   }
 
-  // Constructor for creating a new admin and shop account
+  // Constructor for creating a new non-user account
   public Account(String userName, String role) {
     this.userName = userName;
     this.role = role;
@@ -58,7 +58,7 @@ public class Account {
     List<String> coupons
   ) {
     this.userName = userName;
-    this.role = null;
+    this.role = role;
     this.age = age;
     this.telNo = telNo;
     this.points = points;
@@ -120,9 +120,10 @@ public class Account {
       return;
     }
 
+    System.out.println(coupon.getPoints());
     deductPoints(coupon.getPoints());
     this.couponIDs.add(coupon.getCouponCode());
-    coupon.setOwner(this);
+    coupon.setOwner(this.userName);
 
     JSONObject accountJSON = jsonFileManager.searchJSON(this.userName);
     accountJSON.put("points", this.points);
@@ -130,7 +131,7 @@ public class Account {
     jsonFileManager.modifyJSON("Account", this.userName, accountJSON);
 
     JSONObject couponJSON = jsonFileManager.searchJSON(couponCode);
-    couponJSON.put("owner", this);
+    couponJSON.put("owner", this.userName);
     jsonFileManager.modifyJSON("Coupon/Purchasable", couponCode, couponJSON);
   }
 

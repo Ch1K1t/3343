@@ -152,7 +152,7 @@ public abstract class Page {
     boolean notExist = accountManager.createAccount(username, password);
     if (!notExist) return;
 
-    if (type.equals("Admin") || type.equals("Shop Manager")) {
+    if (!type.equals("User")) {
       accountManager.createAccInfo(username, type);
       return;
     }
