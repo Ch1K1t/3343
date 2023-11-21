@@ -8,16 +8,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import net.sf.json.JSONObject;
-import org.apache.commons.beanutils.LazyDynaBean;
 
 public class Account {
 
   String userName;
   String role;
   int age;
-  int telNo;
+  String telNo;
   Date dateOfBirth;
   double points;
   List<String> couponIDs;
@@ -27,7 +25,7 @@ public class Account {
     String userName,
     String role,
     int age,
-    int telNo,
+    String telNo,
     String dateOfBirth
   ) {
     try {
@@ -54,24 +52,18 @@ public class Account {
     String userName,
     String role,
     int age,
-    int telNo,
-    String dateOfBirth,
+    String telNo,
+    Date dateOfBirth,
     double points,
     List<String> coupons
   ) {
-    try {
-      this.userName = userName;
-      this.role = null;
-      this.age = age;
-      this.telNo = telNo;
-      this.points = points;
-      this.dateOfBirth =
-        new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
-          .parse(dateOfBirth);
-      this.couponIDs = coupons;
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
+    this.userName = userName;
+    this.role = null;
+    this.age = age;
+    this.telNo = telNo;
+    this.points = points;
+    this.dateOfBirth = dateOfBirth;
+    this.couponIDs = coupons;
   }
 
   public void couponToPoints(String couponCode) {
@@ -127,6 +119,7 @@ public class Account {
       System.out.println("You have reached the account's purchasing limit!");
       return;
     }
+
     deductPoints(coupon.getPoints());
     this.couponIDs.add(coupon.getCouponCode());
     coupon.setOwner(this);
@@ -153,7 +146,7 @@ public class Account {
     return age;
   }
 
-  public int getTelNo() {
+  public String getTelNo() {
     return telNo;
   }
 
@@ -181,7 +174,7 @@ public class Account {
     this.age = age;
   }
 
-  public void setTelNo(int telNo) {
+  public void setTelNo(String telNo) {
     this.telNo = telNo;
   }
 

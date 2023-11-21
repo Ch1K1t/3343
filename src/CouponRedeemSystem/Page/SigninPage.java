@@ -8,18 +8,15 @@ import CouponRedeemSystem.System.Password.PasswordManager;
 public class SigninPage extends Page {
 
   public void execute() {
-    System.out.println();
-    System.out.println("Please input your username:");
-    String username = s.nextLine();
-
-    System.out.println();
-    System.out.println("Please input your password:");
-    String password = s.nextLine();
-
     PasswordManager passwordManager = PasswordManager.getInstance();
+    AccountManager accountManager = AccountManager.getInstance();
+
+    String username = strInput("user name");
+
+    String password = strInput("password");
+
     if (!passwordManager.checkPasswordValid(username, password)) return;
 
-    AccountManager accountManager = AccountManager.getInstance();
     Account account = accountManager.getAccount(username);
     String role = account.getRole();
 

@@ -3,10 +3,6 @@ package CouponRedeemSystem.Page;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.model.Shop;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class StaffPage extends Page {
 
@@ -22,90 +18,37 @@ public class StaffPage extends Page {
   }
 
   public void createCoupon(String type) {
-    try {
-      CouponManager couponManager = CouponManager.getInstance();
+    CouponManager couponManager = CouponManager.getInstance();
 
-      System.out.println();
-      System.out.println("Please input the coupon's intrinsic value:");
+    double intrinsicValue = doubleInput("coupon's intrinsic value");
 
-      String value;
-      boolean isDouble;
-      do {
-        value = s.nextLine();
-        isDouble = value.matches("[\\d.]+");
-        if (!isDouble) {
-          System.out.println("Invalid value, please input again:");
-        }
-      } while (!isDouble);
-      double intrinsicValue = Double.parseDouble(value);
+    String expirationDate = afterDateInput("coupon's expiration date");
 
-      System.out.println();
-      System.out.println(
-        "Please input the coupon's expiration date (dd/MM/yyyy):"
+    String couponCode = strInput("coupon's code");
+
+    if (type.equals("Purchasable")) {
+      // Search shop by coupon code
+      Shop shop = null;
+
+      double points = doubleInput("coupon's purchasing value");
+
+      couponManager.create(
+        couponCode,
+        intrinsicValue,
+        expirationDate,
+        shop,
+        points,
+        type
       );
-      String expirationDateStr;
-      Date expirationDate;
-      boolean isDate;
-      boolean isAfterToday;
-      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-      do {
-        expirationDateStr = s.nextLine();
-        isDate =
-          expirationDateStr.matches(
-            "^((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|2[0-1])[0-9]{2})$"
-          );
-        expirationDate = sdf.parse(expirationDateStr);
-        isAfterToday = expirationDate.after(new Date());
-
-        if (!isDate || !isAfterToday) {
-          System.out.println("Invalid date, please input again:");
-        }
-      } while (!isDate || !isAfterToday);
-
-      System.out.println();
-      System.out.println("Please input the coupon's code:");
-      String couponCode = s.nextLine();
-
-      if (type.equals("Purchasable")) {
-        System.out.println();
-        System.out.println("Please input the coupon's shop:");
-        Shop shop = null;
-
-        System.out.println();
-        System.out.println("Please input the coupon's purchasing value:");
-        String pointsStr;
-        boolean isPointsDouble;
-        do {
-          pointsStr = s.nextLine();
-          isPointsDouble = value.matches("[\\d.]+");
-          if (!isPointsDouble) {
-            System.out.println("Invalid value, please input again:");
-          }
-        } while (!isDouble);
-        double points = Double.parseDouble(pointsStr);
-
-        couponManager.create(
-          couponCode,
-          intrinsicValue,
-          expirationDate,
-          shop,
-          points,
-          type
-        );
-      } else {
-        couponManager.create(couponCode, intrinsicValue, expirationDate, type);
-      }
-    } catch (ParseException e) {
-      e.printStackTrace();
+    } else {
+      couponManager.create(couponCode, intrinsicValue, expirationDate, type);
     }
   }
 
   public void deleteCoupon() {
-    System.out.println();
-    System.out.println("Please input the coupon's code:");
-    String couponCode = s.nextLine();
-
     CouponManager couponManager = CouponManager.getInstance();
+
+    String couponCode = strInput("coupon's code");
 
     couponManager.delete(couponCode);
   }

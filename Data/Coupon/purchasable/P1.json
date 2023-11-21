@@ -1,1 +1,10 @@
-{"couponCode":"P1","intrinsicValue":1,"expirationDate":"Tue Nov 11 00:00:00 HKT 2025","owner":null,"shop":null,"active":true,"type":"Purchasable","points":1}
+{
+  "couponCode": "P1",
+  "intrinsicValue": 1,
+  "expirationDate": "11/11/2025",
+  "owner": null,
+  "shop": null,
+  "active": true,
+  "type": "Purchasable",
+  "points": 1
+}

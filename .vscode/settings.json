@@ -11,5 +11,6 @@
   ],
   "[java]": {
     "editor.defaultFormatter": "mwpb.java-prettier-formatter"
-  }
+  },
+  "java.debug.settings.onBuildFailureProceed": true
 }

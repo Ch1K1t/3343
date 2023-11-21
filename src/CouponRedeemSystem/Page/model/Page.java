@@ -17,74 +17,153 @@ public abstract class Page {
     }
   }
 
-  public void createAccount(String type) {
-    try {
-      AccountManager accountManager = AccountManager.getInstance();
-
-      System.out.println();
-      System.out.println("Please input your username:");
-      String username = s.nextLine();
-
-      System.out.println();
-      System.out.println("Please input your password:");
-      String password = s.nextLine();
-
-      accountManager.createAccount(username, password);
-      if (type.equals("Admin") || type.equals("Shop Manager")) {
-        accountManager.createAccInfo(username, type);
-        return;
+  public String strInput(String fieldName) {
+    System.out.println();
+    System.out.println("Please input " + fieldName + ":");
+    String input;
+    do {
+      input = s.nextLine();
+      if (input.isEmpty()) {
+        System.out.println("Please input " + fieldName + ":");
       }
+    } while (input.isEmpty());
+    return input;
+  }
 
-      System.out.println();
-      System.out.println("Please input your age:");
-      String ageStr;
-      boolean isValidAge;
-      do {
-        ageStr = s.nextLine();
-        isValidAge = ageStr.matches("[0-9]+");
-        if (!isValidAge) {
-          System.out.println("Please input a valid age:");
-        }
-      } while (!isValidAge);
-      int age = Integer.parseInt(ageStr);
+  public int intInput(String fieldName) {
+    System.out.println();
+    System.out.println("Please input your " + fieldName + ":");
+    String input;
+    boolean isValid;
+    do {
+      input = s.nextLine();
+      isValid = input.matches("\\d+");
+      if (!isValid) {
+        System.out.println("Please input a valid " + fieldName + ":");
+      }
+    } while (!isValid);
 
-      System.out.println();
-      System.out.println("Please input your telNo:");
-      String telNoStr;
-      boolean isValidTelNo;
-      do {
-        telNoStr = s.nextLine();
-        isValidTelNo = telNoStr.matches("[0-9]{8}");
-        if (!isValidTelNo) {
-          System.out.println("Please input a valid telNo:");
-        }
-      } while (!isValidTelNo);
-      int telNo = Integer.parseInt(telNoStr);
+    return Integer.parseInt(input);
+  }
 
+  public double doubleInput(String fieldName) {
+    System.out.println();
+    System.out.println("Please input the " + fieldName + ":");
+    String input;
+    boolean isDouble;
+    do {
+      input = s.nextLine();
+      isDouble = input.matches("\\d+(\\.\\d+)?");
+      if (!isDouble) {
+        System.out.println("Invalid value, please input again:");
+      }
+    } while (!isDouble);
+    return Double.parseDouble(input);
+  }
+
+  public String telInput() {
+    System.out.println();
+    System.out.println("Please input telephone number:");
+    String telNo;
+    boolean isValidTelNo;
+    do {
+      telNo = s.nextLine();
+      isValidTelNo = telNo.matches("[0-9]{8}");
+      if (!isValidTelNo) {
+        System.out.println("Please input a 8 digit telephone number:");
+      }
+    } while (!isValidTelNo);
+    return telNo;
+  }
+
+  public String beforeDateInput(String fieldName) {
+    try {
       System.out.println();
-      System.out.println("Please input your date of birth (dd/MM/yyyy):");
-      String dobStr;
-      Date dob;
-      boolean isDate;
-      boolean isBeforeToday;
+      System.out.println("Please input " + fieldName + " (dd/MM/yyyy):");
+      String dateStr;
+      boolean isDate = false;
+      boolean isBeforeToday = false;
       SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
       do {
-        dobStr = s.nextLine();
+        dateStr = s.nextLine();
         isDate =
-          dobStr.matches(
+          dateStr.matches(
             "^((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|2[0-1])[0-9]{2})$"
           );
-        dob = sdf.parse(dobStr);
-        isBeforeToday = dob.before(new Date());
-        if (!isDate || !isBeforeToday) {
-          System.out.println("Invalid date, please input again:");
+        if (!isDate) {
+          System.out.println("Invalid date format, please input again:");
+          continue;
+        }
+        Date date = sdf.parse(dateStr);
+        isBeforeToday = date.before(new Date());
+        if (!isBeforeToday) {
+          System.out.println("Date must be before today, please input again:");
+          continue;
         }
       } while (!isDate || !isBeforeToday);
 
-      accountManager.createAccInfo(username, "user", age, telNo, dobStr);
-    } catch (NumberFormatException | ParseException e) {
+      return dateStr;
+    } catch (ParseException e) {
       e.printStackTrace();
+      return null;
     }
+  }
+
+  public String afterDateInput(String fieldName) {
+    try {
+      System.out.println();
+      System.out.println("Please input " + fieldName + " (dd/MM/yyyy):");
+      String dateStr;
+      boolean isDate = false;
+      boolean isAfterToday = false;
+      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+      do {
+        dateStr = s.nextLine();
+        isDate =
+          dateStr.matches(
+            "^((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|2[0-1])[0-9]{2})$"
+          );
+        if (!isDate) {
+          System.out.println("Invalid date format, please input again:");
+          continue;
+        }
+        Date date = sdf.parse(dateStr);
+        isAfterToday = date.after(new Date());
+        if (!isAfterToday) {
+          System.out.println("Date must be after today, please input again:");
+          continue;
+        }
+      } while (!isDate || !isAfterToday);
+
+      return dateStr;
+    } catch (ParseException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  public void createAccount(String type) {
+    AccountManager accountManager = AccountManager.getInstance();
+
+    String username = strInput("user name");
+
+    String password = strInput("password");
+
+    boolean notExist = accountManager.createAccount(username, password);
+    if (!notExist) return;
+
+    if (type.equals("Admin") || type.equals("Shop Manager")) {
+      accountManager.createAccInfo(username, type);
+      return;
+    }
+
+    int age = intInput("age");
+
+    String telNo = telInput();
+
+    String dob = beforeDateInput("date of birth");
+
+    accountManager.createAccInfo(username, "user", age, telNo, dob);
   }
 
   public void exit() {

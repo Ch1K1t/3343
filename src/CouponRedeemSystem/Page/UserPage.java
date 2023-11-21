@@ -2,7 +2,6 @@ package CouponRedeemSystem.Page;
 
 import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Account.model.Account;
-import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.io.File;
@@ -49,15 +48,13 @@ public class UserPage extends Page {
         );
       }
     }
-    System.out.println();
-    System.out.println("Please input the coupon's code:");
-    String couponID = s.nextLine();
+
+    String couponID = strInput("coupon's code");
     account.pointsToCoupon(couponID);
   }
 
   public void redeemCoupon() {
-    System.out.println("Please input the coupon's id:");
-    String couponID = s.nextLine();
+    String couponID = strInput("coupon's code");
     account.couponToPoints(couponID);
   }
 

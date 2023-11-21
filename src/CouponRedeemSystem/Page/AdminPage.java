@@ -46,6 +46,6 @@ public class AdminPage extends Page {
           System.out.println("Unknown command");
           break;
       }
-    } while (!cmd.equals("4"));
+    } while (!cmd.equals("5"));
   }
 }

@@ -3,7 +3,10 @@ package CouponRedeemSystem.Account;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import CouponRedeemSystem.System.Password.PasswordManager;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -42,7 +45,7 @@ public class AccountManager {
     String userName,
     String role,
     int age,
-    int telNo,
+    String telNo,
     String dob
   ) {
     Account account = new Account(userName, role, age, telNo, dob);
@@ -52,7 +55,10 @@ public class AccountManager {
     bean.set("age", account.getAge());
     bean.set("telNo", account.getTelNo());
     bean.set("points", account.getPoints());
-    bean.set("dateOfBirth", account.getDateOfBirth().toString());
+    bean.set(
+      "dateOfBirth",
+      new SimpleDateFormat("dd/MM/yyyy").format(account.getDateOfBirth())
+    );
     bean.set("couponIDs", account.getCouponIDs());
 
     jsonFileManager.modifyJSON("Account", userName, bean);
@@ -100,36 +106,58 @@ public class AccountManager {
   }
 
   private Account extractAccountFromJson(JSONObject accountJson) {
-    String userName = accountJson.getString("userName");
-    String role = accountJson.getString("role");
-    int age = accountJson.getInt("age");
-    int telNo = accountJson.getInt("telNo");
-    double points = accountJson.getDouble("points");
-    String dateOfBirth = accountJson.getString("dateOfBirth");
-    JSONArray couponIDsArray = accountJson.getJSONArray("couponIDs");
-    List<String> couponIDs = new ArrayList<>();
-    for (int i = 0; i < couponIDsArray.size(); i++) {
-      couponIDs.add(couponIDsArray.getString(i));
-    }
+    try {
+      String userName = accountJson.getString("userName");
+      String role = accountJson.getString("role");
+      int age = accountJson.getInt("age");
+      String telNo = accountJson.getString("telNo");
+      double points = accountJson.getDouble("points");
+      Date dateOfBirth = new SimpleDateFormat("dd/MM/yyyy")
+        .parse(accountJson.getString("dateOfBirth"));
+      JSONArray couponIDsArray = accountJson.getJSONArray("couponIDs");
+      List<String> couponIDs = new ArrayList<>();
+      for (int i = 0; i < couponIDsArray.size(); i++) {
+        couponIDs.add(couponIDsArray.getString(i));
+      }
 
-    return new Account(
-      userName,
-      role,
-      age,
-      telNo,
-      dateOfBirth,
-      points,
-      couponIDs
-    );
+      return new Account(
+        userName,
+        role,
+        age,
+        telNo,
+        dateOfBirth,
+        points,
+        couponIDs
+      );
+    } catch (ParseException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
-  public void createAccount(String userName, String Password) {
+  public boolean createAccount(String userName, String Password) {
+    JSONObject jsonObject = jsonFileManager.searchJSON(userName);
+    if (jsonObject != null) {
+      System.out.println("User " + userName + " already exists");
+      return false;
+    }
     passwordManager.createNewPassword(userName, Password);
+    return true;
   }
 
   public void generateDemoAccount() {
-    createAccInfo("admin", "admin");
-    createAccInfo("shopManager", "shopManager");
-    createAccInfo("user", "user", 20, 12345678, "1999-01-01");
+    boolean notExist;
+    notExist = createAccount("admin", "admin");
+    if (notExist) {
+      createAccInfo("admin", "admin");
+    }
+    notExist = createAccount("shop", "shop");
+    if (notExist) {
+      createAccInfo("shop", "shop");
+    }
+    notExist = createAccount("user", "user");
+    if (notExist) {
+      createAccInfo("user", "user", 20, "12345678", "01/01/2000");
+    }
   }
 }
