@@ -24,7 +24,7 @@ public class CouponManager {
   }
 
   // Create json record for purchasable coupon
-  public void create(
+  public void createCoupon(
     String couponCode,
     double intrinsicValue,
     String expirationDate,
@@ -65,7 +65,7 @@ public class CouponManager {
   }
 
   // Create json record for redeemable coupon
-  public void create(
+  public void createCoupon(
     String couponCode,
     double intrinsicValue,
     String expirationDate,
@@ -100,14 +100,15 @@ public class CouponManager {
     System.out.println("Coupon created");
   }
 
-  public void delete(String couponCode) {
-    JSONObject jsonObject = jsonFileManager.searchJSON(couponCode);
-    if (jsonObject == null) {
+  public void deleteCoupon(String couponCode) {
+    // JSONObject jsonObject = jsonFileManager.searchJSON(couponCode);
+    Coupon coupon = getCoupon(couponCode);
+    if (coupon == null) {
       System.out.println("Coupon code " + couponCode + " does not exist");
       return;
     }
 
-    String type = jsonObject.getString("type");
+    String type = coupon.getType();
     jsonFileManager.deleteJSON("Coupon/" + type, couponCode);
     System.out.println("Coupon deleted");
   }
@@ -156,9 +157,9 @@ public class CouponManager {
   }
 
   public void generateDemoCoupon() {
-    create("P1", 1.0, "11/11/2025", null, 1.0, "Purchasable");
-    create("P2", 1.0, "11/11/2025", null, 1.0, "Purchasable");
-    create("R1", 1.0, "11/11/2025", "Redeemable");
-    create("R2", 1.0, "11/11/2025", "Redeemable");
+    createCoupon("P1", 1.0, "11/11/2025", null, 1.0, "Purchasable");
+    createCoupon("P2", 1.0, "11/11/2025", null, 1.0, "Purchasable");
+    createCoupon("R1", 1.0, "11/11/2025", "Redeemable");
+    createCoupon("R2", 1.0, "11/11/2025", "Redeemable");
   }
 }

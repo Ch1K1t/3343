@@ -40,8 +40,18 @@ public class AccountManager {
     jsonFileManager.modifyJSON("Account", account.getUserName(), bean);
   }
 
+  public boolean createPassword(String userName, String Password) {
+    JSONObject jsonObject = jsonFileManager.searchJSON(userName);
+    if (jsonObject != null) {
+      System.out.println("User " + userName + " already exists");
+      return false;
+    }
+    passwordManager.createNewPassword(userName, Password);
+    return true;
+  }
+
   // Create new user account
-  public void createAccInfo(
+  public void createAccount(
     String userName,
     String role,
     int age,
@@ -67,7 +77,7 @@ public class AccountManager {
   }
 
   // Create new admin and shop manager account
-  public void createAccInfo(String userName, String role) {
+  public void createAccount(String userName, String role) {
     Account account = new Account(userName, role);
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("userName", account.getUserName());
@@ -79,17 +89,17 @@ public class AccountManager {
   }
 
   // Delete existing account
-  public void delete(String userName) {
+  public void deleteAccount(String userName) {
     Account account = getAccount(userName);
     jsonFileManager.deleteJSON("Account", account.getUserName());
   }
 
   // Update existing account
-  public void update(String userName) {
+  public void updateAccount(String userName) {
     Account account = getAccount(userName);
 
     // Delete the original JSON file
-    delete(userName);
+    deleteAccount(userName);
 
     // Save the updated account details
     createAccInfo(account);
@@ -140,33 +150,23 @@ public class AccountManager {
     }
   }
 
-  public boolean createAccount(String userName, String Password) {
-    JSONObject jsonObject = jsonFileManager.searchJSON(userName);
-    if (jsonObject != null) {
-      System.out.println("User " + userName + " already exists");
-      return false;
-    }
-    passwordManager.createNewPassword(userName, Password);
-    return true;
-  }
-
   public void generateDemoAccount() {
     boolean notExist;
-    notExist = createAccount("admin", "admin");
+    notExist = createPassword("admin", "admin");
     if (notExist) {
-      createAccInfo("admin", "Admin");
+      createAccount("admin", "Admin");
     }
-    notExist = createAccount("shop", "shop");
+    notExist = createPassword("shop", "shop");
     if (notExist) {
-      createAccInfo("shop", "Shop Manager");
+      createAccount("shop", "Shop Manager");
     }
-    notExist = createAccount("staff", "staff");
+    notExist = createPassword("staff", "staff");
     if (notExist) {
-      createAccInfo("staff", "Staff");
+      createAccount("staff", "Staff");
     }
-    notExist = createAccount("user", "user");
+    notExist = createPassword("user", "user");
     if (notExist) {
-      createAccInfo("user", "User", 20, "12345678", "01/01/2000");
+      createAccount("user", "User", 20, "12345678", "01/01/2000");
     }
   }
 }

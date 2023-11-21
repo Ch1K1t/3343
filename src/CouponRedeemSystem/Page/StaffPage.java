@@ -32,7 +32,7 @@ public class StaffPage extends Page {
 
       double points = doubleInput("coupon's purchasing value");
 
-      couponManager.create(
+      couponManager.createCoupon(
         couponCode,
         intrinsicValue,
         expirationDate,
@@ -41,7 +41,12 @@ public class StaffPage extends Page {
         type
       );
     } else {
-      couponManager.create(couponCode, intrinsicValue, expirationDate, type);
+      couponManager.createCoupon(
+        couponCode,
+        intrinsicValue,
+        expirationDate,
+        type
+      );
     }
   }
 
@@ -50,7 +55,7 @@ public class StaffPage extends Page {
 
     String couponCode = strInput("coupon's code");
 
-    couponManager.delete(couponCode);
+    couponManager.deleteCoupon(couponCode);
   }
 
   public void execute() {

@@ -1,13 +1,19 @@
 package CouponRedeemSystem.Shop;
 
+import CouponRedeemSystem.Coupon.model.Coupon;
+import CouponRedeemSystem.Coupon.model.PurchasableCoupon;
+import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
+import java.util.ArrayList;
+import java.util.List;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.LazyDynaBean;
 
 public class ShopManager {
 
   static final String SHOP_JSON_FILE_NAME = "Shop.json";
-  static final String SHOP_JSON_FILE_PATH = "Shop";
   private static ShopManager instance;
   private CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
 
@@ -47,17 +53,41 @@ public class ShopManager {
     bean.set("shopName", shop.getShopName());
     bean.set("purchasableCoupons", shop.getPurchasableCoupons());
 
-    jsonFileManager.modifyJSON(SHOP_JSON_FILE_PATH, shopName, bean);
+    jsonFileManager.modifyJSON("Shop", shopName, bean);
+    System.out.println();
+    System.out.println("Shop created successfully");
   }
-  // public Shop RemoveShop(String shopName) {
-  //   Shop shop = null;
-  //   if (shops.get(shopName) != null) shops.remove(shopName);
-  //   return shop;
-  // }
 
-  // public Shop findShop(String shopName) {
-  //   Shop shop = null;
-  //   shops.get(shopName);
-  //   return shop;
-  // }
+  public void deleteShop(String shopName) {
+    Shop shop = getShop(shopName);
+    if (shop == null) {
+      System.out.println("Shop " + shopName + " does not exist");
+      return;
+    }
+    jsonFileManager.deleteJSON("Shop", shopName);
+    System.out.println();
+    System.out.println("Shop removed successfully");
+  }
+
+  public Shop getShop(String shopName) {
+    JSONObject shopJson = jsonFileManager.searchJSON(shopName);
+
+    if (shopJson == null) {
+      System.out.println("Shop " + shopName + " does not exist");
+      return null;
+    } else {
+      // Extract coupon details from JSON and return the Account object
+      return extractShopFromJson(shopJson);
+    }
+  }
+
+  private Shop extractShopFromJson(JSONObject shopJson) {
+    String shopName = shopJson.getString("shopName");
+    JSONArray Arr = shopJson.getJSONArray("purchasableCoupons");
+    List<String> purchasableCoupons = new ArrayList<>();
+    for (int i = 0; i < Arr.size(); i++) {
+      purchasableCoupons.add(Arr.getString(i));
+    }
+    return new Shop(shopName, purchasableCoupons);
+  }
 }

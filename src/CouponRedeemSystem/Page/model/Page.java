@@ -19,12 +19,12 @@ public abstract class Page {
 
   public String strInput(String fieldName) {
     System.out.println();
-    System.out.println("Please input " + fieldName + ":");
+    System.out.println("Please input the " + fieldName + ":");
     String input;
     do {
       input = s.nextLine();
       if (input.isEmpty()) {
-        System.out.println("Please input " + fieldName + ":");
+        System.out.println("Please input the " + fieldName + ":");
       }
     } while (input.isEmpty());
     return input;
@@ -32,16 +32,16 @@ public abstract class Page {
 
   public int intInput(String fieldName) {
     System.out.println();
-    System.out.println("Please input your " + fieldName + ":");
+    System.out.println("Please input the " + fieldName + ":");
     String input;
-    boolean isValid;
+    boolean isInt;
     do {
       input = s.nextLine();
-      isValid = input.matches("\\d+");
-      if (!isValid) {
-        System.out.println("Please input a valid " + fieldName + ":");
+      isInt = input.matches("\\d+");
+      if (!isInt) {
+        System.out.println("Invalid value, please input again:");
       }
-    } while (!isValid);
+    } while (!isInt);
 
     return Integer.parseInt(input);
   }
@@ -65,14 +65,14 @@ public abstract class Page {
     System.out.println();
     System.out.println("Please input telephone number:");
     String telNo;
-    boolean isValidTelNo;
+    boolean isValid;
     do {
       telNo = s.nextLine();
-      isValidTelNo = telNo.matches("[0-9]{8}");
-      if (!isValidTelNo) {
+      isValid = telNo.matches("[0-9]{8}");
+      if (!isValid) {
         System.out.println("Please input a 8 digit telephone number:");
       }
-    } while (!isValidTelNo);
+    } while (!isValid);
     return telNo;
   }
 
@@ -83,7 +83,6 @@ public abstract class Page {
       String dateStr;
       boolean isDate = false;
       boolean isBeforeToday = false;
-      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
       do {
         dateStr = s.nextLine();
         isDate =
@@ -94,7 +93,7 @@ public abstract class Page {
           System.out.println("Invalid date format, please input again:");
           continue;
         }
-        Date date = sdf.parse(dateStr);
+        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(dateStr);
         isBeforeToday = date.before(new Date());
         if (!isBeforeToday) {
           System.out.println("Date must be before today, please input again:");
@@ -116,7 +115,6 @@ public abstract class Page {
       String dateStr;
       boolean isDate = false;
       boolean isAfterToday = false;
-      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
       do {
         dateStr = s.nextLine();
         isDate =
@@ -127,7 +125,7 @@ public abstract class Page {
           System.out.println("Invalid date format, please input again:");
           continue;
         }
-        Date date = sdf.parse(dateStr);
+        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(dateStr);
         isAfterToday = date.after(new Date());
         if (!isAfterToday) {
           System.out.println("Date must be after today, please input again:");
@@ -149,11 +147,11 @@ public abstract class Page {
 
     String password = strInput("password");
 
-    boolean notExist = accountManager.createAccount(username, password);
+    boolean notExist = accountManager.createPassword(username, password);
     if (!notExist) return;
 
     if (!type.equals("User")) {
-      accountManager.createAccInfo(username, type);
+      accountManager.createAccount(username, type);
       return;
     }
 
@@ -163,7 +161,7 @@ public abstract class Page {
 
     String dob = beforeDateInput("date of birth");
 
-    accountManager.createAccInfo(username, "user", age, telNo, dob);
+    accountManager.createAccount(username, "user", age, telNo, dob);
   }
 
   public void exit() {
