@@ -33,7 +33,7 @@ public class SigninPage extends Page {
         new ShopManagerPage().execute();
         break;
       case "Staff":
-        new StaffPage().execute();
+        new StaffPage(username).execute();
         break;
     }
   }

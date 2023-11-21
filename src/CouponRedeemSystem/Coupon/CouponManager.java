@@ -13,6 +13,7 @@ public class CouponManager {
 
   private static CouponManager instance;
   private CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
+  private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   private CouponManager() {}
 
@@ -23,7 +24,7 @@ public class CouponManager {
     return instance;
   }
 
-  // Create json record for purchasable coupon
+  // Create new purchasable coupon
   public void createCoupon(
     String couponCode,
     double intrinsicValue,
@@ -34,37 +35,38 @@ public class CouponManager {
   ) {
     JSONObject json = jsonFileManager.searchJSON(couponCode);
     if (json != null) {
+      System.out.println();
       System.out.println("Coupon code " + couponCode + " already exists");
       return;
     }
 
     Coupon coupon = new PurchasableCoupon(
       intrinsicValue,
-      null,
+      shop.getShopName(),
       expirationDate,
       couponCode,
       true,
       points,
       type
     );
+
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("couponCode", coupon.getCouponCode());
+    bean.set("type", coupon.getType());
     bean.set("intrinsicValue", coupon.getIntrinsicValue());
-    bean.set(
-      "expirationDate",
-      new SimpleDateFormat("dd/MM/yyyy").format(coupon.getExpirationDate())
-    );
+    bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
+    bean.set("active", coupon.isActive());
     bean.set("owner", coupon.getOwner());
     bean.set("shop", coupon.getShop());
-    bean.set("active", coupon.isActive());
-    bean.set("type", coupon.getType());
     bean.set("points", coupon.getPoints());
 
     jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
+
+    System.out.println();
     System.out.println("Coupon created");
   }
 
-  // Create json record for redeemable coupon
+  // Create new redeemable coupon
   public void createCoupon(
     String couponCode,
     double intrinsicValue,
@@ -73,6 +75,7 @@ public class CouponManager {
   ) {
     JSONObject json = jsonFileManager.searchJSON(couponCode);
     if (json != null) {
+      System.out.println();
       System.out.println("Coupon code " + couponCode + " already exists");
       return;
     }
@@ -84,43 +87,60 @@ public class CouponManager {
       true,
       type
     );
+
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("couponCode", coupon.getCouponCode());
-    bean.set("intrinsicValue", coupon.getIntrinsicValue());
-    bean.set(
-      "expirationDate",
-      new SimpleDateFormat("dd/MM/yyyy").format(coupon.getExpirationDate())
-    );
-    bean.set("owner", coupon.getOwner());
-    bean.set("shop", coupon.getShop());
-    bean.set("active", coupon.isActive());
     bean.set("type", coupon.getType());
+    bean.set("intrinsicValue", coupon.getIntrinsicValue());
+    bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
+    bean.set("active", coupon.isActive());
 
     jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
+
+    System.out.println();
     System.out.println("Coupon created");
   }
 
   public void deleteCoupon(String couponCode) {
-    // JSONObject jsonObject = jsonFileManager.searchJSON(couponCode);
     Coupon coupon = getCoupon(couponCode);
     if (coupon == null) {
       System.out.println("Coupon code " + couponCode + " does not exist");
       return;
     }
 
-    String type = coupon.getType();
-    jsonFileManager.deleteJSON("Coupon/" + type, couponCode);
+    jsonFileManager.deleteJSON("Coupon/" + coupon.getType(), couponCode);
+
+    System.out.println();
     System.out.println("Coupon deleted");
+  }
+
+  public void updateCoupon(Coupon coupon) {
+    String type = coupon.getType();
+
+    LazyDynaBean bean = new LazyDynaBean();
+    bean.set("couponCode", coupon.getCouponCode());
+    bean.set("intrinsicValue", coupon.getIntrinsicValue());
+    bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
+    bean.set("active", coupon.isActive());
+    bean.set("type", type);
+    if (type.equals("Purchasable")) {
+      bean.set("owner", coupon.getOwner());
+      bean.set("shop", coupon.getShop());
+      bean.set("points", coupon.getPoints());
+    }
+
+    jsonFileManager.modifyJSON("Coupon/" + type, coupon.getCouponCode(), bean);
+
+    System.out.println();
+    System.out.println("Coupon updated");
   }
 
   public Coupon getCoupon(String couponCode) {
     JSONObject couponJson = jsonFileManager.searchJSON(couponCode);
 
     if (couponJson == null) {
-      System.out.println("Coupon " + couponCode + " does not exist");
       return null;
     } else {
-      // Extract coupon details from JSON and return the Account object
       return extractCouponFromJson(couponJson);
     }
   }

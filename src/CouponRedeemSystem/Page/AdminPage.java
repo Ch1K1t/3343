@@ -1,5 +1,6 @@
 package CouponRedeemSystem.Page;
 
+import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Page.model.Page;
 
 public class AdminPage extends Page {
@@ -11,9 +12,18 @@ public class AdminPage extends Page {
     System.out.println("2. Create Shop Manager Account");
     System.out.println("3. Create Staff Account");
     System.out.println("4. Create User Account");
-    System.out.println("5. Signout");
-    System.out.println("6. Exit");
+    System.out.println("5. Delete Account");
+    System.out.println("6. Signout");
+    System.out.println("7. Exit");
     System.out.println();
+  }
+
+  public void deleteAccount() {
+    AccountManager accountManager = AccountManager.getInstance();
+
+    String username = strInput("user name");
+
+    accountManager.deleteAccount(username);
   }
 
   public void execute() {
@@ -37,15 +47,18 @@ public class AdminPage extends Page {
           createAccount("User");
           break;
         case "5":
-          System.out.println("Signout successfully");
+          deleteAccount();
           break;
         case "6":
+          System.out.println("Signout successfully");
+          break;
+        case "7":
           exit();
           break;
         default:
           System.out.println("Unknown command");
           break;
       }
-    } while (!cmd.equals("5"));
+    } while (!cmd.equals("6"));
   }
 }

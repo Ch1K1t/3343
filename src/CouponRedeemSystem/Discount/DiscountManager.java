@@ -38,7 +38,7 @@ public class DiscountManager {
       valueOff
     );
 
-    storeNewDiscount(discount);
+    createDiscount(discount);
 
     return discount;
   }
@@ -60,7 +60,7 @@ public class DiscountManager {
 
     System.out.println(discount.getJSONString());
 
-    storeNewDiscount(discount);
+    createDiscount(discount);
 
     return discount;
   }
@@ -92,7 +92,7 @@ public class DiscountManager {
     );
   }
 
-  private void storeNewDiscount(Discount discount) {
+  private void createDiscount(Discount discount) {
     CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
     JSONObject discountJsonObject = new JSONObject();
     discountJsonObject.put(discount.getId(), discount.getJSONObject());
@@ -101,7 +101,8 @@ public class DiscountManager {
 
   private void modifyDiscount(String id, Discount discount) {
     CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
-    JSONObject discountJson = mgr.searchJSON("Discount List.json");
+    JSONObject discountJson = mgr.searchJSON("Discount List");
     discountJson.put(id, discount.getJSONObject());
+    mgr.modifyJSON("Discount", "Discount List", discountJson);
   }
 }

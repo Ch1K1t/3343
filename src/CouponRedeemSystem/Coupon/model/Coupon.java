@@ -1,26 +1,28 @@
 package CouponRedeemSystem.Coupon.model;
 
-import CouponRedeemSystem.Shop.model.Shop;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public abstract class Coupon {
 
-  double intrinsicValue;
-  Shop shop;
-  Date expirationDate;
-  boolean active;
-  String couponCode;
-  String owner;
-  Double points;
-  String type;
+  private double intrinsicValue;
+  private String shop;
+  private Date expirationDate;
+  private boolean active;
+  private String couponCode;
+  private String owner;
+  private Double points;
+  private String type;
+
+  private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   // Purchasable Coupon
   public Coupon(
     double intrinsicValue,
-    Shop shop,
+    String shop,
     String expirationDate,
     String couponCode,
     boolean active,
@@ -30,8 +32,7 @@ public abstract class Coupon {
     try {
       this.intrinsicValue = intrinsicValue;
       this.shop = shop;
-      this.expirationDate =
-        new SimpleDateFormat("dd/MM/yyyy").parse(expirationDate);
+      this.expirationDate = sdf.parse(expirationDate);
       this.couponCode = couponCode;
       this.active = active;
       this.owner = null;
@@ -52,8 +53,7 @@ public abstract class Coupon {
   ) {
     try {
       this.intrinsicValue = intrinsicValue;
-      this.expirationDate =
-        new SimpleDateFormat("dd/MM/yyyy").parse(expirationDate);
+      this.expirationDate = sdf.parse(expirationDate);
       this.couponCode = couponCode;
       this.active = active;
       this.type = type;
@@ -63,17 +63,20 @@ public abstract class Coupon {
   }
 
   public Double pointConversion() {
-    Date currentDate = new Date();
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(this.expirationDate);
+    Calendar cal2 = Calendar.getInstance();
+    cal2.setTime(new Date());
 
-    double daysBeforeExpire =
-      Math.abs(this.expirationDate.getTime() - currentDate.getTime()) /
-      Math.pow(10, 9);
-    // (Coupon Value + (Days to Expiration * Weight)) * Conversion Rate
-    // Remarks: conversion rate refers to the amount of points rewarded per dollar
-    // 1 -> 1 point per dollar
+    int daysBeforeExpire =
+      cal.get(Calendar.DAY_OF_YEAR) - cal2.get(Calendar.DAY_OF_YEAR);
+    int yearBeforeExpire = cal.get(Calendar.YEAR) - cal2.get(Calendar.YEAR);
+    if (yearBeforeExpire > 0) {
+      daysBeforeExpire += yearBeforeExpire * 365;
+    }
     DecimalFormat df = new DecimalFormat("###.##");
     return Double.parseDouble(
-      df.format((this.intrinsicValue + (daysBeforeExpire * 0.5)) * 1)
+      df.format(this.intrinsicValue + (daysBeforeExpire * 0.5))
     );
   }
 
@@ -85,11 +88,11 @@ public abstract class Coupon {
     this.intrinsicValue = intrinsicValue;
   }
 
-  public Shop getShop() {
+  public String getShop() {
     return shop;
   }
 
-  public void setShop(Shop shop) {
+  public void setShop(String shop) {
     this.shop = shop;
   }
 

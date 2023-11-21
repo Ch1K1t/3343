@@ -1,10 +1,23 @@
 package CouponRedeemSystem.Page;
 
+import CouponRedeemSystem.Account.AccountManager;
+import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Page.model.Page;
+import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.File.CRSJsonFileManager;
+import java.io.File;
+import net.sf.json.JSONObject;
 
 public class StaffPage extends Page {
+
+  private Account account;
+
+  public StaffPage(String username) {
+    AccountManager accountManager = AccountManager.getInstance();
+    this.account = accountManager.getAccount(username);
+  }
 
   public void getInstruction() {
     System.out.println();
@@ -27,8 +40,20 @@ public class StaffPage extends Page {
     String couponCode = strInput("coupon's code");
 
     if (type.equals("Purchasable")) {
-      // Search shop by coupon code
+      CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
+      ShopManager shopManager = ShopManager.getInstance();
+
       Shop shop = null;
+      File[] fileArr = new File("Data/Shop").listFiles();
+      for (File file : fileArr) {
+        JSONObject jsonObject = jsonFileManager.convertFileTextToJSON(file);
+        if (jsonObject.getJSONArray("staffs").contains(account.getUserName())) {
+          shop = shopManager.getShop(jsonObject.getString("shopName"));
+          shop.addPurchasableCoupons(couponCode);
+          shopManager.updateShop(shop);
+          break;
+        }
+      }
 
       double points = doubleInput("coupon's purchasing value");
 

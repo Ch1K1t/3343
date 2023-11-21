@@ -1,0 +1,10 @@
+{
+  "couponCode": "R3",
+  "type": "Purchasable",
+  "intrinsicValue": 1,
+  "expirationDate": "11/11/2025",
+  "active": true,
+  "owner": null,
+  "shop": "shop1",
+  "points": 10
+}

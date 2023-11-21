@@ -1,8 +1,5 @@
 package CouponRedeemSystem.Shop;
 
-import CouponRedeemSystem.Coupon.model.Coupon;
-import CouponRedeemSystem.Coupon.model.PurchasableCoupon;
-import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.util.ArrayList;
@@ -13,7 +10,6 @@ import org.apache.commons.beanutils.LazyDynaBean;
 
 public class ShopManager {
 
-  static final String SHOP_JSON_FILE_NAME = "Shop.json";
   private static ShopManager instance;
   private CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
 
@@ -24,38 +20,18 @@ public class ShopManager {
     return instance;
   }
 
-  // public void loadAllShopsFromStorage() {
-  //   try {
-  //     JSONObject json = jsonFileManager.searchJSON(SHOP_JSON_FILE_NAME);
-  //     for (Object shop : json.getJSONObject("List of Shops").keySet()) {
-  //       String shopId = (String) shop;
-  //       JSONObject shopObject = json
-  //         .getJSONObject("List of Shops")
-  //         .getJSONObject(shopId);
-  //       Shop s = new Shop(
-  //         shopObject.getString(shopId),
-  //         shopObject.getString("shopName")
-  //       );
-
-  //       // load approve coupons in shop
-  //       s.loadApprovedCoupons(shopObject);
-  //       shops.put(shopObject.getString(shopId), s);
-  //     }
-  //     noOfShops = json.getInt("number of Shops");
-  //   } catch (IOException e) {
-  //     e.printStackTrace();
-  //   }
-  // }
-
   public void createShop(String shopName) {
     Shop shop = new Shop(shopName);
+
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("shopName", shop.getShopName());
     bean.set("purchasableCoupons", shop.getPurchasableCoupons());
+    bean.set("staffs", shop.getStaffs());
 
     jsonFileManager.modifyJSON("Shop", shopName, bean);
+
     System.out.println();
-    System.out.println("Shop created successfully");
+    System.out.println("Shop created");
   }
 
   public void deleteShop(String shopName) {
@@ -64,19 +40,31 @@ public class ShopManager {
       System.out.println("Shop " + shopName + " does not exist");
       return;
     }
+
     jsonFileManager.deleteJSON("Shop", shopName);
+
     System.out.println();
-    System.out.println("Shop removed successfully");
+    System.out.println("Shop deleted");
+  }
+
+  public void updateShop(Shop shop) {
+    LazyDynaBean bean = new LazyDynaBean();
+    bean.set("shopName", shop.getShopName());
+    bean.set("purchasableCoupons", shop.getPurchasableCoupons());
+    bean.set("staffs", shop.getStaffs());
+
+    jsonFileManager.modifyJSON("Shop", shop.getShopName(), bean);
+
+    System.out.println();
+    System.out.println("Shop updated");
   }
 
   public Shop getShop(String shopName) {
     JSONObject shopJson = jsonFileManager.searchJSON(shopName);
 
     if (shopJson == null) {
-      System.out.println("Shop " + shopName + " does not exist");
       return null;
     } else {
-      // Extract coupon details from JSON and return the Account object
       return extractShopFromJson(shopJson);
     }
   }
@@ -88,6 +76,17 @@ public class ShopManager {
     for (int i = 0; i < Arr.size(); i++) {
       purchasableCoupons.add(Arr.getString(i));
     }
-    return new Shop(shopName, purchasableCoupons);
+    JSONArray Arr2 = shopJson.getJSONArray("staffs");
+    List<String> staffs = new ArrayList<>();
+    for (int i = 0; i < Arr2.size(); i++) {
+      staffs.add(Arr2.getString(i));
+    }
+
+    return new Shop(shopName, purchasableCoupons, staffs);
+  }
+
+  public void generateDemoShop() {
+    createShop("shop1");
+    createShop("shop2");
   }
 }

@@ -1,10 +1,11 @@
 package CouponRedeemSystem.Page.model;
 
 import CouponRedeemSystem.Account.AccountManager;
+import CouponRedeemSystem.Shop.ShopManager;
+import CouponRedeemSystem.Shop.model.Shop;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Scanner;
 
 public abstract class Page {
@@ -140,7 +141,7 @@ public abstract class Page {
     }
   }
 
-  public void createAccount(String type) {
+  public void createAccount(String role) {
     AccountManager accountManager = AccountManager.getInstance();
 
     String username = strInput("user name");
@@ -150,8 +151,26 @@ public abstract class Page {
     boolean notExist = accountManager.createPassword(username, password);
     if (!notExist) return;
 
-    if (!type.equals("User")) {
-      accountManager.createAccount(username, type);
+    if (role.equals("Staff")) {
+      ShopManager shopManager = ShopManager.getInstance();
+
+      String shopName;
+      Shop shop;
+      do {
+        shopName = strInput("shop name");
+        shop = shopManager.getShop(shopName);
+        if (shop == null) {
+          System.out.println();
+          System.out.println("Shop " + shopName + " does not exist!");
+        }
+      } while (shop == null);
+      shop.addStaffs(username);
+      shopManager.updateShop(shop);
+
+      accountManager.createAccount(username, role);
+      return;
+    } else if (!role.equals("User")) {
+      accountManager.createAccount(username, role);
       return;
     }
 

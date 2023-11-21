@@ -1,9 +1,1 @@
-{
-  "couponCode": "R1",
-  "intrinsicValue": 1,
-  "expirationDate": "11/11/2025",
-  "owner": null,
-  "shop": null,
-  "active": true,
-  "type": "Redeemable"
-}
+{"couponCode":"R1","intrinsicValue":1,"expirationDate":"11/11/2025","owner":null,"shop":null,"active":true,"type":"Redeemable"}

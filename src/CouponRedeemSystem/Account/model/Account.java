@@ -1,14 +1,13 @@
 package CouponRedeemSystem.Account.model;
 
+import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Coupon.model.Coupon;
-import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import net.sf.json.JSONObject;
 
 public class Account {
 
@@ -67,12 +66,12 @@ public class Account {
   }
 
   public void couponToPoints(String couponCode) {
-    CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
+    AccountManager accountManager = AccountManager.getInstance();
     CouponManager couponManager = CouponManager.getInstance();
 
     Coupon coupon = couponManager.getCoupon(couponCode);
     if (coupon == null) {
-      System.out.println("No coupon found!");
+      System.out.println("Coupon code" + couponCode + " does not exist!");
       return;
     } else if (coupon.getType().equals("Purchasable")) {
       System.out.println("This coupon is not redeemable!");
@@ -86,31 +85,23 @@ public class Account {
     }
 
     double points = coupon.pointConversion();
-    addPoints(points);
+    this.addPoints(points);
+    accountManager.updateAccount(this);
+
     coupon.setActive(false);
+    couponManager.updateCoupon(coupon);
 
-    JSONObject accountJSON = jsonFileManager.searchJSON(this.userName);
-    accountJSON.put("points", this.points);
-    jsonFileManager.modifyJSON("Account", this.userName, accountJSON);
-
-    JSONObject couponJSON = jsonFileManager.searchJSON(couponCode);
-    couponJSON.put("active", coupon.isActive());
-    jsonFileManager.modifyJSON(
-      "Coupon/" + couponJSON.getString("type"),
-      couponCode,
-      couponJSON
-    );
-
-    System.out.println("Coupon redeemed successfully!");
+    System.out.println();
+    System.out.println("Coupon redeemed");
   }
 
   public void pointsToCoupon(String couponCode) {
+    AccountManager accountManager = AccountManager.getInstance();
     CouponManager couponManager = CouponManager.getInstance();
-    CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
 
     Coupon coupon = couponManager.getCoupon(couponCode);
     if (coupon == null) {
-      System.out.println("No coupon found!");
+      System.out.println("Coupon code" + couponCode + " does not exist!");
       return;
     } else if (this.points < coupon.getPoints()) {
       System.out.println("Insufficient points!");
@@ -120,19 +111,15 @@ public class Account {
       return;
     }
 
-    System.out.println(coupon.getPoints());
-    deductPoints(coupon.getPoints());
+    this.deductPoints(coupon.getPoints());
     this.couponIDs.add(coupon.getCouponCode());
+    accountManager.updateAccount(this);
+
     coupon.setOwner(this.userName);
+    couponManager.updateCoupon(coupon);
 
-    JSONObject accountJSON = jsonFileManager.searchJSON(this.userName);
-    accountJSON.put("points", this.points);
-    accountJSON.put("couponIDs", this.couponIDs);
-    jsonFileManager.modifyJSON("Account", this.userName, accountJSON);
-
-    JSONObject couponJSON = jsonFileManager.searchJSON(couponCode);
-    couponJSON.put("owner", this.userName);
-    jsonFileManager.modifyJSON("Coupon/Purchasable", couponCode, couponJSON);
+    System.out.println();
+    System.out.println("Coupon purchased");
   }
 
   public String getUserName() {
