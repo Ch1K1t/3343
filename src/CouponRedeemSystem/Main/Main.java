@@ -39,9 +39,9 @@ public class Main {
     // new StaffPage("staff1").execute();
     // new UserPage("user").execute();
 
-    initializeUser();
-    initializeShop();
-    initializeCoupon();
-    initializeDiscount();
+    // initializeUser();
+    // initializeShop();
+    // initializeCoupon();
+    // initializeDiscount();
   }
 }

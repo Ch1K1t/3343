@@ -85,10 +85,10 @@ public class StaffPage extends Page {
     Coupon coupon = couponManager.createCoupon(
       couponCode,
       intrinsicValue,
-      expirationDate,
-      shop,
       points,
-      "Purchasable"
+      shop,
+      "Purchasable",
+      expirationDate
     );
 
     if (coupon != null) {
