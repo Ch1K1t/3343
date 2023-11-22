@@ -36,8 +36,9 @@ public class Main {
     // new HomePage().execute();
     // new AdminPage().execute();
     // new ShopManagerPage().execute();
-    // new StaffPage("staff").execute();
-    new UserPage("user").execute();
+    new StaffPage("staff1").execute();
+    // new UserPage("user").execute();
+
     // initializeUser();
     // initializeShop();
     // initializeCoupon();

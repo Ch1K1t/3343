@@ -9,11 +9,14 @@ import CouponRedeemSystem.Discount.model.Discount;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class StaffPage extends Page {
 
   private Account account;
+
+  private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   public StaffPage(String username) {
     AccountManager accountManager = AccountManager.getInstance();
@@ -23,15 +26,35 @@ public class StaffPage extends Page {
   public void getInstruction() {
     System.out.println();
     System.out.println("Please select the command and input the number:");
-    System.out.println("1. Create Purchasable Coupon");
-    System.out.println("2. Create Redeemable Coupon");
+    System.out.println("1. Check Coupon");
+    System.out.println("2. Create Purchasable Coupon");
     System.out.println("3. Delete Coupon");
-    System.out.println("4. Create Discount By Day");
-    System.out.println("5. Create Discount By Month");
-    System.out.println("6. Delete Discount");
-    System.out.println("7. Signout");
-    System.out.println("8. Exit");
+    System.out.println("4. Check Discount");
+    System.out.println("5. Create Discount By Day");
+    System.out.println("6. Create Discount By Month");
+    System.out.println("7. Delete Discount");
+    System.out.println("8. Signout");
+    System.out.println("9. Exit");
     System.out.println();
+  }
+
+  public void checkCoupon() {
+    ShopManager shopManager = ShopManager.getInstance();
+    CouponManager couponManager = CouponManager.getInstance();
+
+    Shop shop = shopManager.getShopByStaff(account.getUserName());
+    List<String> couponList = shop.getPurchasableCouponList();
+    for (String s : couponList) {
+      Coupon coupon = couponManager.getCoupon(s);
+      System.out.println("Coupon Code: " + coupon.getCouponCode());
+      System.out.println(
+        "Coupon Intrinsic Value: " + coupon.getIntrinsicValue()
+      );
+      System.out.println("Coupon Points: " + coupon.getPoints());
+      System.out.println(
+        "Coupon Expiration Date: " + coupon.getExpirationDate()
+      );
+    }
   }
 
   public void createCoupon(String type) {
@@ -112,6 +135,8 @@ public class StaffPage extends Page {
       System.out.println("Coupon deletion failed");
     }
   }
+
+  public void checkDiscount() {}
 
   public void createDiscount(String unit) {
     ShopManager shopManager = ShopManager.getInstance();
@@ -196,33 +221,36 @@ public class StaffPage extends Page {
       cmd = s.nextLine();
       switch (cmd) {
         case "1":
-          createCoupon("Purchasable");
+          checkCoupon();
           break;
         case "2":
-          createCoupon("Redeemable");
+          createCoupon("Purchasable");
           break;
         case "3":
           deleteCoupon();
           break;
         case "4":
-          createDiscount("day");
+          checkDiscount();
           break;
         case "5":
-          createDiscount("month");
+          createDiscount("day");
           break;
         case "6":
-          deleteDiscount();
+          createDiscount("month");
           break;
         case "7":
-          System.out.println("Signout successfully");
+          deleteDiscount();
           break;
         case "8":
+          System.out.println("Signout successfully");
+          break;
+        case "9":
           exit();
           break;
         default:
           System.out.println("Invalid command, please input again:");
           break;
       }
-    } while (!cmd.equals("7"));
+    } while (!cmd.equals("8"));
   }
 }

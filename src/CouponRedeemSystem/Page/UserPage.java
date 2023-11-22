@@ -112,11 +112,11 @@ public class UserPage extends Page {
       return;
     } else if (!coupon.isActive()) {
       System.out.println();
-      System.out.println("Coupon has been used!");
+      System.out.println("Coupon has been used");
       return;
     } else if (coupon.getExpirationDate().before(new Date())) {
       System.out.println();
-      System.out.println("Coupon has expired!");
+      System.out.println("Coupon has expired");
       return;
     }
 

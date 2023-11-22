@@ -31,7 +31,7 @@ public class ShopManager {
 
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("shopName", shop.getShopName());
-    bean.set("purchasableCouponList", shop.getPurchasableCouponList());
+    bean.set("couponList", shop.getPurchasableCouponList());
     bean.set("staffList", shop.getStaffList());
     bean.set("discountList", shop.getDiscountList());
 
@@ -57,7 +57,7 @@ public class ShopManager {
   public boolean updateShop(Shop shop) {
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("shopName", shop.getShopName());
-    bean.set("purchasableCouponList", shop.getPurchasableCouponList());
+    bean.set("couponList", shop.getPurchasableCouponList());
     bean.set("staffList", shop.getStaffList());
     bean.set("discountList", shop.getDiscountList());
 
@@ -98,10 +98,10 @@ public class ShopManager {
 
   private Shop extractShopFromJson(JSONObject shopJson) {
     String shopName = shopJson.getString("shopName");
-    JSONArray Arr = shopJson.getJSONArray("purchasableCouponList");
-    List<String> purchasableCouponList = new ArrayList<>();
+    JSONArray Arr = shopJson.getJSONArray("couponList");
+    List<String> couponList = new ArrayList<>();
     for (int i = 0; i < Arr.size(); i++) {
-      purchasableCouponList.add(Arr.getString(i));
+      couponList.add(Arr.getString(i));
     }
     JSONArray Arr2 = shopJson.getJSONArray("staffList");
     List<String> staffList = new ArrayList<>();
@@ -114,7 +114,7 @@ public class ShopManager {
       discountList.add(Arr3.getString(i));
     }
 
-    return new Shop(shopName, purchasableCouponList, staffList, discountList);
+    return new Shop(shopName, couponList, staffList, discountList);
   }
 
   public void generateDemoShop() {

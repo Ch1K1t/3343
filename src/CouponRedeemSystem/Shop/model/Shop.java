@@ -6,25 +6,25 @@ import java.util.List;
 public class Shop {
 
   private String shopName;
-  private List<String> purchasableCouponList;
+  private List<String> couponList;
   private List<String> staffList;
   private List<String> discountList;
 
   public Shop(String shopName) {
     this.shopName = shopName;
-    this.purchasableCouponList = new ArrayList<String>();
+    this.couponList = new ArrayList<String>();
     this.staffList = new ArrayList<String>();
     this.discountList = new ArrayList<String>();
   }
 
   public Shop(
     String shopName,
-    List<String> purchasableCouponList,
+    List<String> couponList,
     List<String> staffList,
     List<String> discountList
   ) {
     this.shopName = shopName;
-    this.purchasableCouponList = purchasableCouponList;
+    this.couponList = couponList;
     this.staffList = staffList;
     this.discountList = discountList;
   }
@@ -38,19 +38,19 @@ public class Shop {
   }
 
   public List<String> getPurchasableCouponList() {
-    return purchasableCouponList;
+    return couponList;
   }
 
-  public void setPurchasableCouponList(List<String> purchasableCouponList) {
-    this.purchasableCouponList = purchasableCouponList;
+  public void setPurchasableCouponList(List<String> couponList) {
+    this.couponList = couponList;
   }
 
   public void addPurchasableCoupon(String couponCode) {
-    purchasableCouponList.add(couponCode);
+    couponList.add(couponCode);
   }
 
   public void removePurchasableCoupon(String couponCode) {
-    purchasableCouponList.remove(couponCode);
+    couponList.remove(couponCode);
   }
 
   public List<String> getStaffList() {

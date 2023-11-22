@@ -1,6 +1,6 @@
 {
   "shopName": "shop2",
-  "purchasableCouponList": ["P2"],
+  "couponList": ["P2"],
   "staffList": ["staff2"],
   "discountList": ["discount2"]
 }
