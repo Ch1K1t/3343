@@ -1,5 +1,7 @@
 package CouponRedeemSystem.Coupon;
 
+import CouponRedeemSystem.Account.AccountManager;
+import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Coupon.model.PurchasableCoupon;
 import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
@@ -40,13 +42,14 @@ public class CouponManager {
     }
 
     Coupon coupon = new PurchasableCoupon(
-      intrinsicValue,
-      shop,
-      expirationDate,
       couponCode,
-      true,
+      intrinsicValue,
       points,
-      type
+      shop,
+      null,
+      true,
+      type,
+      expirationDate
     );
 
     LazyDynaBean bean = new LazyDynaBean();
@@ -85,11 +88,11 @@ public class CouponManager {
     }
 
     Coupon coupon = new RedeemableCoupon(
-      intrinsicValue,
-      expirationDate,
       couponCode,
+      intrinsicValue,
       true,
-      type
+      type,
+      expirationDate
     );
 
     LazyDynaBean bean = new LazyDynaBean();
@@ -160,22 +163,30 @@ public class CouponManager {
     switch (type) {
       case "Redeemable":
         return new RedeemableCoupon(
-          intrinsicValue,
-          expirationDate,
           couponCode,
+          intrinsicValue,
           active,
-          type
+          type,
+          expirationDate
         );
       case "Purchasable":
+        ShopManager shopManager = ShopManager.getInstance();
+        Shop shop = shopManager.getShop(couponJson.getString("shop"));
+        AccountManager accountManager = AccountManager.getInstance();
+        Account owner = accountManager.getAccount(
+          couponJson.getString("owner")
+        );
         double points = couponJson.getDouble("points");
+
         return new PurchasableCoupon(
-          intrinsicValue,
-          null,
-          expirationDate,
           couponCode,
-          active,
+          intrinsicValue,
           points,
-          type
+          shop,
+          owner,
+          active,
+          type,
+          expirationDate
         );
       default:
         return null;

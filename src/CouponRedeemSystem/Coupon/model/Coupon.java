@@ -10,35 +10,37 @@ import java.util.Date;
 
 public abstract class Coupon {
 
-  private double intrinsicValue;
-  private Shop shop;
-  private Date expirationDate;
-  private boolean active;
   private String couponCode;
-  private Account owner;
+  private double intrinsicValue;
   private Double points;
+  private Shop shop;
+  private Account owner;
+  private boolean active;
   private String type;
+  private Date expirationDate;
 
   private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   // Purchasable Coupon
   public Coupon(
-    double intrinsicValue,
-    Shop shop,
-    String expirationDate,
     String couponCode,
-    boolean active,
+    double intrinsicValue,
     double points,
-    String type
+    Shop shop,
+    Account owner,
+    boolean active,
+    String type,
+    String expirationDate
   ) {
     try {
-      this.intrinsicValue = intrinsicValue;
-      this.shop = shop;
-      this.expirationDate = sdf.parse(expirationDate);
       this.couponCode = couponCode;
-      this.active = active;
+      this.intrinsicValue = intrinsicValue;
       this.points = points;
+      this.shop = shop;
+      this.owner = owner;
+      this.active = active;
       this.type = type;
+      this.expirationDate = sdf.parse(expirationDate);
     } catch (ParseException e) {
       e.printStackTrace();
     }
@@ -46,18 +48,18 @@ public abstract class Coupon {
 
   // Redeemable Coupon
   public Coupon(
-    double intrinsicValue,
-    String expirationDate,
     String couponCode,
+    double intrinsicValue,
     boolean active,
-    String type
+    String type,
+    String expirationDate
   ) {
     try {
-      this.intrinsicValue = intrinsicValue;
-      this.expirationDate = sdf.parse(expirationDate);
       this.couponCode = couponCode;
+      this.intrinsicValue = intrinsicValue;
       this.active = active;
       this.type = type;
+      this.expirationDate = sdf.parse(expirationDate);
     } catch (ParseException e) {
       e.printStackTrace();
     }

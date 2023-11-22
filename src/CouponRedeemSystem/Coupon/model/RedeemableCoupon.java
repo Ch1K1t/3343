@@ -3,12 +3,12 @@ package CouponRedeemSystem.Coupon.model;
 public class RedeemableCoupon extends Coupon {
 
   public RedeemableCoupon(
-    double intrinsicValue,
-    String expirationDate,
     String couponCode,
+    double intrinsicValue,
     boolean active,
-    String type
+    String type,
+    String expirationDate
   ) {
-    super(intrinsicValue, expirationDate, couponCode, active, type);
+    super(couponCode, intrinsicValue, active, type, expirationDate);
   }
 }
