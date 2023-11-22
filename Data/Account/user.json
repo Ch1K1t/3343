@@ -1,0 +1,9 @@
+{
+  "userName": "user",
+  "role": "User",
+  "age": 20,
+  "telNo": "12345678",
+  "points": 0,
+  "dateOfBirth": "01/01/2000",
+  "couponIDs": []
+}

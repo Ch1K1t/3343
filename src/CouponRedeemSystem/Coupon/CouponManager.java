@@ -185,9 +185,9 @@ public class CouponManager {
   public void generateDemoCoupon() {
     ShopManager shopManager = ShopManager.getInstance();
     Shop shop1 = shopManager.getShop("shop1");
-    createCoupon("P1", 1.0, "11/11/2025", shop1, 1.0, "Purchasable");
+    createCoupon("P1", 10.0, "11/11/2025", shop1, 15.0, "Purchasable");
     Shop shop2 = shopManager.getShop("shop2");
-    createCoupon("P2", 1.0, "11/11/2025", shop2, 1.0, "Purchasable");
+    createCoupon("P2", 10.0, "11/11/2025", shop2, 15.0, "Purchasable");
     createCoupon("R1", 1.0, "11/11/2025", "Redeemable");
     createCoupon("R2", 1.0, "11/11/2025", "Redeemable");
   }

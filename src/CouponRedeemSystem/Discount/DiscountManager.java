@@ -170,12 +170,8 @@ public class DiscountManager {
   public void generateDemoDiscount() {
     ShopManager shopManager = ShopManager.getInstance();
     Shop shop1 = shopManager.getShop("shop1");
-    shop1.addDiscount("discount1");
-    shopManager.updateShop(shop1);
-    createDiscountByDay("discount1", shop1, 1, "22/11/2023", 10);
+    createDiscountByDay("discount1", shop1, 2, "22/11/2023", 10);
     Shop shop2 = shopManager.getShop("shop2");
-    shop2.addDiscount("discount2");
-    shopManager.updateShop(shop2);
     createDiscountByMonth("discount2", shop2, 2, "22/11/2023", 1);
   }
 }

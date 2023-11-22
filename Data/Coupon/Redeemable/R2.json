@@ -1,0 +1,7 @@
+{
+  "couponCode": "R2",
+  "type": "Redeemable",
+  "intrinsicValue": 1,
+  "expirationDate": "11/11/2025",
+  "active": true
+}

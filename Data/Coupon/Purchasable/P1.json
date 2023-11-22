@@ -1,0 +1,10 @@
+{
+  "couponCode": "P1",
+  "type": "Purchasable",
+  "intrinsicValue": 10,
+  "expirationDate": "11/11/2025",
+  "active": true,
+  "owner": null,
+  "shop": "shop1",
+  "points": 15
+}
