@@ -97,7 +97,11 @@ public class Account {
       }
     }
 
-    this.deductPoints(coupon.getPoints() - discountTotal);
+    this.deductPoints(
+        coupon.getPoints() - discountTotal < 1
+          ? 1
+          : coupon.getPoints() - discountTotal
+      );
     this.couponIDs.add(coupon.getCouponCode());
     boolean isAccUpdated = accountManager.updateAccount(this);
 

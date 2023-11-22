@@ -87,7 +87,11 @@ public class UserPage extends Page {
             String.format("%-15s", "Code: " + coupon.getCouponCode()) +
             String.format("%-30s", "Original Points: " + coupon.getPoints()) +
             "After Discount: " +
-            (coupon.getPoints() - discountTotal)
+            (
+              coupon.getPoints() - discountTotal < 1
+                ? 1
+                : coupon.getPoints() - discountTotal
+            )
           );
         } else {
           System.out.println(
@@ -110,9 +114,9 @@ public class UserPage extends Page {
       System.out.println();
       System.out.println("This coupon is not purchasable");
       return;
-    } else if (!coupon.isActive()) {
+    } else if (coupon.getPoints() > account.getPoints()) {
       System.out.println();
-      System.out.println("Coupon has been used");
+      System.out.println("Insufficient points");
       return;
     } else if (coupon.getExpirationDate().before(new Date())) {
       System.out.println();

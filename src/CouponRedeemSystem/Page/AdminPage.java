@@ -2,6 +2,8 @@ package CouponRedeemSystem.Page;
 
 import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Account.model.Account;
+import CouponRedeemSystem.Coupon.CouponManager;
+import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Page.model.Page;
 
 public class AdminPage extends Page {
@@ -14,8 +16,9 @@ public class AdminPage extends Page {
     System.out.println("3. Create Staff Account");
     System.out.println("4. Create User Account");
     System.out.println("5. Delete Account");
-    System.out.println("6. Signout");
-    System.out.println("7. Exit");
+    System.out.println("6. Create Redeemable Coupon");
+    System.out.println("7. Signout");
+    System.out.println("8. Exit");
     System.out.println();
   }
 
@@ -40,6 +43,31 @@ public class AdminPage extends Page {
     }
   }
 
+  public void createRedeemableCoupon() {
+    CouponManager couponManager = CouponManager.getInstance();
+
+    double intrinsicValue = doubleInput("coupon's intrinsic value");
+
+    String expirationDate = afterDateInput("coupon's expiration date");
+
+    String couponCode = strInput("coupon's code");
+
+    Coupon coupon = couponManager.createCoupon(
+      couponCode,
+      intrinsicValue,
+      expirationDate,
+      "Redeemable"
+    );
+
+    if (coupon != null) {
+      System.out.println();
+      System.out.println("Coupon created");
+    } else {
+      System.out.println();
+      System.out.println("Coupon creation failed");
+    }
+  }
+
   public void execute() {
     String cmd;
 
@@ -59,20 +87,22 @@ public class AdminPage extends Page {
           break;
         case "4":
           createAccount("User");
-          break;
         case "5":
           deleteAccount();
           break;
         case "6":
-          System.out.println("Signout successfully");
+          createRedeemableCoupon();
           break;
         case "7":
+          System.out.println("Signout successfully");
+          break;
+        case "8":
           exit();
           break;
         default:
           System.out.println("Unknown command");
           break;
       }
-    } while (!cmd.equals("6"));
+    } while (!cmd.equals("7"));
   }
 }

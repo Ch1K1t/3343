@@ -5,7 +5,6 @@ import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
-import java.util.List;
 
 public class ShopManagerPage extends Page {
 

@@ -54,13 +54,13 @@ public class CouponManager {
 
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("couponCode", coupon.getCouponCode());
-    bean.set("type", coupon.getType());
     bean.set("intrinsicValue", coupon.getIntrinsicValue());
-    bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
-    bean.set("active", coupon.isActive());
-    bean.set("owner", null);
-    bean.set("shop", coupon.getShop().getShopName());
     bean.set("points", coupon.getPoints());
+    bean.set("shop", coupon.getShop().getShopName());
+    bean.set("owner", null);
+    bean.set("active", coupon.isActive());
+    bean.set("type", coupon.getType());
+    bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
 
     boolean isSuccess = jsonFileManager.modifyJSON(
       "Coupon/" + type,
@@ -97,10 +97,10 @@ public class CouponManager {
 
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("couponCode", coupon.getCouponCode());
-    bean.set("type", coupon.getType());
     bean.set("intrinsicValue", coupon.getIntrinsicValue());
-    bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
     bean.set("active", coupon.isActive());
+    bean.set("type", coupon.getType());
+    bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
 
     boolean isSuccess = jsonFileManager.modifyJSON(
       "Coupon/" + type,
@@ -126,15 +126,21 @@ public class CouponManager {
     String type = coupon.getType();
 
     LazyDynaBean bean = new LazyDynaBean();
-    bean.set("couponCode", coupon.getCouponCode());
-    bean.set("intrinsicValue", coupon.getIntrinsicValue());
-    bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
-    bean.set("active", coupon.isActive());
-    bean.set("type", type);
     if (type.equals("Purchasable")) {
-      bean.set("owner", coupon.getOwner().getUserName());
-      bean.set("shop", coupon.getShop().getShopName());
+      bean.set("couponCode", coupon.getCouponCode());
+      bean.set("intrinsicValue", coupon.getIntrinsicValue());
       bean.set("points", coupon.getPoints());
+      bean.set("shop", coupon.getShop().getShopName());
+      bean.set("owner", null);
+      bean.set("active", coupon.isActive());
+      bean.set("type", coupon.getType());
+      bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
+    } else {
+      bean.set("couponCode", coupon.getCouponCode());
+      bean.set("intrinsicValue", coupon.getIntrinsicValue());
+      bean.set("active", coupon.isActive());
+      bean.set("type", coupon.getType());
+      bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
     }
 
     return jsonFileManager.modifyJSON(

@@ -36,12 +36,12 @@ public class Main {
     // new HomePage().execute();
     // new AdminPage().execute();
     // new ShopManagerPage().execute();
-    new StaffPage("staff1").execute();
+    // new StaffPage("staff1").execute();
     // new UserPage("user").execute();
 
-    // initializeUser();
-    // initializeShop();
-    // initializeCoupon();
-    // initializeDiscount();
+    initializeUser();
+    initializeShop();
+    initializeCoupon();
+    initializeDiscount();
   }
 }

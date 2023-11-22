@@ -51,11 +51,11 @@ public class AccountManager {
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("userName", account.getUserName());
     bean.set("role", account.getRole());
+    bean.set("points", account.getPoints());
+    bean.set("couponIDs", account.getCouponIDs());
     bean.set("age", account.getAge());
     bean.set("telNo", account.getTelNo());
-    bean.set("points", account.getPoints());
     bean.set("dateOfBirth", sdf.format(account.getDateOfBirth()));
-    bean.set("couponIDs", account.getCouponIDs());
 
     boolean isSuccess = jsonFileManager.modifyJSON("Account", userName, bean);
     if (isSuccess) {
@@ -92,11 +92,11 @@ public class AccountManager {
     bean.set("userName", account.getUserName());
     bean.set("role", role);
     if (role.equals("User")) {
+      bean.set("points", account.getPoints());
+      bean.set("couponIDs", account.getCouponIDs());
       bean.set("age", account.getAge());
       bean.set("telNo", account.getTelNo());
-      bean.set("points", account.getPoints());
       bean.set("dateOfBirth", sdf.format(account.getDateOfBirth()));
-      bean.set("couponIDs", account.getCouponIDs());
     }
 
     return jsonFileManager.modifyJSON("Account", account.getUserName(), bean);
