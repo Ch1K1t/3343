@@ -8,21 +8,25 @@ public class Shop {
   private String shopName;
   private List<String> purchasableCouponList;
   private List<String> staffList;
+  private List<String> discountList;
 
   public Shop(String shopName) {
     this.shopName = shopName;
     this.purchasableCouponList = new ArrayList<String>();
     this.staffList = new ArrayList<String>();
+    this.discountList = new ArrayList<String>();
   }
 
   public Shop(
     String shopName,
     List<String> purchasableCouponList,
-    List<String> staffList
+    List<String> staffList,
+    List<String> discountList
   ) {
     this.shopName = shopName;
     this.purchasableCouponList = purchasableCouponList;
     this.staffList = staffList;
+    this.discountList = discountList;
   }
 
   public String getShopName() {
@@ -63,5 +67,21 @@ public class Shop {
 
   public void removeStaff(String staff) {
     staffList.remove(staff);
+  }
+
+  public List<String> getDiscountList() {
+    return discountList;
+  }
+
+  public void setDiscountList(List<String> discountList) {
+    this.discountList = discountList;
+  }
+
+  public void addDiscount(String discountCode) {
+    discountList.add(discountCode);
+  }
+
+  public void removeDiscount(String discountCode) {
+    discountList.remove(discountCode);
   }
 }

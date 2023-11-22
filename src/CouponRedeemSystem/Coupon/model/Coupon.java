@@ -1,5 +1,7 @@
 package CouponRedeemSystem.Coupon.model;
 
+import CouponRedeemSystem.Account.model.Account;
+import CouponRedeemSystem.Shop.model.Shop;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,11 +11,11 @@ import java.util.Date;
 public abstract class Coupon {
 
   private double intrinsicValue;
-  private String shop;
+  private Shop shop;
   private Date expirationDate;
   private boolean active;
   private String couponCode;
-  private String owner;
+  private Account owner;
   private Double points;
   private String type;
 
@@ -22,7 +24,7 @@ public abstract class Coupon {
   // Purchasable Coupon
   public Coupon(
     double intrinsicValue,
-    String shop,
+    Shop shop,
     String expirationDate,
     String couponCode,
     boolean active,
@@ -35,7 +37,6 @@ public abstract class Coupon {
       this.expirationDate = sdf.parse(expirationDate);
       this.couponCode = couponCode;
       this.active = active;
-      this.owner = null;
       this.points = points;
       this.type = type;
     } catch (ParseException e) {
@@ -88,11 +89,11 @@ public abstract class Coupon {
     this.intrinsicValue = intrinsicValue;
   }
 
-  public String getShop() {
+  public Shop getShop() {
     return shop;
   }
 
-  public void setShop(String shop) {
+  public void setShop(Shop shop) {
     this.shop = shop;
   }
 
@@ -120,11 +121,11 @@ public abstract class Coupon {
     this.couponCode = couponCode;
   }
 
-  public String getOwner() {
+  public Account getOwner() {
     return owner;
   }
 
-  public void setOwner(String owner) {
+  public void setOwner(Account owner) {
     this.owner = owner;
   }
 

@@ -1,10 +1,12 @@
 package CouponRedeemSystem.Coupon.model;
 
+import CouponRedeemSystem.Shop.model.Shop;
+
 public class PurchasableCoupon extends Coupon {
 
   public PurchasableCoupon(
     double intrinsicValue,
-    String shop,
+    Shop shop,
     String expirationDate,
     String couponCode,
     boolean active,

@@ -1,17 +1,21 @@
 package CouponRedeemSystem.Discount;
 
 import CouponRedeemSystem.Discount.model.Discount;
+import CouponRedeemSystem.Shop.ShopManager;
+import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import net.sf.json.JSONObject;
+import org.apache.commons.beanutils.LazyDynaBean;
 import org.apache.commons.lang.time.DateUtils;
 
 public class DiscountManager {
 
   private static DiscountManager instance;
 
-  private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+  private final CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
+  private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   private DiscountManager() {}
 
@@ -25,84 +29,153 @@ public class DiscountManager {
 
   public Discount createDiscountByDay(
     String discountName,
-    Date startDate,
-    int day,
-    double valueOff
+    Shop shop,
+    double value,
+    String startDate,
+    int day
   ) {
-    String startDateInSDF = sdf.format(startDate);
-    String expireDate = sdf.format(DateUtils.addDays(startDate, day));
-    Discount discount = new Discount(
-      discountName,
-      startDateInSDF,
-      expireDate,
-      valueOff
-    );
+    try {
+      JSONObject jsonObject = jsonFileManager.searchJSON(discountName);
+      if (jsonObject != null) {
+        return null;
+      }
 
-    createDiscount(discount);
+      String expireDate = sdf.format(
+        DateUtils.addDays(sdf.parse(startDate), day)
+      );
+      Discount discount = new Discount(
+        discountName,
+        shop,
+        startDate,
+        expireDate,
+        value
+      );
 
-    return discount;
+      LazyDynaBean bean = new LazyDynaBean();
+      bean.set("discountName", discount.getDiscountName());
+      bean.set("shop", discount.getShop().getShopName());
+      bean.set("startDate", sdf.format(discount.getStartDate()));
+      bean.set("expireDate", sdf.format(discount.getExpireDate()));
+      bean.set("value", discount.getValue());
+      bean.set("active", discount.validateTime());
+
+      boolean isSuccess = jsonFileManager.modifyJSON(
+        "Discount",
+        discountName,
+        bean
+      );
+
+      if (isSuccess) {
+        return discount;
+      } else {
+        return null;
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   public Discount createDiscountByMonth(
     String discountName,
-    Date startDate,
-    int month,
-    double valueOff
+    Shop shop,
+    double value,
+    String startDate,
+    int month
   ) {
-    String startDateInSDF = sdf.format(startDate);
-    String expireDate = sdf.format(DateUtils.addMonths(startDate, month));
-    Discount discount = new Discount(
-      discountName,
-      startDateInSDF,
-      expireDate,
-      valueOff
-    );
+    try {
+      JSONObject jsonObject = jsonFileManager.searchJSON(discountName);
+      if (jsonObject != null) {
+        return null;
+      }
 
-    System.out.println(discount.getJSONString());
-
-    createDiscount(discount);
-
-    return discount;
-  }
-
-  public void updateActiveDiscountList() {
-    CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
-    JSONObject discountJson = mgr.searchJSON("Discount List.json");
-    JSONObject activeDiscountJsonObject = new JSONObject();
-    for (Object keyObj : discountJson.keySet()) {
-      String key = (String) keyObj;
-      Discount discount = (Discount) JSONObject.toBean(
-        discountJson.getJSONObject(key),
-        Discount.class
+      String expireDate = sdf.format(
+        DateUtils.addMonths(sdf.parse(startDate), month)
       );
-      boolean oldStatus = discount.getActive();
-      discount.updateStatus();
-      boolean newStatus = discount.getActive();
-      if (oldStatus != newStatus) {
-        modifyDiscount(key, discount);
+      Discount discount = new Discount(
+        discountName,
+        shop,
+        startDate,
+        expireDate,
+        value
+      );
+
+      LazyDynaBean bean = new LazyDynaBean();
+      bean.set("discountName", discount.getDiscountName());
+      bean.set("shop", discount.getShop().getShopName());
+      bean.set("startDate", sdf.format(discount.getStartDate()));
+      bean.set("expireDate", sdf.format(discount.getExpireDate()));
+      bean.set("value", discount.getValue());
+      bean.set("active", discount.validateTime());
+
+      boolean isSuccess = jsonFileManager.modifyJSON(
+        "Discount",
+        discountName,
+        bean
+      );
+
+      if (isSuccess) {
+        return discount;
+      } else {
+        return null;
       }
-      if (newStatus) {
-        activeDiscountJsonObject.put(key, discount.getJSONObject());
-      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+      return null;
     }
-    mgr.modifyJSON(
+  }
+
+  public boolean deleteDiscount(Discount discount) {
+    return jsonFileManager.deleteJSON("Discount", discount.getDiscountName());
+  }
+
+  public boolean updateDiscount(Discount discount) {
+    LazyDynaBean bean = new LazyDynaBean();
+    bean.set("discountName", discount.getDiscountName());
+    bean.set("shop", discount.getShop().getShopName());
+    bean.set("startDate", sdf.format(discount.getStartDate()));
+    bean.set("expireDate", sdf.format(discount.getExpireDate()));
+    bean.set("value", discount.getValue());
+    bean.set("active", discount.validateTime());
+
+    return jsonFileManager.modifyJSON(
       "Discount",
-      "Active Discount List",
-      activeDiscountJsonObject
+      discount.getDiscountName(),
+      bean
     );
   }
 
-  private void createDiscount(Discount discount) {
-    CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
-    JSONObject discountJsonObject = new JSONObject();
-    discountJsonObject.put(discount.getId(), discount.getJSONObject());
-    mgr.modifyJSON("Discount", "Discount List", discountJsonObject);
+  public Discount getDiscount(String discountName) {
+    JSONObject discountJson = jsonFileManager.searchJSON(discountName);
+
+    if (discountJson == null) {
+      return null;
+    } else {
+      return extractDiscountFromJson(discountJson);
+    }
   }
 
-  private void modifyDiscount(String id, Discount discount) {
-    CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
-    JSONObject discountJson = mgr.searchJSON("Discount List");
-    discountJson.put(id, discount.getJSONObject());
-    mgr.modifyJSON("Discount", "Discount List", discountJson);
+  private Discount extractDiscountFromJson(JSONObject discountJson) {
+    ShopManager shopManager = ShopManager.getInstance();
+
+    String discountName = discountJson.getString("discountName");
+    Shop shop = shopManager.getShop(discountJson.getString("shop"));
+    String startDate = discountJson.getString("startDate");
+    String expireDate = discountJson.getString("expireDate");
+    double value = discountJson.getDouble("value");
+
+    return new Discount(discountName, shop, startDate, expireDate, value);
+  }
+
+  public void generateDemoDiscount() {
+    ShopManager shopManager = ShopManager.getInstance();
+    Shop shop1 = shopManager.getShop("shop1");
+    shop1.addDiscount("discount1");
+    shopManager.updateShop(shop1);
+    createDiscountByDay("discount1", shop1, 1, "22/11/2023", 10);
+    Shop shop2 = shopManager.getShop("shop2");
+    shop2.addDiscount("discount2");
+    shopManager.updateShop(shop2);
+    createDiscountByMonth("discount2", shop2, 2, "22/11/2023", 1);
   }
 }

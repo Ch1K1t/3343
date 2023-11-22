@@ -1,6 +1,7 @@
 package CouponRedeemSystem.Page;
 
 import CouponRedeemSystem.Account.AccountManager;
+import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Page.model.Page;
 
 public class AdminPage extends Page {
@@ -22,8 +23,14 @@ public class AdminPage extends Page {
     AccountManager accountManager = AccountManager.getInstance();
 
     String username = strInput("user name");
+    Account account = accountManager.getAccount(username);
+    if (account == null) {
+      System.out.println();
+      System.out.println("Account not found");
+      return;
+    }
 
-    boolean isDeleted = accountManager.deleteAccount(username);
+    boolean isDeleted = accountManager.deleteAccount(account);
     if (isDeleted) {
       System.out.println();
       System.out.println("Account deleted");

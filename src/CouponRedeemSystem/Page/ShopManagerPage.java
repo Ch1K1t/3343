@@ -24,9 +24,9 @@ public class ShopManagerPage extends Page {
     ShopManager shopManager = ShopManager.getInstance();
 
     String shopName = strInput("shop name");
-    boolean isCreated = shopManager.createShop(shopName);
+    Shop shop = shopManager.createShop(shopName);
 
-    if (isCreated) {
+    if (shop != null) {
       System.out.println();
       System.out.println("Shop created");
     } else {
@@ -63,16 +63,11 @@ public class ShopManagerPage extends Page {
     }
 
     if (account.getRole().equals("Staff")) {
-      List<Shop> shopList = shopManager.getShopList();
-      for (Shop shop : shopList) {
-        if (shop.getStaffList().contains(username)) {
-          shop.removeStaff(username);
-          shopManager.updateShop(shop);
-          break;
-        }
-      }
+      Shop shop = shopManager.getShopByStaff(username);
+      shop.removeStaff(username);
+      shopManager.updateShop(shop);
 
-      boolean isDeleted = accountManager.deleteAccount(username);
+      boolean isDeleted = accountManager.deleteAccount(account);
       if (isDeleted) {
         System.out.println();
         System.out.println("Account deleted");
@@ -83,7 +78,6 @@ public class ShopManagerPage extends Page {
     } else {
       System.out.println();
       System.out.println("This account is not a staff account");
-      return;
     }
   }
 

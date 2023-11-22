@@ -26,7 +26,7 @@ public class CouponManager {
   }
 
   // Create new purchasable coupon
-  public boolean createCoupon(
+  public Coupon createCoupon(
     String couponCode,
     double intrinsicValue,
     String expirationDate,
@@ -36,12 +36,12 @@ public class CouponManager {
   ) {
     JSONObject json = jsonFileManager.searchJSON(couponCode);
     if (json != null) {
-      return false;
+      return null;
     }
 
     Coupon coupon = new PurchasableCoupon(
       intrinsicValue,
-      shop.getShopName(),
+      shop,
       expirationDate,
       couponCode,
       true,
@@ -55,15 +55,25 @@ public class CouponManager {
     bean.set("intrinsicValue", coupon.getIntrinsicValue());
     bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
     bean.set("active", coupon.isActive());
-    bean.set("owner", coupon.getOwner());
-    bean.set("shop", coupon.getShop());
+    bean.set("owner", null);
+    bean.set("shop", coupon.getShop().getShopName());
     bean.set("points", coupon.getPoints());
 
-    return jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
+    boolean isSuccess = jsonFileManager.modifyJSON(
+      "Coupon/" + type,
+      couponCode,
+      bean
+    );
+
+    if (isSuccess) {
+      return coupon;
+    } else {
+      return null;
+    }
   }
 
   // Create new redeemable coupon
-  public boolean createCoupon(
+  public Coupon createCoupon(
     String couponCode,
     double intrinsicValue,
     String expirationDate,
@@ -71,7 +81,7 @@ public class CouponManager {
   ) {
     JSONObject json = jsonFileManager.searchJSON(couponCode);
     if (json != null) {
-      return false;
+      return null;
     }
 
     Coupon coupon = new RedeemableCoupon(
@@ -89,16 +99,24 @@ public class CouponManager {
     bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
     bean.set("active", coupon.isActive());
 
-    return jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
+    boolean isSuccess = jsonFileManager.modifyJSON(
+      "Coupon/" + type,
+      couponCode,
+      bean
+    );
+
+    if (isSuccess) {
+      return coupon;
+    } else {
+      return null;
+    }
   }
 
-  public boolean deleteCoupon(String couponCode) {
-    Coupon coupon = getCoupon(couponCode);
-    if (coupon == null) {
-      return false;
-    }
-
-    return jsonFileManager.deleteJSON("Coupon/" + coupon.getType(), couponCode);
+  public boolean deleteCoupon(Coupon coupon) {
+    return jsonFileManager.deleteJSON(
+      "Coupon/" + coupon.getType(),
+      coupon.getCouponCode()
+    );
   }
 
   public boolean updateCoupon(Coupon coupon) {
@@ -111,8 +129,8 @@ public class CouponManager {
     bean.set("active", coupon.isActive());
     bean.set("type", type);
     if (type.equals("Purchasable")) {
-      bean.set("owner", coupon.getOwner());
-      bean.set("shop", coupon.getShop());
+      bean.set("owner", coupon.getOwner().getUserName());
+      bean.set("shop", coupon.getShop().getShopName());
       bean.set("points", coupon.getPoints());
     }
 

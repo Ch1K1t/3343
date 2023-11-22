@@ -1,6 +1,7 @@
 package CouponRedeemSystem.Page.model;
 
 import CouponRedeemSystem.Account.AccountManager;
+import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import java.text.ParseException;
@@ -11,6 +12,7 @@ import java.util.Scanner;
 public abstract class Page {
 
   protected static Scanner s;
+  private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   public Page() {
     if (s == null) {
@@ -94,8 +96,8 @@ public abstract class Page {
           System.out.println("Invalid date format, please input again:");
           continue;
         }
-        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(dateStr);
-        isBeforeToday = date.before(new Date());
+        Date date = sdf.parse(dateStr);
+        isBeforeToday = date.compareTo(new Date()) <= 0;
         if (!isBeforeToday) {
           System.out.println("Date must be before today, please input again:");
           continue;
@@ -126,8 +128,8 @@ public abstract class Page {
           System.out.println("Invalid date format, please input again:");
           continue;
         }
-        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(dateStr);
-        isAfterToday = date.after(new Date());
+        Date date = sdf.parse(dateStr);
+        isAfterToday = date.compareTo(new Date()) >= 0;
         if (!isAfterToday) {
           System.out.println("Date must be after today, please input again:");
           continue;
@@ -171,8 +173,8 @@ public abstract class Page {
       shop.addStaff(username);
       shopManager.updateShop(shop);
 
-      boolean isCreated = accountManager.createAccount(username, role);
-      if (isCreated) {
+      Account account = accountManager.createAccount(username, role);
+      if (account != null) {
         System.out.println();
         System.out.println("Account created");
       } else {
@@ -181,8 +183,8 @@ public abstract class Page {
       }
       return;
     } else if (!role.equals("User")) {
-      boolean isCreated = accountManager.createAccount(username, role);
-      if (isCreated) {
+      Account account = accountManager.createAccount(username, role);
+      if (account != null) {
         System.out.println();
         System.out.println("Account created");
       } else {
@@ -197,14 +199,14 @@ public abstract class Page {
 
     String dob = beforeDateInput("date of birth");
 
-    boolean isCreated = accountManager.createAccount(
+    Account account = accountManager.createAccount(
       username,
       "user",
       age,
       telNo,
       dob
     );
-    if (isCreated) {
+    if (account != null) {
       System.out.println();
       System.out.println("Account created");
     } else {

@@ -114,7 +114,7 @@ public class Account {
     this.couponIDs.add(coupon.getCouponCode());
     boolean isAccUpdated = accountManager.updateAccount(this);
 
-    coupon.setOwner(this.userName);
+    coupon.setOwner(this);
     boolean isCouponUpdated = couponManager.updateCoupon(coupon);
 
     return isAccUpdated && isCouponUpdated;

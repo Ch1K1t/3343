@@ -2,6 +2,7 @@ package CouponRedeemSystem.Main;
 
 import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Coupon.CouponManager;
+import CouponRedeemSystem.Discount.DiscountManager;
 import CouponRedeemSystem.Page.AdminPage;
 import CouponRedeemSystem.Page.HomePage;
 import CouponRedeemSystem.Page.ShopManagerPage;
@@ -26,15 +27,21 @@ public class Main {
     couponManager.generateDemoCoupon();
   }
 
+  public static void initializeDiscount() {
+    DiscountManager discountManager = DiscountManager.getInstance();
+    discountManager.generateDemoDiscount();
+  }
+
   public static void main(String[] args) {
     // new HomePage().execute();
     // new AdminPage().execute();
     // new ShopManagerPage().execute();
     // new StaffPage("staff").execute();
-    new UserPage("user").execute();
+    // new UserPage("user").execute();
 
-    // initializeUser();
-    // initializeShop();
-    // initializeCoupon();
+    initializeUser();
+    initializeShop();
+    initializeCoupon();
+    initializeDiscount();
   }
 }

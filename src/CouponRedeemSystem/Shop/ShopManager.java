@@ -21,15 +21,27 @@ public class ShopManager {
     return instance;
   }
 
-  public boolean createShop(String shopName) {
+  public Shop createShop(String shopName) {
+    JSONObject jsonObject = jsonFileManager.searchJSON(shopName);
+    if (jsonObject != null) {
+      return null;
+    }
+
     Shop shop = new Shop(shopName);
 
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("shopName", shop.getShopName());
     bean.set("purchasableCouponList", shop.getPurchasableCouponList());
     bean.set("staffList", shop.getStaffList());
+    bean.set("discountList", shop.getDiscountList());
 
-    return jsonFileManager.modifyJSON("Shop", shopName, bean);
+    boolean isSuccess = jsonFileManager.modifyJSON("Shop", shopName, bean);
+
+    if (isSuccess) {
+      return shop;
+    } else {
+      return null;
+    }
   }
 
   public boolean deleteShop(String shopName) {
@@ -47,6 +59,7 @@ public class ShopManager {
     bean.set("shopName", shop.getShopName());
     bean.set("purchasableCouponList", shop.getPurchasableCouponList());
     bean.set("staffList", shop.getStaffList());
+    bean.set("discountList", shop.getDiscountList());
 
     return jsonFileManager.modifyJSON("Shop", shop.getShopName(), bean);
   }
@@ -59,6 +72,16 @@ public class ShopManager {
     } else {
       return extractShopFromJson(shopJson);
     }
+  }
+
+  public Shop getShopByStaff(String staffName) {
+    List<Shop> shopList = getShopList();
+    for (Shop shop : shopList) {
+      if (shop.getStaffList().contains(staffName)) {
+        return shop;
+      }
+    }
+    return null;
   }
 
   public List<Shop> getShopList() {
@@ -85,18 +108,21 @@ public class ShopManager {
     for (int i = 0; i < Arr2.size(); i++) {
       staffList.add(Arr2.getString(i));
     }
+    JSONArray Arr3 = shopJson.getJSONArray("discountList");
+    List<String> discountList = new ArrayList<>();
+    for (int i = 0; i < Arr3.size(); i++) {
+      discountList.add(Arr3.getString(i));
+    }
 
-    return new Shop(shopName, purchasableCouponList, staffList);
+    return new Shop(shopName, purchasableCouponList, staffList, discountList);
   }
 
   public void generateDemoShop() {
-    createShop("shop1");
-    Shop shop = getShop("shop1");
+    Shop shop = createShop("shop1");
     shop.addStaff("staff");
     shop.addPurchasableCoupon("P1");
     updateShop(shop);
-    createShop("shop2");
-    Shop shop2 = getShop("shop2");
+    Shop shop2 = createShop("shop2");
     shop2.addPurchasableCoupon("P2");
     updateShop(shop2);
   }

@@ -1,97 +1,84 @@
 package CouponRedeemSystem.Discount.model;
 
-import CouponRedeemSystem.System.ID.IdGenerator;
+import CouponRedeemSystem.Shop.model.Shop;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import net.sf.json.JSONObject;
 
 public class Discount {
 
-  private int id;
   private String discountName;
-  private String startDate;
-  private String expireDate;
-  private double valueOff;
-  private boolean active;
+  private Shop shop;
+  private Date startDate;
+  private Date expireDate;
+  private double value;
 
-  private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+  private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   public Discount() {}
 
   public Discount(
     String discountName,
+    Shop shop,
     String startDate,
     String expireDate,
-    double valueOff
+    double value
   ) {
-    this.id = IdGenerator.getInstance().getNextId("DiscountId");
-    this.discountName = discountName;
-    this.startDate = startDate;
-    this.expireDate = expireDate;
-    this.valueOff = valueOff;
-    updateStatus();
-  }
-
-  public void updateStatus() {
     try {
-      this.active =
-        sdf.parse(startDate).compareTo(new Date()) <= 0 &&
-        sdf.parse(expireDate).compareTo(new Date()) > 0;
+      this.discountName = discountName;
+      this.shop = shop;
+      this.startDate = sdf.parse(startDate);
+      this.expireDate = sdf.parse(expireDate);
+      this.value = value;
     } catch (ParseException e) {
       e.printStackTrace();
     }
   }
 
-  public JSONObject getJSONObject() {
-    JSONObject jsonObject = new JSONObject();
-    jsonObject.put("id", id);
-    jsonObject.put("discountName", discountName);
-    jsonObject.put("startDate", startDate);
-    jsonObject.put("expireDate", expireDate);
-    jsonObject.put("valueOff", valueOff);
-    jsonObject.put("active", active);
-
-    return jsonObject;
+  public boolean validateTime() {
+    return (
+      new Date().compareTo(this.startDate) > 0 &&
+      new Date().compareTo(this.expireDate) < 0
+    );
   }
 
-  public String getJSONString() {
-    return getJSONObject().toString();
-  }
-
-  public boolean getActive() {
-    return active;
-  }
-
-  public int getId() {
-    return id;
-  }
-
-  public void disableDiscount() {
-    this.active = false;
-  }
-
-  public void setActive(boolean active) {
-    this.active = active;
-  }
-
-  public void setExpireDate(String expireDate) {
-    this.expireDate = expireDate;
-  }
-
-  public void setId(int id) {
-    this.id = id;
+  public String getDiscountName() {
+    return discountName;
   }
 
   public void setDiscountName(String discountName) {
     this.discountName = discountName;
   }
 
-  public void setStartDate(String startDate) {
+  public Shop getShop() {
+    return shop;
+  }
+
+  public void setShop(Shop shop) {
+    this.shop = shop;
+  }
+
+  public Date getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(Date startDate) {
     this.startDate = startDate;
   }
 
-  public void setValueOff(double valueOff) {
-    this.valueOff = valueOff;
+  public Date getExpireDate() {
+    return expireDate;
+  }
+
+  public void setExpireDate(Date expireDate) {
+    this.expireDate = expireDate;
+  }
+
+  public double getValue() {
+    return value;
+  }
+
+  public void setValue(double value) {
+    this.value = value;
   }
 }

@@ -39,7 +39,7 @@ public class AccountManager {
   }
 
   // Create new user account
-  public boolean createAccount(
+  public Account createAccount(
     String userName,
     String role,
     int age,
@@ -57,26 +57,31 @@ public class AccountManager {
     bean.set("dateOfBirth", sdf.format(account.getDateOfBirth()));
     bean.set("couponIDs", account.getCouponIDs());
 
-    return jsonFileManager.modifyJSON("Account", userName, bean);
+    boolean isSuccess = jsonFileManager.modifyJSON("Account", userName, bean);
+    if (isSuccess) {
+      return account;
+    } else {
+      return null;
+    }
   }
 
   // Create new non-user account
-  public boolean createAccount(String userName, String role) {
+  public Account createAccount(String userName, String role) {
     Account account = new Account(userName, role);
 
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("userName", account.getUserName());
     bean.set("role", account.getRole());
 
-    return jsonFileManager.modifyJSON("Account", userName, bean);
+    boolean isSuccess = jsonFileManager.modifyJSON("Account", userName, bean);
+    if (isSuccess) {
+      return account;
+    } else {
+      return null;
+    }
   }
 
-  public boolean deleteAccount(String userName) {
-    Account account = getAccount(userName);
-    if (account == null) {
-      return false;
-    }
-
+  public boolean deleteAccount(Account account) {
     return jsonFileManager.deleteJSON("Account", account.getUserName());
   }
 
@@ -150,9 +155,13 @@ public class AccountManager {
     if (isCreated) {
       createAccount("shop", "Shop Manager");
     }
-    isCreated = createPassword("staff", "staff");
+    isCreated = createPassword("staff1", "staff1");
     if (isCreated) {
-      createAccount("staff", "Staff");
+      createAccount("staff1", "Staff");
+    }
+    isCreated = createPassword("staff2", "staff2");
+    if (isCreated) {
+      createAccount("staff2", "Staff");
     }
     isCreated = createPassword("user", "user");
     if (isCreated) {
