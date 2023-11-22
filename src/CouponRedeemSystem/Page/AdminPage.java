@@ -23,7 +23,14 @@ public class AdminPage extends Page {
 
     String username = strInput("user name");
 
-    accountManager.deleteAccount(username);
+    boolean isDeleted = accountManager.deleteAccount(username);
+    if (isDeleted) {
+      System.out.println();
+      System.out.println("Account deleted");
+    } else {
+      System.out.println();
+      System.out.println("Account deletion failed");
+    }
   }
 
   public void execute() {

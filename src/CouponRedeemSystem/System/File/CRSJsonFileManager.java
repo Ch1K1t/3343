@@ -79,8 +79,8 @@ public class CRSJsonFileManager {
    * @param content  the content
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public void modifyJSON(String dirName, String fileName, DynaBean content) {
-    modifyJSON(dirName, fileName, JSONObject.fromObject(content));
+  public boolean modifyJSON(String dirName, String fileName, DynaBean content) {
+    return modifyJSON(dirName, fileName, JSONObject.fromObject(content));
   }
 
   /**
@@ -91,14 +91,20 @@ public class CRSJsonFileManager {
    * @param content  the content
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public void modifyJSON(String dirName, String fileName, JSONObject content) {
+  public boolean modifyJSON(
+    String dirName,
+    String fileName,
+    JSONObject content
+  ) {
     try {
       File file = createJson(dirName, fileName);
       FileWriter fileWriter = new FileWriter(file);
       fileWriter.write(content.toString());
       fileWriter.close();
+      return true;
     } catch (IOException e) {
       e.printStackTrace();
+      return false;
     }
   }
 
@@ -133,11 +139,9 @@ public class CRSJsonFileManager {
    * @param fileName the file name
    * @throws IOException Signals that an I/O exception has occurred.
    */
-  public void deleteJSON(String dirName, String fileName) {
+  public boolean deleteJSON(String dirName, String fileName) {
     File file = createJson(dirName, fileName);
-    if (!file.delete()) {
-      System.out.println("Delete is failed!");
-    }
+    return file.delete();
   }
 
   /**

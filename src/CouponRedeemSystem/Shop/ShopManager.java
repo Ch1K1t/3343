@@ -2,6 +2,7 @@ package CouponRedeemSystem.Shop;
 
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.json.JSONArray;
@@ -20,43 +21,34 @@ public class ShopManager {
     return instance;
   }
 
-  public void createShop(String shopName) {
+  public boolean createShop(String shopName) {
     Shop shop = new Shop(shopName);
 
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("shopName", shop.getShopName());
-    bean.set("purchasableCoupons", shop.getPurchasableCoupons());
-    bean.set("staffs", shop.getStaffs());
+    bean.set("purchasableCouponList", shop.getPurchasableCouponList());
+    bean.set("staffList", shop.getStaffList());
 
-    jsonFileManager.modifyJSON("Shop", shopName, bean);
-
-    System.out.println();
-    System.out.println("Shop created");
+    return jsonFileManager.modifyJSON("Shop", shopName, bean);
   }
 
-  public void deleteShop(String shopName) {
+  public boolean deleteShop(String shopName) {
     Shop shop = getShop(shopName);
     if (shop == null) {
       System.out.println("Shop " + shopName + " does not exist");
-      return;
+      return false;
     }
 
-    jsonFileManager.deleteJSON("Shop", shopName);
-
-    System.out.println();
-    System.out.println("Shop deleted");
+    return jsonFileManager.deleteJSON("Shop", shopName);
   }
 
-  public void updateShop(Shop shop) {
+  public boolean updateShop(Shop shop) {
     LazyDynaBean bean = new LazyDynaBean();
     bean.set("shopName", shop.getShopName());
-    bean.set("purchasableCoupons", shop.getPurchasableCoupons());
-    bean.set("staffs", shop.getStaffs());
+    bean.set("purchasableCouponList", shop.getPurchasableCouponList());
+    bean.set("staffList", shop.getStaffList());
 
-    jsonFileManager.modifyJSON("Shop", shop.getShopName(), bean);
-
-    System.out.println();
-    System.out.println("Shop updated");
+    return jsonFileManager.modifyJSON("Shop", shop.getShopName(), bean);
   }
 
   public Shop getShop(String shopName) {
@@ -69,24 +61,43 @@ public class ShopManager {
     }
   }
 
-  private Shop extractShopFromJson(JSONObject shopJson) {
-    String shopName = shopJson.getString("shopName");
-    JSONArray Arr = shopJson.getJSONArray("purchasableCoupons");
-    List<String> purchasableCoupons = new ArrayList<>();
-    for (int i = 0; i < Arr.size(); i++) {
-      purchasableCoupons.add(Arr.getString(i));
-    }
-    JSONArray Arr2 = shopJson.getJSONArray("staffs");
-    List<String> staffs = new ArrayList<>();
-    for (int i = 0; i < Arr2.size(); i++) {
-      staffs.add(Arr2.getString(i));
+  public List<Shop> getShopList() {
+    List<Shop> shopList = new ArrayList<>();
+    File[] fileArr = new File("Data/Shop").listFiles();
+    for (File file : fileArr) {
+      JSONObject jsonObject = jsonFileManager.convertFileTextToJSON(file);
+      Shop shop = extractShopFromJson(jsonObject);
+      shopList.add(shop);
     }
 
-    return new Shop(shopName, purchasableCoupons, staffs);
+    return shopList;
+  }
+
+  private Shop extractShopFromJson(JSONObject shopJson) {
+    String shopName = shopJson.getString("shopName");
+    JSONArray Arr = shopJson.getJSONArray("purchasableCouponList");
+    List<String> purchasableCouponList = new ArrayList<>();
+    for (int i = 0; i < Arr.size(); i++) {
+      purchasableCouponList.add(Arr.getString(i));
+    }
+    JSONArray Arr2 = shopJson.getJSONArray("staffList");
+    List<String> staffList = new ArrayList<>();
+    for (int i = 0; i < Arr2.size(); i++) {
+      staffList.add(Arr2.getString(i));
+    }
+
+    return new Shop(shopName, purchasableCouponList, staffList);
   }
 
   public void generateDemoShop() {
     createShop("shop1");
+    Shop shop = getShop("shop1");
+    shop.addStaff("staff");
+    shop.addPurchasableCoupon("P1");
+    updateShop(shop);
     createShop("shop2");
+    Shop shop2 = getShop("shop2");
+    shop2.addPurchasableCoupon("P2");
+    updateShop(shop2);
   }
 }

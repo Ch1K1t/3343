@@ -5,9 +5,7 @@ import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
-import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import java.io.File;
-import net.sf.json.JSONObject;
+import java.util.List;
 
 public class ShopManagerPage extends Page {
 
@@ -26,43 +24,67 @@ public class ShopManagerPage extends Page {
     ShopManager shopManager = ShopManager.getInstance();
 
     String shopName = strInput("shop name");
-    shopManager.createShop(shopName);
+    boolean isCreated = shopManager.createShop(shopName);
+
+    if (isCreated) {
+      System.out.println();
+      System.out.println("Shop created");
+    } else {
+      System.out.println();
+      System.out.println("Shop creation failed");
+    }
   }
 
   public void deleteShop() {
     ShopManager shopManager = ShopManager.getInstance();
 
     String shopName = strInput("shop name");
-    shopManager.deleteShop(shopName);
+    boolean isDeleted = shopManager.deleteShop(shopName);
+
+    if (isDeleted) {
+      System.out.println();
+      System.out.println("Shop deleted");
+    } else {
+      System.out.println();
+      System.out.println("Shop deletion failed");
+    }
   }
 
   public void deleteAccount() {
-    CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
     AccountManager accountManager = AccountManager.getInstance();
     ShopManager shopManager = ShopManager.getInstance();
 
     String username = strInput("staff name");
     Account account = accountManager.getAccount(username);
-    if (account != null) {
-      if (account.getRole().equals("Staff")) {
-        File[] fileArr = new File("Data/Shop").listFiles();
-        for (File file : fileArr) {
-          JSONObject jsonObject = jsonFileManager.convertFileTextToJSON(file);
-          if (jsonObject.getJSONArray("staffs").contains(username)) {
-            Shop shop = shopManager.getShop(jsonObject.getString("shopName"));
-            shop.removeStaffs(username);
-            shopManager.updateShop(shop);
-            break;
-          }
-        }
-      } else {
-        System.out.println();
-        System.out.println("This account is not a staff account");
-        return;
-      }
+    if (account == null) {
+      System.out.println();
+      System.out.println("Account does not exist");
+      return;
     }
 
-    accountManager.deleteAccount(username);
+    if (account.getRole().equals("Staff")) {
+      List<Shop> shopList = shopManager.getShopList();
+      for (Shop shop : shopList) {
+        if (shop.getStaffList().contains(username)) {
+          shop.removeStaff(username);
+          shopManager.updateShop(shop);
+          break;
+        }
+      }
+
+      boolean isDeleted = accountManager.deleteAccount(username);
+      if (isDeleted) {
+        System.out.println();
+        System.out.println("Account deleted");
+      } else {
+        System.out.println();
+        System.out.println("Account deletion failed");
+      }
+    } else {
+      System.out.println();
+      System.out.println("This account is not a staff account");
+      return;
+    }
   }
 
   public void execute() {

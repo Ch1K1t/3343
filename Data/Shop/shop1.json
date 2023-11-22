@@ -1,1 +1,1 @@
-{"shopName":"shop1","purchasableCoupons":["R3"],"staffs":["staff"]}
+{ "shopName": "shop1", "purchasableCouponList": ["P1"], "staffList": ["staff"] }

@@ -6,9 +6,7 @@ import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
-import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import java.io.File;
-import net.sf.json.JSONObject;
+import java.util.List;
 
 public class StaffPage extends Page {
 
@@ -40,16 +38,14 @@ public class StaffPage extends Page {
     String couponCode = strInput("coupon's code");
 
     if (type.equals("Purchasable")) {
-      CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
       ShopManager shopManager = ShopManager.getInstance();
 
+      List<Shop> shopList = shopManager.getShopList();
       Shop shop = null;
-      File[] fileArr = new File("Data/Shop").listFiles();
-      for (File file : fileArr) {
-        JSONObject jsonObject = jsonFileManager.convertFileTextToJSON(file);
-        if (jsonObject.getJSONArray("staffs").contains(account.getUserName())) {
-          shop = shopManager.getShop(jsonObject.getString("shopName"));
-          shop.addPurchasableCoupons(couponCode);
+      for (Shop s : shopList) {
+        if (s.getStaffList().contains(account.getUserName())) {
+          shop = s;
+          shop.addPurchasableCoupon(couponCode);
           shopManager.updateShop(shop);
           break;
         }
@@ -57,7 +53,7 @@ public class StaffPage extends Page {
 
       double points = doubleInput("coupon's purchasing value");
 
-      couponManager.createCoupon(
+      boolean isCreated = couponManager.createCoupon(
         couponCode,
         intrinsicValue,
         expirationDate,
@@ -65,13 +61,29 @@ public class StaffPage extends Page {
         points,
         type
       );
+
+      if (isCreated) {
+        System.out.println();
+        System.out.println("Coupon created");
+      } else {
+        System.out.println();
+        System.out.println("Coupon creation failed");
+      }
     } else {
-      couponManager.createCoupon(
+      boolean isCreated = couponManager.createCoupon(
         couponCode,
         intrinsicValue,
         expirationDate,
         type
       );
+
+      if (isCreated) {
+        System.out.println();
+        System.out.println("Coupon created");
+      } else {
+        System.out.println();
+        System.out.println("Coupon creation failed");
+      }
     }
   }
 
@@ -80,7 +92,15 @@ public class StaffPage extends Page {
 
     String couponCode = strInput("coupon's code");
 
-    couponManager.deleteCoupon(couponCode);
+    boolean isDeleted = couponManager.deleteCoupon(couponCode);
+
+    if (isDeleted) {
+      System.out.println();
+      System.out.println("Coupon deleted");
+    } else {
+      System.out.println();
+      System.out.println("Coupon deletion failed");
+    }
   }
 
   public void execute() {

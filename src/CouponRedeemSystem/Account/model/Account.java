@@ -65,61 +65,59 @@ public class Account {
     this.couponIDs = coupons;
   }
 
-  public void couponToPoints(String couponCode) {
+  public boolean couponToPoints(String couponCode) {
     AccountManager accountManager = AccountManager.getInstance();
     CouponManager couponManager = CouponManager.getInstance();
 
     Coupon coupon = couponManager.getCoupon(couponCode);
     if (coupon == null) {
       System.out.println("Coupon code" + couponCode + " does not exist!");
-      return;
+      return false;
     } else if (coupon.getType().equals("Purchasable")) {
       System.out.println("This coupon is not redeemable!");
-      return;
+      return false;
     } else if (!coupon.isActive()) {
       System.out.println("Coupon has been used!");
-      return;
+      return false;
     } else if (coupon.getExpirationDate().before(new Date())) {
       System.out.println("Coupon has expired!");
-      return;
+      return false;
     }
 
     double points = coupon.pointConversion();
     this.addPoints(points);
-    accountManager.updateAccount(this);
+    boolean isAccUpdated = accountManager.updateAccount(this);
 
     coupon.setActive(false);
-    couponManager.updateCoupon(coupon);
+    boolean isCouponUpdated = couponManager.updateCoupon(coupon);
 
-    System.out.println();
-    System.out.println("Coupon redeemed");
+    return isAccUpdated && isCouponUpdated;
   }
 
-  public void pointsToCoupon(String couponCode) {
+  public boolean pointsToCoupon(String couponCode) {
     AccountManager accountManager = AccountManager.getInstance();
     CouponManager couponManager = CouponManager.getInstance();
 
     Coupon coupon = couponManager.getCoupon(couponCode);
     if (coupon == null) {
       System.out.println("Coupon code" + couponCode + " does not exist!");
-      return;
+      return false;
     } else if (this.points < coupon.getPoints()) {
       System.out.println("Insufficient points!");
-      return;
+      return false;
     } else if (this.couponIDs.size() > 10) {
       System.out.println("You have reached the account's purchasing limit!");
-      return;
+      return false;
     }
 
     this.deductPoints(coupon.getPoints());
     this.couponIDs.add(coupon.getCouponCode());
-    accountManager.updateAccount(this);
+    boolean isAccUpdated = accountManager.updateAccount(this);
 
     coupon.setOwner(this.userName);
-    couponManager.updateCoupon(coupon);
+    boolean isCouponUpdated = couponManager.updateCoupon(coupon);
 
-    System.out.println();
-    System.out.println("Coupon purchased");
+    return isAccUpdated && isCouponUpdated;
   }
 
   public String getUserName() {

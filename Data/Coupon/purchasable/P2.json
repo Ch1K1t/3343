@@ -1,1 +1,10 @@
-{"couponCode":"P2","intrinsicValue":1,"expirationDate":"11/11/2025","owner":null,"shop":null,"active":true,"type":"Purchasable","points":1}
+{
+  "couponCode": "P2",
+  "type": "Purchasable",
+  "intrinsicValue": 1,
+  "expirationDate": "11/11/2025",
+  "active": true,
+  "owner": null,
+  "shop": "shop2",
+  "points": 1
+}

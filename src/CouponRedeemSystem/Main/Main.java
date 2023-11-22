@@ -16,14 +16,14 @@ public class Main {
     accountManager.generateDemoAccount();
   }
 
-  public static void initializeCoupon() {
-    CouponManager couponManager = CouponManager.getInstance();
-    couponManager.generateDemoCoupon();
-  }
-
   public static void initializeShop() {
     ShopManager shopManager = ShopManager.getInstance();
     shopManager.generateDemoShop();
+  }
+
+  public static void initializeCoupon() {
+    CouponManager couponManager = CouponManager.getInstance();
+    couponManager.generateDemoCoupon();
   }
 
   public static void main(String[] args) {
@@ -33,8 +33,8 @@ public class Main {
     // new StaffPage("staff").execute();
     // new UserPage("user").execute();
 
-    // initializeCoupon();
-    // initializeUser();
-
+    initializeUser();
+    initializeShop();
+    initializeCoupon();
   }
 }

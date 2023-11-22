@@ -2,10 +2,10 @@ package CouponRedeemSystem.Page;
 
 import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Account.model.Account;
+import CouponRedeemSystem.Coupon.CouponManager;
+import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Page.model.Page;
-import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import java.io.File;
-import net.sf.json.JSONObject;
+import java.util.List;
 
 public class UserPage extends Page {
 
@@ -33,37 +33,45 @@ public class UserPage extends Page {
   }
 
   public void purchaseCoupon() {
-    CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
+    CouponManager couponManager = CouponManager.getInstance();
 
     System.out.println();
     System.out.println("Your balance is " + account.getPoints());
-    File[] fileArr = new File("Data/Coupon/Purchasable").listFiles();
 
     System.out.println();
     System.out.println("The available coupons are:");
-    for (File file : fileArr) {
-      JSONObject jsonObject = jsonFileManager.convertFileTextToJSON(file);
-      if (jsonObject.getString("owner").equals("null")) {
-        System.out.println(
-          String.format(
-            "%-" + 15 + "s",
-            "Code: " + jsonObject.getString("couponCode")
-          ) +
-          "Required Points: " +
-          jsonObject.getString("points")
-        );
-      }
+    List<Coupon> couponList = couponManager.getPurchasableCouponList();
+    for (Coupon coupon : couponList) {
+      System.out.println(
+        String.format("%-" + 15 + "s", "Code: " + coupon.getCouponCode()) +
+        "Required Points: " +
+        coupon.getPoints()
+      );
     }
 
     String couponID = strInput("coupon's code");
-    account.pointsToCoupon(couponID);
-    System.out.println();
-    System.out.println("Purchase successfully");
+    boolean isSuccess = account.pointsToCoupon(couponID);
+
+    if (isSuccess) {
+      System.out.println();
+      System.out.println("Purchase successfully");
+    } else {
+      System.out.println();
+      System.out.println("Purchase failed");
+    }
   }
 
   public void redeemCoupon() {
     String couponID = strInput("coupon's code");
-    account.couponToPoints(couponID);
+    boolean isSuccess = account.couponToPoints(couponID);
+
+    if (isSuccess) {
+      System.out.println();
+      System.out.println("Redeem successfully");
+    } else {
+      System.out.println();
+      System.out.println("Redeem failed");
+    }
   }
 
   public void execute() {

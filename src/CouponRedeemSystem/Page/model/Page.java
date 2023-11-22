@@ -148,8 +148,12 @@ public abstract class Page {
 
     String password = strInput("password");
 
-    boolean notExist = accountManager.createPassword(username, password);
-    if (!notExist) return;
+    boolean isPwdCreated = accountManager.createPassword(username, password);
+    if (!isPwdCreated) {
+      System.out.println();
+      System.out.println("User already exists");
+      return;
+    }
 
     if (role.equals("Staff")) {
       ShopManager shopManager = ShopManager.getInstance();
@@ -164,14 +168,27 @@ public abstract class Page {
           System.out.println("Shop " + shopName + " does not exist!");
         }
       } while (shop == null);
-      shop.addStaffs(username);
+      shop.addStaff(username);
       shopManager.updateShop(shop);
 
-      accountManager.createAccount(username, role);
+      boolean isCreated = accountManager.createAccount(username, role);
+      if (isCreated) {
+        System.out.println();
+        System.out.println("Account created");
+      } else {
+        System.out.println();
+        System.out.println("Account creation failed");
+      }
       return;
     } else if (!role.equals("User")) {
-      accountManager.createAccount(username, role);
-      return;
+      boolean isCreated = accountManager.createAccount(username, role);
+      if (isCreated) {
+        System.out.println();
+        System.out.println("Account created");
+      } else {
+        System.out.println();
+        System.out.println("Account creation failed");
+      }
     }
 
     int age = intInput("age");
@@ -180,7 +197,20 @@ public abstract class Page {
 
     String dob = beforeDateInput("date of birth");
 
-    accountManager.createAccount(username, "user", age, telNo, dob);
+    boolean isCreated = accountManager.createAccount(
+      username,
+      "user",
+      age,
+      telNo,
+      dob
+    );
+    if (isCreated) {
+      System.out.println();
+      System.out.println("Account created");
+    } else {
+      System.out.println();
+      System.out.println("Account creation failed");
+    }
   }
 
   public void exit() {

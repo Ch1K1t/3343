@@ -3,9 +3,13 @@ package CouponRedeemSystem.Coupon;
 import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Coupon.model.PurchasableCoupon;
 import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
+import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.LazyDynaBean;
 
@@ -25,7 +29,7 @@ public class CouponManager {
   }
 
   // Create new purchasable coupon
-  public void createCoupon(
+  public boolean createCoupon(
     String couponCode,
     double intrinsicValue,
     String expirationDate,
@@ -35,9 +39,7 @@ public class CouponManager {
   ) {
     JSONObject json = jsonFileManager.searchJSON(couponCode);
     if (json != null) {
-      System.out.println();
-      System.out.println("Coupon code " + couponCode + " already exists");
-      return;
+      return false;
     }
 
     Coupon coupon = new PurchasableCoupon(
@@ -60,14 +62,11 @@ public class CouponManager {
     bean.set("shop", coupon.getShop());
     bean.set("points", coupon.getPoints());
 
-    jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
-
-    System.out.println();
-    System.out.println("Coupon created");
+    return jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
   }
 
   // Create new redeemable coupon
-  public void createCoupon(
+  public boolean createCoupon(
     String couponCode,
     double intrinsicValue,
     String expirationDate,
@@ -75,9 +74,7 @@ public class CouponManager {
   ) {
     JSONObject json = jsonFileManager.searchJSON(couponCode);
     if (json != null) {
-      System.out.println();
-      System.out.println("Coupon code " + couponCode + " already exists");
-      return;
+      return false;
     }
 
     Coupon coupon = new RedeemableCoupon(
@@ -95,26 +92,19 @@ public class CouponManager {
     bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
     bean.set("active", coupon.isActive());
 
-    jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
-
-    System.out.println();
-    System.out.println("Coupon created");
+    return jsonFileManager.modifyJSON("Coupon/" + type, couponCode, bean);
   }
 
-  public void deleteCoupon(String couponCode) {
+  public boolean deleteCoupon(String couponCode) {
     Coupon coupon = getCoupon(couponCode);
     if (coupon == null) {
-      System.out.println("Coupon code " + couponCode + " does not exist");
-      return;
+      return false;
     }
 
-    jsonFileManager.deleteJSON("Coupon/" + coupon.getType(), couponCode);
-
-    System.out.println();
-    System.out.println("Coupon deleted");
+    return jsonFileManager.deleteJSON("Coupon/" + coupon.getType(), couponCode);
   }
 
-  public void updateCoupon(Coupon coupon) {
+  public boolean updateCoupon(Coupon coupon) {
     String type = coupon.getType();
 
     LazyDynaBean bean = new LazyDynaBean();
@@ -129,10 +119,11 @@ public class CouponManager {
       bean.set("points", coupon.getPoints());
     }
 
-    jsonFileManager.modifyJSON("Coupon/" + type, coupon.getCouponCode(), bean);
-
-    System.out.println();
-    System.out.println("Coupon updated");
+    return jsonFileManager.modifyJSON(
+      "Coupon/" + type,
+      coupon.getCouponCode(),
+      bean
+    );
   }
 
   public Coupon getCoupon(String couponCode) {
@@ -143,6 +134,18 @@ public class CouponManager {
     } else {
       return extractCouponFromJson(couponJson);
     }
+  }
+
+  public List<Coupon> getPurchasableCouponList() {
+    List<Coupon> couponList = new ArrayList<>();
+    File[] fileArr = new File("Data/Coupon/Purchasable").listFiles();
+    for (File file : fileArr) {
+      JSONObject jsonObject = jsonFileManager.convertFileTextToJSON(file);
+      Coupon coupon = extractCouponFromJson(jsonObject);
+      couponList.add(coupon);
+    }
+
+    return couponList;
   }
 
   private Coupon extractCouponFromJson(JSONObject couponJson) {
@@ -177,8 +180,11 @@ public class CouponManager {
   }
 
   public void generateDemoCoupon() {
-    createCoupon("P1", 1.0, "11/11/2025", null, 1.0, "Purchasable");
-    createCoupon("P2", 1.0, "11/11/2025", null, 1.0, "Purchasable");
+    ShopManager shopManager = ShopManager.getInstance();
+    Shop shop1 = shopManager.getShop("shop1");
+    createCoupon("P1", 1.0, "11/11/2025", shop1, 1.0, "Purchasable");
+    Shop shop2 = shopManager.getShop("shop2");
+    createCoupon("P2", 1.0, "11/11/2025", shop2, 1.0, "Purchasable");
     createCoupon("R1", 1.0, "11/11/2025", "Redeemable");
     createCoupon("R2", 1.0, "11/11/2025", "Redeemable");
   }

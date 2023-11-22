@@ -6,23 +6,23 @@ import java.util.List;
 public class Shop {
 
   private String shopName;
-  private List<String> purchasableCoupons;
-  private List<String> staffs;
+  private List<String> purchasableCouponList;
+  private List<String> staffList;
 
   public Shop(String shopName) {
     this.shopName = shopName;
-    this.purchasableCoupons = new ArrayList<String>();
-    this.staffs = new ArrayList<String>();
+    this.purchasableCouponList = new ArrayList<String>();
+    this.staffList = new ArrayList<String>();
   }
 
   public Shop(
     String shopName,
-    List<String> purchasableCoupons,
-    List<String> staffs
+    List<String> purchasableCouponList,
+    List<String> staffList
   ) {
     this.shopName = shopName;
-    this.purchasableCoupons = purchasableCoupons;
-    this.staffs = staffs;
+    this.purchasableCouponList = purchasableCouponList;
+    this.staffList = staffList;
   }
 
   public String getShopName() {
@@ -33,35 +33,35 @@ public class Shop {
     this.shopName = shopName;
   }
 
-  public List<String> getPurchasableCoupons() {
-    return purchasableCoupons;
+  public List<String> getPurchasableCouponList() {
+    return purchasableCouponList;
   }
 
-  public void setPurchasableCoupons(List<String> purchasableCoupons) {
-    this.purchasableCoupons = purchasableCoupons;
+  public void setPurchasableCouponList(List<String> purchasableCouponList) {
+    this.purchasableCouponList = purchasableCouponList;
   }
 
-  public void addPurchasableCoupons(String couponCode) {
-    purchasableCoupons.add(couponCode);
+  public void addPurchasableCoupon(String couponCode) {
+    purchasableCouponList.add(couponCode);
   }
 
-  public void removePurchasableCoupons(String couponCode) {
-    purchasableCoupons.remove(couponCode);
+  public void removePurchasableCoupon(String couponCode) {
+    purchasableCouponList.remove(couponCode);
   }
 
-  public List<String> getStaffs() {
-    return staffs;
+  public List<String> getStaffList() {
+    return staffList;
   }
 
-  public void setStaffs(List<String> staffs) {
-    this.staffs = staffs;
+  public void setStaffList(List<String> staffList) {
+    this.staffList = staffList;
   }
 
-  public void addStaffs(String staff) {
-    staffs.add(staff);
+  public void addStaff(String staff) {
+    staffList.add(staff);
   }
 
-  public void removeStaffs(String staff) {
-    staffs.remove(staff);
+  public void removeStaff(String staff) {
+    staffList.remove(staff);
   }
 }

@@ -33,19 +33,19 @@ public class PasswordManager {
     return mgr.convertFileTextToJSON(file);
   }
 
-  public void createNewPassword(String userName, String password) {
+  public boolean createNewPassword(String userName, String password) {
     JSONObject jsonObject = getPasswordRefTable();
     String encryptedPassword = mgr.encryption(password);
     jsonObject.put(userName, encryptedPassword);
 
-    CRSJsonFileManager
+    return CRSJsonFileManager
       .getInstance()
       .modifyJSON("Password", "ReferenceTable", jsonObject);
   }
 
   public boolean checkPasswordValid(String userName, String password) {
     JSONObject jsonObject = getPasswordRefTable();
-    String textBeforeEncrypt = (String) jsonObject.get(userName);
+    String textBeforeEncrypt = jsonObject.getString(userName);
     if (textBeforeEncrypt == null) {
       System.out.println("Account is not found!");
       return false;
