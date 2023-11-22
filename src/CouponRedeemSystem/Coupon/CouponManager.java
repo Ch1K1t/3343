@@ -6,10 +6,7 @@ import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.LazyDynaBean;
 
@@ -134,18 +131,6 @@ public class CouponManager {
     } else {
       return extractCouponFromJson(couponJson);
     }
-  }
-
-  public List<Coupon> getPurchasableCouponList() {
-    List<Coupon> couponList = new ArrayList<>();
-    File[] fileArr = new File("Data/Coupon/Purchasable").listFiles();
-    for (File file : fileArr) {
-      JSONObject jsonObject = jsonFileManager.convertFileTextToJSON(file);
-      Coupon coupon = extractCouponFromJson(jsonObject);
-      couponList.add(coupon);
-    }
-
-    return couponList;
   }
 
   private Coupon extractCouponFromJson(JSONObject couponJson) {

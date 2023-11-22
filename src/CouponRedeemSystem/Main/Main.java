@@ -31,10 +31,10 @@ public class Main {
     // new AdminPage().execute();
     // new ShopManagerPage().execute();
     // new StaffPage("staff").execute();
-    // new UserPage("user").execute();
+    new UserPage("user").execute();
 
-    initializeUser();
-    initializeShop();
-    initializeCoupon();
+    // initializeUser();
+    // initializeShop();
+    // initializeCoupon();
   }
 }

@@ -5,6 +5,8 @@ import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Page.model.Page;
+import CouponRedeemSystem.Shop.ShopManager;
+import CouponRedeemSystem.Shop.model.Shop;
 import java.util.List;
 
 public class UserPage extends Page {
@@ -34,19 +36,26 @@ public class UserPage extends Page {
 
   public void purchaseCoupon() {
     CouponManager couponManager = CouponManager.getInstance();
+    ShopManager shopManager = ShopManager.getInstance();
 
     System.out.println();
     System.out.println("Your balance is " + account.getPoints());
 
     System.out.println();
     System.out.println("The available coupons are:");
-    List<Coupon> couponList = couponManager.getPurchasableCouponList();
-    for (Coupon coupon : couponList) {
-      System.out.println(
-        String.format("%-" + 15 + "s", "Code: " + coupon.getCouponCode()) +
-        "Required Points: " +
-        coupon.getPoints()
-      );
+    List<Shop> shopList = shopManager.getShopList();
+    for (Shop shop : shopList) {
+      System.out.println("Shop " + shop.getShopName() + ":");
+      List<String> couponList = shop.getPurchasableCouponList();
+      for (String s : couponList) {
+        Coupon coupon = couponManager.getCoupon(s);
+        System.out.println(
+          String.format("%-" + 15 + "s", "Code: " + coupon.getCouponCode()) +
+          "Required Points: " +
+          coupon.getPoints()
+        );
+      }
+      System.out.println();
     }
 
     String couponID = strInput("coupon's code");
