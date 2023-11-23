@@ -2,6 +2,7 @@ package CouponRedeemSystem.Test;
 
 import CouponRedeemSystem.Discount.model.Discount;
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.Test.model.MainTest;
 import java.text.ParseException;
 import net.sf.json.JSONObject;
 import org.junit.Assert;

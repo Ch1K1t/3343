@@ -1,6 +1,7 @@
 package CouponRedeemSystem.Test;
 
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.Test.model.MainTest;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.json.JSONObject;

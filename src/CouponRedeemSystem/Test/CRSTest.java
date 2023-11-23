@@ -1,5 +1,6 @@
 package CouponRedeemSystem.Test;
 
+import CouponRedeemSystem.Test.model.MainTest;
 import java.io.File;
 import net.sf.json.JSONObject;
 import org.junit.Assert;

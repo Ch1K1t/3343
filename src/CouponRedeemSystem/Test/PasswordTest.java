@@ -1,5 +1,6 @@
 package CouponRedeemSystem.Test;
 
+import CouponRedeemSystem.Test.model.MainTest;
 import org.junit.Assert;
 import org.junit.Test;
 

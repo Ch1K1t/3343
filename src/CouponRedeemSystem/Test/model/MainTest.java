@@ -1,4 +1,4 @@
-package CouponRedeemSystem.Test;
+package CouponRedeemSystem.Test.model;
 
 import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Coupon.CouponManager;
