@@ -8,7 +8,8 @@ public class PasswordManager {
 
   private static PasswordManager instance;
 
-  private EncryptionManager mgr = EncryptionManager.getInstance();
+  private EncryptionManager encryptionManager = EncryptionManager.getInstance();
+  private final CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
 
   private PasswordManager() {}
 
@@ -20,27 +21,31 @@ public class PasswordManager {
     return instance;
   }
 
-  public String getPasswordRefTablePath() {
-    return "Password\\ReferenceTable.json";
-  }
-
   private JSONObject getPasswordRefTable() {
-    CRSJsonFileManager mgr = CRSJsonFileManager.getInstance();
-    File file = mgr.searchFile("ReferenceTable");
+    File file = jsonFileManager.searchFile("ReferenceTable");
     if (file == null) {
-      file = mgr.createJson("Password", "ReferenceTable");
+      file = jsonFileManager.createJson("Password", "ReferenceTable");
     }
-    return mgr.convertFileTextToJSON(file);
+    return jsonFileManager.convertFileTextToJSON(file);
   }
 
   public boolean createNewPassword(String userName, String password) {
     JSONObject jsonObject = getPasswordRefTable();
-    String encryptedPassword = mgr.encryption(password);
+    String encryptedPassword = encryptionManager.encryption(password);
     jsonObject.put(userName, encryptedPassword);
 
-    return CRSJsonFileManager
-      .getInstance()
-      .modifyJSON("Password", "ReferenceTable", jsonObject);
+    return jsonFileManager.modifyJSON("Password", "ReferenceTable", jsonObject);
+  }
+
+  public boolean deletePassword(String userName) {
+    JSONObject jsonObject = getPasswordRefTable();
+    if (jsonObject.get(userName) == null) {
+      return false;
+    }
+
+    jsonObject.remove(userName);
+
+    return jsonFileManager.modifyJSON("Password", "ReferenceTable", jsonObject);
   }
 
   public boolean checkPasswordValid(String userName, String password) {
@@ -50,7 +55,7 @@ public class PasswordManager {
       System.out.println("Account is not found!");
       return false;
     }
-    String text = mgr.decryption(textBeforeEncrypt);
+    String text = encryptionManager.decryption(textBeforeEncrypt);
     if (text.equals(password)) {
       return true;
     } else {

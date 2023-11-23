@@ -28,20 +28,9 @@ public class ShopManager {
     }
 
     Shop shop = new Shop(shopName);
+    this.updateShop(shop);
 
-    LazyDynaBean bean = new LazyDynaBean();
-    bean.set("shopName", shop.getShopName());
-    bean.set("couponList", shop.getPurchasableCouponList());
-    bean.set("staffList", shop.getStaffList());
-    bean.set("discountList", shop.getDiscountList());
-
-    boolean isSuccess = jsonFileManager.modifyJSON("Shop", shopName, bean);
-
-    if (isSuccess) {
-      return shop;
-    } else {
-      return null;
-    }
+    return shop;
   }
 
   public boolean deleteShop(String shopName) {
@@ -115,6 +104,25 @@ public class ShopManager {
     }
 
     return new Shop(shopName, couponList, staffList, discountList);
+  }
+
+  public String jsonToString(JSONObject jsonObject) {
+    String shopName = jsonObject.getString("shopName");
+    JSONArray couponList = jsonObject.getJSONArray("couponList");
+    JSONArray staffList = jsonObject.getJSONArray("staffList");
+    JSONArray discountList = jsonObject.getJSONArray("discountList");
+
+    return (
+      "{\"shopName\":\"" +
+      shopName +
+      "\", \"couponList\":" +
+      couponList +
+      ", \"staffList\":" +
+      staffList +
+      ", \"discountList\":" +
+      discountList +
+      "}"
+    );
   }
 
   public void generateDemoShop() {

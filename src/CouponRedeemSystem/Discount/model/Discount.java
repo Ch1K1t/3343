@@ -42,6 +42,23 @@ public class Discount {
     );
   }
 
+  @Override
+  public String toString() {
+    return (
+      "Discount{discountName=\"" +
+      discountName +
+      "\", shop=" +
+      shop +
+      ", startDate=" +
+      startDate +
+      ", expireDate=" +
+      expireDate +
+      ", value=" +
+      value +
+      "}"
+    );
+  }
+
   public String getDiscountName() {
     return discountName;
   }

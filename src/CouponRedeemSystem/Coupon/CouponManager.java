@@ -31,7 +31,7 @@ public class CouponManager {
   public Coupon createCoupon(
     String couponCode,
     double intrinsicValue,
-    Double points,
+    double points,
     Shop shop,
     String type,
     String expirationDate
@@ -51,28 +51,9 @@ public class CouponManager {
       type,
       expirationDate
     );
+    this.updateCoupon(coupon);
 
-    LazyDynaBean bean = new LazyDynaBean();
-    bean.set("couponCode", coupon.getCouponCode());
-    bean.set("intrinsicValue", coupon.getIntrinsicValue());
-    bean.set("points", coupon.getPoints());
-    bean.set("shop", coupon.getShop().getShopName());
-    bean.set("owner", null);
-    bean.set("active", coupon.isActive());
-    bean.set("type", coupon.getType());
-    bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
-
-    boolean isSuccess = jsonFileManager.modifyJSON(
-      "Coupon/" + type,
-      couponCode,
-      bean
-    );
-
-    if (isSuccess) {
-      return coupon;
-    } else {
-      return null;
-    }
+    return coupon;
   }
 
   // Create new redeemable coupon
@@ -131,7 +112,7 @@ public class CouponManager {
       bean.set("intrinsicValue", coupon.getIntrinsicValue());
       bean.set("points", coupon.getPoints());
       bean.set("shop", coupon.getShop().getShopName());
-      bean.set("owner", null);
+      bean.set("owner", coupon.getOwner());
       bean.set("active", coupon.isActive());
       bean.set("type", coupon.getType());
       bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
@@ -197,6 +178,55 @@ public class CouponManager {
       default:
         return null;
     }
+  }
+
+  public String jsonToString(JSONObject jsonObject) {
+    String result = "";
+    
+    String couponCode = jsonObject.getString("couponCode");
+    double intrinsicValue = jsonObject.getDouble("intrinsicValue");
+    boolean active = jsonObject.getBoolean("active");
+    String type = jsonObject.getString("type");
+    String expirationDate = jsonObject.getString("expirationDate");
+
+    if (type.equals("Purchasable")) {
+      double points = jsonObject.getDouble("points");
+      String shop = jsonObject.getString("shop");
+      String owner = jsonObject.getString("owner");
+      result =
+        "{\"couponCode\":\"" +
+        couponCode +
+        "\", \"intrinsicValue\":" +
+        intrinsicValue +
+        ", \"points\":" +
+        points +
+        ", \"shop\":\"" +
+        shop +
+        "\", \"owner\":" +
+        owner +
+        ", \"active\":" +
+        active +
+        ", \"type\":\"" +
+        type +
+        "\", \"expirationDate\":\"" +
+        expirationDate +
+        "\"}";
+    } else {
+      result =
+        "{\"couponCode\":\"" +
+        couponCode +
+        "\", \"intrinsicValue\":" +
+        intrinsicValue +
+        ", \"active\":" +
+        active +
+        ", \"type\":\"" +
+        type +
+        "\", \"expirationDate\":\"" +
+        expirationDate +
+        "\"}";
+    }
+
+    return result;
   }
 
   public void generateDemoCoupon() {

@@ -50,26 +50,9 @@ public class DiscountManager {
         expireDate,
         value
       );
+      this.updateDiscount(discount);
 
-      LazyDynaBean bean = new LazyDynaBean();
-      bean.set("discountName", discount.getDiscountName());
-      bean.set("shop", discount.getShop().getShopName());
-      bean.set("startDate", sdf.format(discount.getStartDate()));
-      bean.set("expireDate", sdf.format(discount.getExpireDate()));
-      bean.set("value", discount.getValue());
-      bean.set("active", discount.validateTime());
-
-      boolean isSuccess = jsonFileManager.modifyJSON(
-        "Discount",
-        discountName,
-        bean
-      );
-
-      if (isSuccess) {
-        return discount;
-      } else {
-        return null;
-      }
+      return discount;
     } catch (ParseException e) {
       e.printStackTrace();
       return null;
@@ -116,6 +99,35 @@ public class DiscountManager {
     double value = discountJson.getDouble("value");
 
     return new Discount(discountName, shop, startDate, expireDate, value);
+  }
+
+  public String jsonToString(JSONObject jsonObject) {
+    /*
+     *  private String discountName;
+  private Shop shop;
+  private Date startDate;
+  private Date expireDate;
+  private double value;
+     */
+    String discountName = jsonObject.getString("discountName");
+    String shopName = jsonObject.getString("shop");
+    String startDate = jsonObject.getString("startDate");
+    String expireDate = jsonObject.getString("expireDate");
+    double value = jsonObject.getDouble("value");
+
+    return (
+      "{\"discountName\":\"" +
+      discountName +
+      "\", \"shop\":\"" +
+      shopName +
+      "\", \"startDate\":\"" +
+      startDate +
+      "\", \"expireDate\":\"" +
+      expireDate +
+      "\", \"value\":" +
+      value +
+      "}"
+    );
   }
 
   public void generateDemoDiscount() {

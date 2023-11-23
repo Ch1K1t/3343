@@ -9,6 +9,13 @@ import CouponRedeemSystem.Page.ShopManagerPage;
 import CouponRedeemSystem.Page.StaffPage;
 import CouponRedeemSystem.Page.UserPage;
 import CouponRedeemSystem.Shop.ShopManager;
+import CouponRedeemSystem.System.File.CRSJsonFileManager;
+import CouponRedeemSystem.System.Password.PasswordManager;
+import java.util.ArrayList;
+import java.util.List;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.apache.commons.beanutils.LazyDynaBean;
 
 public class Main {
 
@@ -39,9 +46,9 @@ public class Main {
     // new StaffPage("staff1").execute();
     // new UserPage("user").execute();
 
-    // initializeUser();
-    // initializeShop();
-    // initializeCoupon();
-    // initializeDiscount();
+    initializeUser();
+    initializeShop();
+    initializeCoupon();
+    initializeDiscount();
   }
 }

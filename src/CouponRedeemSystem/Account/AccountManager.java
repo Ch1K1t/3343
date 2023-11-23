@@ -47,38 +47,17 @@ public class AccountManager {
     String dob
   ) {
     Account account = new Account(userName, role, age, telNo, dob);
+    this.updateAccount(account);
 
-    LazyDynaBean bean = new LazyDynaBean();
-    bean.set("userName", account.getUserName());
-    bean.set("role", account.getRole());
-    bean.set("points", account.getPoints());
-    bean.set("couponIDs", account.getCouponIDs());
-    bean.set("age", account.getAge());
-    bean.set("telNo", account.getTelNo());
-    bean.set("dateOfBirth", sdf.format(account.getDateOfBirth()));
-
-    boolean isSuccess = jsonFileManager.modifyJSON("Account", userName, bean);
-    if (isSuccess) {
-      return account;
-    } else {
-      return null;
-    }
+    return account;
   }
 
   // Create new non-user account
   public Account createAccount(String userName, String role) {
     Account account = new Account(userName, role);
+    this.updateAccount(account);
 
-    LazyDynaBean bean = new LazyDynaBean();
-    bean.set("userName", account.getUserName());
-    bean.set("role", account.getRole());
-
-    boolean isSuccess = jsonFileManager.modifyJSON("Account", userName, bean);
-    if (isSuccess) {
-      return account;
-    } else {
-      return null;
-    }
+    return account;
   }
 
   public boolean deleteAccount(Account account) {
@@ -143,6 +122,41 @@ public class AccountManager {
       e.printStackTrace();
       return null;
     }
+  }
+
+  public String jsonToString(JSONObject jsonObject) {
+    String result = "";
+
+    String userName = jsonObject.getString("userName");
+    String role = jsonObject.getString("role");
+    if (!role.equals("User")) {
+      result = "{\"userName\":\"" + userName + "\", \"role\":\"" + role + "\"}";
+    } else {
+      int age = jsonObject.getInt("age");
+      String telNo = jsonObject.getString("telNo");
+      double points = jsonObject.getDouble("points");
+      String dateOfBirth = jsonObject.getString("dateOfBirth");
+      JSONArray couponIDs = jsonObject.getJSONArray("couponIDs");
+
+      result =
+        "{\"userName\":\"" +
+        userName +
+        "\", \"role\":\"" +
+        role +
+        "\", \"age\":" +
+        age +
+        ", \"telNo\":\"" +
+        telNo +
+        "\", \"dateOfBirth\":\"" +
+        dateOfBirth +
+        "\", \"points\":" +
+        points +
+        ", \"couponIDs\":" +
+        couponIDs +
+        "}";
+    }
+
+    return result;
   }
 
   public void generateDemoAccount() {

@@ -22,6 +22,12 @@ public class Account {
   double points;
   List<String> couponIDs;
 
+  // Constructor for creating a new non-user account
+  public Account(String userName, String role) {
+    this.userName = userName;
+    this.role = role;
+  }
+
   // Constructor for creating a new user account
   public Account(
     String userName,
@@ -41,12 +47,6 @@ public class Account {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-  }
-
-  // Constructor for creating a new non-user account
-  public Account(String userName, String role) {
-    this.userName = userName;
-    this.role = role;
   }
 
   // Constructor for loading an existing account
@@ -109,6 +109,33 @@ public class Account {
     boolean isCouponUpdated = couponManager.updateCoupon(coupon);
 
     return isAccUpdated && isCouponUpdated;
+  }
+
+  @Override
+  public String toString() {
+    if (role.equals("User")) {
+      return (
+        "Account{userName=\"" +
+        userName +
+        "\", role=\"" +
+        role +
+        "\", age=" +
+        age +
+        ", telNo=\"" +
+        telNo +
+        "\", dateOfBirth=" +
+        dateOfBirth +
+        ", points=" +
+        points +
+        ", couponIDs=" +
+        couponIDs +
+        "}"
+      );
+    } else {
+      return (
+        "Account{userName=\"" + "" + userName + "\", role=\"" + role + "\"}"
+      );
+    }
   }
 
   public String getUserName() {

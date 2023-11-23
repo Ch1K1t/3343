@@ -29,6 +29,21 @@ public class Shop {
     this.discountList = discountList;
   }
 
+  @Override
+  public String toString() {
+    return (
+      "Shop{shopName=\"" +
+      shopName +
+      "\", couponList=" +
+      couponList +
+      ", staffList=" +
+      staffList +
+      ", discountList=" +
+      discountList +
+      "}"
+    );
+  }
+
   public String getShopName() {
     return shopName;
   }

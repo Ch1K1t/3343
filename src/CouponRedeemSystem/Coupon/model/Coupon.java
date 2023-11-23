@@ -83,6 +83,45 @@ public abstract class Coupon {
     );
   }
 
+  @Override
+  public String toString() {
+    if (type.equals("Purchasable")) {
+      return (
+        "Coupon{couponCode=\"" +
+        couponCode +
+        "\", intrinsicValue=" +
+        intrinsicValue +
+        ", points=" +
+        points +
+        ", shop=" +
+        shop +
+        ", owner=" +
+        owner +
+        ", active=" +
+        active +
+        ", type=\"" +
+        type +
+        "\", expirationDate=" +
+        expirationDate +
+        "}"
+      );
+    } else {
+      return (
+        "Coupon{couponCode=\"" +
+        couponCode +
+        "\", intrinsicValue=" +
+        intrinsicValue +
+        ", active=" +
+        active +
+        ", type=\"" +
+        type +
+        "\", expirationDate=" +
+        expirationDate +
+        "}"
+      );
+    }
+  }
+
   public double getIntrinsicValue() {
     return intrinsicValue;
   }
