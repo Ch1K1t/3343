@@ -22,11 +22,13 @@ public class PasswordManager {
   }
 
   private JSONObject getPasswordRefTable() {
-    File file = jsonFileManager.searchFile("ReferenceTable");
-    if (file == null) {
-      file = jsonFileManager.createJson("Password", "ReferenceTable");
+    JSONObject jsonObject = jsonFileManager.searchJSON("ReferenceTable");
+    if (jsonObject != null) {
+      return jsonObject;
+    } else {
+      File file = jsonFileManager.createJSONFile("Password", "ReferenceTable");
+      return jsonFileManager.convertFileTextToJSON(file);
     }
-    return jsonFileManager.convertFileTextToJSON(file);
   }
 
   public boolean createNewPassword(String userName, String password) {

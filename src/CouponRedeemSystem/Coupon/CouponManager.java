@@ -10,7 +10,6 @@ import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.text.SimpleDateFormat;
 import net.sf.json.JSONObject;
-import org.apache.commons.beanutils.LazyDynaBean;
 
 public class CouponManager {
 
@@ -75,25 +74,9 @@ public class CouponManager {
       type,
       expirationDate
     );
+    this.updateCoupon(coupon);
 
-    LazyDynaBean bean = new LazyDynaBean();
-    bean.set("couponCode", coupon.getCouponCode());
-    bean.set("intrinsicValue", coupon.getIntrinsicValue());
-    bean.set("active", coupon.isActive());
-    bean.set("type", coupon.getType());
-    bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
-
-    boolean isSuccess = jsonFileManager.modifyJSON(
-      "Coupon/" + type,
-      couponCode,
-      bean
-    );
-
-    if (isSuccess) {
-      return coupon;
-    } else {
-      return null;
-    }
+    return coupon;
   }
 
   public boolean deleteCoupon(Coupon coupon) {
@@ -106,28 +89,31 @@ public class CouponManager {
   public boolean updateCoupon(Coupon coupon) {
     String type = coupon.getType();
 
-    LazyDynaBean bean = new LazyDynaBean();
+    JSONObject jsonObject = new JSONObject();
     if (type.equals("Purchasable")) {
-      bean.set("couponCode", coupon.getCouponCode());
-      bean.set("intrinsicValue", coupon.getIntrinsicValue());
-      bean.set("points", coupon.getPoints());
-      bean.set("shop", coupon.getShop().getShopName());
-      bean.set("owner", coupon.getOwner());
-      bean.set("active", coupon.isActive());
-      bean.set("type", coupon.getType());
-      bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
+      jsonObject.put("couponCode", coupon.getCouponCode());
+      jsonObject.put("intrinsicValue", coupon.getIntrinsicValue());
+      jsonObject.put("points", coupon.getPoints());
+      jsonObject.put("shop", coupon.getShop().getShopName());
+      jsonObject.put(
+        "owner",
+        coupon.getOwner() == null ? "null" : coupon.getOwner()
+      );
+      jsonObject.put("active", coupon.isActive());
+      jsonObject.put("type", coupon.getType());
+      jsonObject.put("expirationDate", sdf.format(coupon.getExpirationDate()));
     } else {
-      bean.set("couponCode", coupon.getCouponCode());
-      bean.set("intrinsicValue", coupon.getIntrinsicValue());
-      bean.set("active", coupon.isActive());
-      bean.set("type", coupon.getType());
-      bean.set("expirationDate", sdf.format(coupon.getExpirationDate()));
+      jsonObject.put("couponCode", coupon.getCouponCode());
+      jsonObject.put("intrinsicValue", coupon.getIntrinsicValue());
+      jsonObject.put("active", coupon.isActive());
+      jsonObject.put("type", coupon.getType());
+      jsonObject.put("expirationDate", sdf.format(coupon.getExpirationDate()));
     }
 
     return jsonFileManager.modifyJSON(
       "Coupon/" + type,
       coupon.getCouponCode(),
-      bean
+      jsonObject
     );
   }
 
@@ -182,7 +168,7 @@ public class CouponManager {
 
   public String jsonToString(JSONObject jsonObject) {
     String result = "";
-    
+
     String couponCode = jsonObject.getString("couponCode");
     double intrinsicValue = jsonObject.getDouble("intrinsicValue");
     boolean active = jsonObject.getBoolean("active");

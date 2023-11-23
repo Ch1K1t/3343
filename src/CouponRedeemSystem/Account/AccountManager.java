@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.List;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.apache.commons.beanutils.LazyDynaBean;
 
 public class AccountManager {
 
@@ -67,18 +66,22 @@ public class AccountManager {
   public boolean updateAccount(Account account) {
     String role = account.getRole();
 
-    LazyDynaBean bean = new LazyDynaBean();
-    bean.set("userName", account.getUserName());
-    bean.set("role", role);
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("userName", account.getUserName());
+    jsonObject.put("role", role);
     if (role.equals("User")) {
-      bean.set("points", account.getPoints());
-      bean.set("couponIDs", account.getCouponIDs());
-      bean.set("age", account.getAge());
-      bean.set("telNo", account.getTelNo());
-      bean.set("dateOfBirth", sdf.format(account.getDateOfBirth()));
+      jsonObject.put("points", account.getPoints());
+      jsonObject.put("couponIDs", account.getCouponIDs());
+      jsonObject.put("age", account.getAge());
+      jsonObject.put("telNo", account.getTelNo());
+      jsonObject.put("dateOfBirth", sdf.format(account.getDateOfBirth()));
     }
 
-    return jsonFileManager.modifyJSON("Account", account.getUserName(), bean);
+    return jsonFileManager.modifyJSON(
+      "Account",
+      account.getUserName(),
+      jsonObject
+    );
   }
 
   public Account getAccount(String userName) {

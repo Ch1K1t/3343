@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.apache.commons.beanutils.LazyDynaBean;
 
 public class ShopManager {
 
@@ -44,13 +43,13 @@ public class ShopManager {
   }
 
   public boolean updateShop(Shop shop) {
-    LazyDynaBean bean = new LazyDynaBean();
-    bean.set("shopName", shop.getShopName());
-    bean.set("couponList", shop.getPurchasableCouponList());
-    bean.set("staffList", shop.getStaffList());
-    bean.set("discountList", shop.getDiscountList());
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("shopName", shop.getShopName());
+    jsonObject.put("couponList", shop.getPurchasableCouponList());
+    jsonObject.put("staffList", shop.getStaffList());
+    jsonObject.put("discountList", shop.getDiscountList());
 
-    return jsonFileManager.modifyJSON("Shop", shop.getShopName(), bean);
+    return jsonFileManager.modifyJSON("Shop", shop.getShopName(), jsonObject);
   }
 
   public Shop getShop(String shopName) {

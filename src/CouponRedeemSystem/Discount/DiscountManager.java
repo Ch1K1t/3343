@@ -7,7 +7,6 @@ import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import net.sf.json.JSONObject;
-import org.apache.commons.beanutils.LazyDynaBean;
 import org.apache.commons.lang.time.DateUtils;
 
 public class DiscountManager {
@@ -64,18 +63,18 @@ public class DiscountManager {
   }
 
   public boolean updateDiscount(Discount discount) {
-    LazyDynaBean bean = new LazyDynaBean();
-    bean.set("discountName", discount.getDiscountName());
-    bean.set("shop", discount.getShop().getShopName());
-    bean.set("startDate", sdf.format(discount.getStartDate()));
-    bean.set("expireDate", sdf.format(discount.getExpireDate()));
-    bean.set("value", discount.getValue());
-    bean.set("active", discount.validateTime());
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("discountName", discount.getDiscountName());
+    jsonObject.put("shop", discount.getShop().getShopName());
+    jsonObject.put("startDate", sdf.format(discount.getStartDate()));
+    jsonObject.put("expireDate", sdf.format(discount.getExpireDate()));
+    jsonObject.put("value", discount.getValue());
+    jsonObject.put("active", discount.validateTime());
 
     return jsonFileManager.modifyJSON(
       "Discount",
       discount.getDiscountName(),
-      bean
+      jsonObject
     );
   }
 
