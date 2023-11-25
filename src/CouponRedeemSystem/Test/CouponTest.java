@@ -11,7 +11,7 @@ import org.junit.Test;
 public class CouponTest extends MainTest {
 
   @Test
-  public void createPurchasableCouponObject() throws ParseException {
+  public void createPurchasableCouponObjectTest() throws ParseException {
     Shop shop = new Shop("shopTest");
     String couponCode = "pCouponTest";
     double intrinsicValue = 10.0;
@@ -52,7 +52,7 @@ public class CouponTest extends MainTest {
   }
 
   @Test
-  public void createRedeemableCouponObject() throws ParseException {
+  public void createRedeemableCouponObjectTest() throws ParseException {
     String couponCode = "rCouponTest";
     double intrinsicValue = 10.0;
     String type = "Redeemable";
@@ -83,7 +83,7 @@ public class CouponTest extends MainTest {
   }
 
   @Test
-  public void createPurchasableCouponJSON() {
+  public void createPurchasableCouponJSONTest() {
     Shop shop = new Shop("shopTest");
     String couponCode = "pCouponTest";
     double intrinsicValue = 10.0;
@@ -126,7 +126,7 @@ public class CouponTest extends MainTest {
   }
 
   @Test
-  public void createRedeemableCouponJSON() {
+  public void createRedeemableCouponJSONTest() {
     String couponCode = "rCouponTest";
     double intrinsicValue = 10.0;
     String type = "Redeemable";

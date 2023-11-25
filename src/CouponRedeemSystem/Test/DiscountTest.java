@@ -11,7 +11,7 @@ import org.junit.Test;
 public class DiscountTest extends MainTest {
 
   @Test
-  public void createDiscountObject() throws ParseException {
+  public void createDiscountObjectTest() throws ParseException {
     Shop shop = new Shop("shopTest");
     String discountName = "discountTest";
     double value = 10.0;
@@ -45,7 +45,7 @@ public class DiscountTest extends MainTest {
   }
 
   @Test
-  public void createDiscountJSON() {
+  public void createDiscountJSONTest() {
     Shop shop = new Shop("shopTest");
     String discountName = "discountTest";
     double value = 10.0;

@@ -21,7 +21,7 @@ public class PasswordManager {
     return instance;
   }
 
-  private JSONObject getPasswordRefTable() {
+  public JSONObject getPasswordRefTable() {
     JSONObject jsonObject = jsonFileManager.searchJSON("ReferenceTable");
     if (jsonObject != null) {
       return jsonObject;

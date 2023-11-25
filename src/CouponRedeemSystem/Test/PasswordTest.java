@@ -1,13 +1,33 @@
 package CouponRedeemSystem.Test;
 
 import CouponRedeemSystem.Test.model.MainTest;
+import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class PasswordTest extends MainTest {
 
   @Test
-  public void createPassword() {
+  public void getPasswordRefTableTest() {
+    // Already have a reference table
+    JSONObject jsonObject = passwordManager.getPasswordRefTable();
+    JSONObject expected = jsonFileManager.searchJSON("ReferenceTable");
+
+    Assert.assertEquals(expected.toString(), jsonObject.toString());
+  }
+
+  @Test
+  public void getPasswordRefTableTest2() {
+    // No reference table
+    jsonFileManager.deleteJSON("Password", "ReferenceTable");
+    JSONObject jsonObject = passwordManager.getPasswordRefTable();
+    JSONObject expected = new JSONObject();
+
+    Assert.assertEquals(expected.toString(), jsonObject.toString());
+  }
+
+  @Test
+  public void createPasswordTest() {
     String username = "userTest";
     String password = "passwordTest";
 
@@ -17,10 +37,10 @@ public class PasswordTest extends MainTest {
   }
 
   @Test
-  public void createPasswordFail() {}
+  public void createPasswordFailTest() {}
 
   @Test
-  public void deletePassword() {
+  public void deletePasswordTest() {
     String username = "userTest";
     String password = "passwordTest";
 
@@ -30,7 +50,7 @@ public class PasswordTest extends MainTest {
   }
 
   @Test
-  public void deletePasswordFail() {
+  public void deletePasswordFailTest() {
     String username = "userTest";
 
     boolean result = passwordManager.deletePassword(username);
@@ -38,7 +58,7 @@ public class PasswordTest extends MainTest {
   }
 
   @Test
-  public void checkPassword() {
+  public void checkPasswordTest() {
     String username = "userTest";
     String password = "passwordTest";
 
@@ -49,7 +69,7 @@ public class PasswordTest extends MainTest {
   }
 
   @Test
-  public void checkPasswordFail() {
+  public void checkPasswordFailTest() {
     String username = "userTest";
     String password = "passwordTest";
 

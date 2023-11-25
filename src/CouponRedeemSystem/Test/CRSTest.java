@@ -9,7 +9,7 @@ import org.junit.Test;
 public class CRSTest extends MainTest {
 
   @Test
-  public void createJSONFile() {
+  public void createJSONFileTest() {
     String dirName = "Test";
     String fileName = "test";
 
@@ -19,10 +19,10 @@ public class CRSTest extends MainTest {
   }
 
   @Test
-  public void createJSONFileFail() {}
+  public void createJSONFileFailTest() {}
 
   @Test
-  public void modifyJSONFile() {
+  public void modifyJSONFileTest() {
     String dirName = "Test";
     String fileName = "test";
     JSONObject content = new JSONObject();
@@ -35,10 +35,10 @@ public class CRSTest extends MainTest {
   }
 
   @Test
-  public void modifyJSONFileFail() {}
+  public void modifyJSONFileFailTest() {}
 
   @Test
-  public void searchFile() {
+  public void searchFileTest() {
     String dirName = "Test";
     String fileName = "test";
 
@@ -53,7 +53,7 @@ public class CRSTest extends MainTest {
   }
 
   @Test
-  public void searchFileFail() {
+  public void searchFileFailTest() {
     String dirName = "Test";
     String fileName = "test";
 
@@ -65,7 +65,7 @@ public class CRSTest extends MainTest {
   }
 
   @Test
-  public void convertFileTextToJSON() {
+  public void convertFileTextToJSONTest() {
     String dirName = "Test";
     String fileName = "test";
     String contentKey = "test";
@@ -84,10 +84,10 @@ public class CRSTest extends MainTest {
   }
 
   @Test
-  public void convertFileTextToJSONFail() {}
+  public void convertFileTextToJSONFailTest() {}
 
   @Test
-  public void searchJSONFile() {
+  public void searchJSONFileTest() {
     String dirName = "Test";
     String fileName = "test";
 
@@ -99,7 +99,7 @@ public class CRSTest extends MainTest {
   }
 
   @Test
-  public void searchJSONFileFail() {
+  public void searchJSONFileFailTest() {
     String fileName = "test";
 
     JSONObject json = jsonFileManager.searchJSON(fileName);
@@ -107,7 +107,7 @@ public class CRSTest extends MainTest {
   }
 
   @Test
-  public void deleteJSONFile() {
+  public void deleteJSONFileTest() {
     String dirName = "Test";
     String fileName = "test";
 

@@ -11,7 +11,7 @@ import org.junit.Test;
 public class ShopTest extends MainTest {
 
   @Test
-  public void createShopObject() {
+  public void createShopObjectTest() {
     String shopName = "shopTest";
     ArrayList<String> couponList = new ArrayList<>();
     ArrayList<String> staffList = new ArrayList<>();
@@ -35,7 +35,7 @@ public class ShopTest extends MainTest {
   }
 
   @Test
-  public void createShopJSON() {
+  public void createShopJSONTest() {
     String shopName = "shopTest";
     List<String> couponList = new ArrayList<>();
     List<String> staffList = new ArrayList<>();

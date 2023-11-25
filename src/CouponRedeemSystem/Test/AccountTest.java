@@ -12,7 +12,7 @@ import org.junit.Test;
 public class AccountTest extends MainTest {
 
   @Test
-  public void createNonUserAccountObject() {
+  public void createNonUserAccountObjectTest() {
     String username = "userTest";
     String[] roleList = new String[] { "Admin", "Shop", "Staff" };
 
@@ -28,7 +28,7 @@ public class AccountTest extends MainTest {
   }
 
   @Test
-  public void createUserAccountObject() throws ParseException {
+  public void createUserAccountObjectTest() throws ParseException {
     String username = "userTest";
     String role = "User";
     int age = 20;
@@ -66,7 +66,7 @@ public class AccountTest extends MainTest {
   }
 
   @Test
-  public void createNonUserAccountJSON() {
+  public void createNonUserAccountJSONTest() {
     String username = "userTest";
     String[] roleList = new String[] { "Admin", "Shop", "Staff" };
 
@@ -87,7 +87,7 @@ public class AccountTest extends MainTest {
   }
 
   @Test
-  public void createUserAccountJSON() {
+  public void createUserAccountJSONTest() {
     String username = "userTest";
     String role = "User";
     int age = 20;
