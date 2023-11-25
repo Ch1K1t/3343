@@ -52,12 +52,12 @@ public class PasswordManager {
 
   public boolean checkPasswordValid(String userName, String password) {
     JSONObject jsonObject = getPasswordRefTable();
-    String textBeforeEncrypt = jsonObject.getString(userName);
+    Object textBeforeEncrypt = jsonObject.get(userName);
     if (textBeforeEncrypt == null) {
       System.out.println("Account is not found!");
       return false;
     }
-    String text = encryptionManager.decryption(textBeforeEncrypt);
+    String text = encryptionManager.decryption(textBeforeEncrypt.toString());
     if (text.equals(password)) {
       return true;
     } else {

@@ -5,9 +5,11 @@
     "deletecoupon",
     "Dyna",
     "hendry",
+    "PKCS",
     "redeemcoupon",
     "signin",
-    "Signout"
+    "Signout",
+    "Zrzpz"
   ],
   "[java]": {
     "editor.defaultFormatter": "mwpb.java-prettier-formatter"

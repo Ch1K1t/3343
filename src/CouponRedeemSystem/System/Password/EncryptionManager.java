@@ -21,7 +21,7 @@ public class EncryptionManager {
 
   private EncryptionManager() {
     try {
-      this.key = generateKey();
+      this.key = new SecretKeySpec(keyStr.getBytes(), "AES");
       this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
     } catch (Exception e) {
       System.out.println(e);
@@ -34,10 +34,6 @@ public class EncryptionManager {
     }
 
     return instance;
-  }
-
-  private SecretKeySpec generateKey() {
-    return new SecretKeySpec(keyStr.getBytes(), "AES");
   }
 
   public String encryption(String textToEncrypt) {

@@ -9,7 +9,7 @@ import org.junit.Test;
 public class CRSTest extends MainTest {
 
   @Test
-  public void createJSONFileTest() {
+  public void createJSONTest() {
     String dirName = "Test";
     String fileName = "test";
 
@@ -22,7 +22,7 @@ public class CRSTest extends MainTest {
   public void createJSONFileFailTest() {}
 
   @Test
-  public void modifyJSONFileTest() {
+  public void modifyJSONTest() {
     String dirName = "Test";
     String fileName = "test";
     JSONObject content = new JSONObject();
@@ -87,7 +87,7 @@ public class CRSTest extends MainTest {
   public void convertFileTextToJSONFailTest() {}
 
   @Test
-  public void searchJSONFileTest() {
+  public void searchJSONTest() {
     String dirName = "Test";
     String fileName = "test";
 
@@ -99,7 +99,7 @@ public class CRSTest extends MainTest {
   }
 
   @Test
-  public void searchJSONFileFailTest() {
+  public void searchJSONFailTest() {
     String fileName = "test";
 
     JSONObject json = jsonFileManager.searchJSON(fileName);
@@ -107,7 +107,7 @@ public class CRSTest extends MainTest {
   }
 
   @Test
-  public void deleteJSONFileTest() {
+  public void deleteJSONTest() {
     String dirName = "Test";
     String fileName = "test";
 

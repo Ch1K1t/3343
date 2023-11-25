@@ -9,6 +9,8 @@ import CouponRedeemSystem.Page.ShopManagerPage;
 import CouponRedeemSystem.Page.StaffPage;
 import CouponRedeemSystem.Page.UserPage;
 import CouponRedeemSystem.Shop.ShopManager;
+import CouponRedeemSystem.System.File.CRSJsonFileManager;
+import net.sf.json.JSONObject;
 
 public class Main {
 
@@ -43,5 +45,20 @@ public class Main {
     // initializeShop();
     // initializeCoupon();
     // initializeDiscount();
+
+    // JSONObject jsonObject = CRSJsonFileManager
+    //   .getInstance()
+    //   .searchJSON("ReferenceTable");
+
+    // JSONObject jsonObject2 = jsonObject;
+    // if (jsonObject2.get("") == null) {
+    //   // if (jsonObject2.getJSONObject("").toString().equals("null")) {
+
+    //   System.out.println("nulla");
+    // }
+
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("a", "b");
+    System.out.println(jsonObject.get("a").toString());
   }
 }

@@ -69,7 +69,19 @@ public class PasswordTest extends MainTest {
   }
 
   @Test
-  public void checkPasswordFailTest() {
+  public void checkPasswordFailTest1() {
+    // No password
+    String username = "userTest";
+    String password = "passwordTest";
+
+    boolean result = passwordManager.checkPasswordValid(username, password);
+    Assert.assertEquals(false, result);
+    passwordManager.deletePassword(username);
+  }
+
+  @Test
+  public void checkPasswordFailTest2() {
+    // Wrong password
     String username = "userTest";
     String password = "passwordTest";
 
