@@ -12,26 +12,31 @@ import org.junit.Test;
 public class AccountTest extends MainTest {
 
   @Test
-  public void createPasswordTest(){
+  public void createPasswordTest() {
     String username = "userTest";
     String password = "passwordTest";
 
-    accountManager.createPassword(username,password);
-    JSONObject jsonObject=passwordManager.getPasswordRefTable();
-    String text=jsonObject.get(username).toString();
-    Assert.assertEquals(true,encryptionManager.decryption(text).equals(password));
+    accountManager.createPassword(username, password);
+    JSONObject jsonObject = passwordManager.getPasswordRefTable();
+    String text = jsonObject.get(username).toString();
+    Assert.assertEquals(
+      true,
+      encryptionManager.decryption(text).equals(password)
+    );
     passwordManager.deletePassword(username);
   }
 
   @Test
-  public void createPasswordTestFail(){
+  public void createPasswordTestFail() {
     String username = "userTest";
+    String role = "Admin";
     String password = "passwordTest";
 
-    accountManager.createPassword(username,password);
-    boolean result= accountManager.createPassword(username,password);
-    Assert.assertEquals(false,result);
+    Account account = accountManager.createAccount(username, role);
+    boolean result = accountManager.createPassword(username, password);
+    Assert.assertEquals(false, result);
     passwordManager.deletePassword(username);
+    accountManager.deleteAccount(account);
   }
 
   @Test
@@ -150,55 +155,54 @@ public class AccountTest extends MainTest {
   }
 
   @Test
-  public void deleteAccountTest(){
+  public void deleteAccountTest() {
     String username = "userTest";
-    String role="Admin";
+    String role = "Admin";
 
-    Account account=accountManager.createAccount(username, role);
-    boolean result=accountManager.deleteAccount(account);
-    Assert.assertEquals(true,result);
+    Account account = accountManager.createAccount(username, role);
+    boolean result = accountManager.deleteAccount(account);
+    Assert.assertEquals(true, result);
   }
 
   @Test
-  public void deleteAccountTestFail(){
+  public void deleteAccountTestFail() {
     String username = "userTest";
-    String role="Admin";
+    String role = "Admin";
 
-    Account account= new Account(userName,role);
-    boolean result=accountManager.deleteAccount(account);
-    Assert.assertEquals(false,result);
+    Account account = new Account(username, role);
+    boolean result = accountManager.deleteAccount(account);
+    Assert.assertEquals(false, result);
   }
 
   @Test
-  public void getAccountTest(){
+  public void getAccountTest() {
     String username = "userTest";
-    String role="Admin";
+    String role = "Admin";
 
-    Account account1=accountManager.createAccount(username,role);
-    Account account2=accountManager.getAccount(username);
-    Assert.assertEquals(account1.toString(),account2.toString());
+    Account account1 = accountManager.createAccount(username, role);
+    Account account2 = accountManager.getAccount(username);
+    Assert.assertEquals(account1.toString(), account2.toString());
     accountManager.deleteAccount(account1);
   }
 
   @Test
-  public void getAccountTestFail(){
+  public void getAccountTestFail() {
     String username = "userTest";
-    String role="Admin";
 
-    Account account=accountManager.getAccount(username);
-    Assert.assertEquals(null,account);
+    Account account = accountManager.getAccount(username);
+    Assert.assertEquals(null, account);
   }
 
   @Test
-  public void extractAccountFromJsonTest(){
+  public void extractAccountFromJsonTest() {
     String username = "userTest";
-    String role="Admin";
+    String role = "Admin";
 
-    Account account1=accountManager.createAccount(username,role);
-    JSONObject jsonObject=jsonFileManager.searchJSON(username);
-    Account account2=accountManager.extractAccountFromJson(jsonObject);
+    Account account1 = accountManager.createAccount(username, role);
+    JSONObject jsonObject = jsonFileManager.searchJSON(username);
+    Account account2 = accountManager.extractAccountFromJson(jsonObject);
 
-    Assert.assertEquals(account1.toString(),account2.toString());
+    Assert.assertEquals(account1.toString(), account2.toString());
     accountManager.deleteAccount(account1);
   }
 }
