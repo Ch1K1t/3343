@@ -79,13 +79,6 @@ public class CouponManager {
     return coupon;
   }
 
-  public boolean deleteCoupon(Coupon coupon) {
-    return jsonFileManager.deleteJSON(
-      "Coupon/" + coupon.getType(),
-      coupon.getCouponCode()
-    );
-  }
-
   public boolean updateCoupon(Coupon coupon) {
     String type = coupon.getType();
 
@@ -117,6 +110,13 @@ public class CouponManager {
     );
   }
 
+  public boolean deleteCoupon(Coupon coupon) {
+    return jsonFileManager.deleteJSON(
+      "Coupon/" + coupon.getType(),
+      coupon.getCouponCode()
+    );
+  }
+
   public Coupon getCoupon(String couponCode) {
     JSONObject couponJson = jsonFileManager.searchJSON(couponCode);
 
@@ -127,7 +127,7 @@ public class CouponManager {
     }
   }
 
-  private Coupon extractCouponFromJson(JSONObject couponJson) {
+  public Coupon extractCouponFromJson(JSONObject couponJson) {
     double intrinsicValue = couponJson.getDouble("intrinsicValue");
     boolean active = couponJson.getBoolean("active");
     String couponCode = couponJson.getString("couponCode");

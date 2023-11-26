@@ -37,9 +37,6 @@ public class PasswordTest extends MainTest {
   }
 
   @Test
-  public void createPasswordFailTest() {}
-
-  @Test
   public void deletePasswordTest() {
     String username = "userTest";
     String password = "passwordTest";

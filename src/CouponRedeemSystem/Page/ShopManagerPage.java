@@ -38,7 +38,8 @@ public class ShopManagerPage extends Page {
     ShopManager shopManager = ShopManager.getInstance();
 
     String shopName = strInput("shop name");
-    boolean isDeleted = shopManager.deleteShop(shopName);
+    Shop shop = shopManager.getShop(shopName);
+    boolean isDeleted = shopManager.deleteShop(shop);
 
     if (isDeleted) {
       System.out.println();

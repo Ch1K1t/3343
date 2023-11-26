@@ -59,10 +59,6 @@ public class AccountManager {
     return account;
   }
 
-  public boolean deleteAccount(Account account) {
-    return jsonFileManager.deleteJSON("Account", account.getUserName());
-  }
-
   public boolean updateAccount(Account account) {
     String role = account.getRole();
 
@@ -82,6 +78,10 @@ public class AccountManager {
       account.getUserName(),
       jsonObject
     );
+  }
+
+  public boolean deleteAccount(Account account) {
+    return jsonFileManager.deleteJSON("Account", account.getUserName());
   }
 
   public Account getAccount(String userName) {

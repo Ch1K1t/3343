@@ -32,16 +32,6 @@ public class ShopManager {
     return shop;
   }
 
-  public boolean deleteShop(String shopName) {
-    Shop shop = getShop(shopName);
-    if (shop == null) {
-      System.out.println("Shop " + shopName + " does not exist");
-      return false;
-    }
-
-    return jsonFileManager.deleteJSON("Shop", shopName);
-  }
-
   public boolean updateShop(Shop shop) {
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("shopName", shop.getShopName());
@@ -50,6 +40,15 @@ public class ShopManager {
     jsonObject.put("discountList", shop.getDiscountList());
 
     return jsonFileManager.modifyJSON("Shop", shop.getShopName(), jsonObject);
+  }
+
+  public boolean deleteShop(Shop shop) {
+    if (shop == null) {
+      System.out.println("Shop does not exist");
+      return false;
+    }
+
+    return jsonFileManager.deleteJSON("Shop", shop.getShopName());
   }
 
   public Shop getShop(String shopName) {

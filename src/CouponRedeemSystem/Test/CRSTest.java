@@ -19,9 +19,6 @@ public class CRSTest extends MainTest {
   }
 
   @Test
-  public void createJSONFileFailTest() {}
-
-  @Test
   public void modifyJSONTest() {
     String dirName = "Test";
     String fileName = "test";
@@ -33,9 +30,6 @@ public class CRSTest extends MainTest {
     Assert.assertEquals(content, json);
     jsonFileManager.deleteJSON(dirName, fileName);
   }
-
-  @Test
-  public void modifyJSONFileFailTest() {}
 
   @Test
   public void searchFileTest() {
@@ -82,9 +76,6 @@ public class CRSTest extends MainTest {
     Assert.assertEquals(content, json);
     jsonFileManager.deleteJSON(dirName, fileName);
   }
-
-  @Test
-  public void convertFileTextToJSONFailTest() {}
 
   @Test
   public void searchJSONTest() {

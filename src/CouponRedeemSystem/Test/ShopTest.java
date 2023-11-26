@@ -11,7 +11,7 @@ import org.junit.Test;
 public class ShopTest extends MainTest {
 
   @Test
-  public void createShopObjectTest() {
+  public void createShopTest() {
     String shopName = "shopTest";
     ArrayList<String> couponList = new ArrayList<>();
     ArrayList<String> staffList = new ArrayList<>();
@@ -35,7 +35,18 @@ public class ShopTest extends MainTest {
   }
 
   @Test
-  public void createShopJSONTest() {
+  public void createShopTestFail() {
+    String shopName = "shopTest";
+
+    Shop shop = shopManager.createShop(shopName);
+    Shop shop2 = shopManager.createShop(shopName);
+
+    Assert.assertEquals(null, shop2);
+    shopManager.deleteShop(shop);
+  }
+
+  @Test
+  public void updateShopTest() {
     String shopName = "shopTest";
     List<String> couponList = new ArrayList<>();
     List<String> staffList = new ArrayList<>();
@@ -58,5 +69,14 @@ public class ShopTest extends MainTest {
 
     Assert.assertEquals(expectedOutput, shopManager.jsonToString(shopJson));
     jsonFileManager.deleteJSON("Shop", shopName);
+  }
+
+  @Test
+  public void deleteShopTest() {
+    String shopName = "shopTest";
+
+    Shop shop = shopManager.createShop(shopName);
+    boolean result = shopManager.deleteShop(shop);
+    Assert.assertEquals(true, result);
   }
 }
