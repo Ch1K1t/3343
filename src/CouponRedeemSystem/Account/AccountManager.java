@@ -94,7 +94,7 @@ public class AccountManager {
     }
   }
 
-  private Account extractAccountFromJson(JSONObject accountJson) {
+  public Account extractAccountFromJson(JSONObject accountJson) {
     try {
       String userName = accountJson.getString("userName");
       String role = accountJson.getString("role");
