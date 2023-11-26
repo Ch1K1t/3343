@@ -76,7 +76,6 @@ public class PasswordTest extends MainTest {
 
     boolean result = passwordManager.checkPasswordValid(username, password);
     Assert.assertEquals(false, result);
-    passwordManager.deletePassword(username);
   }
 
   @Test
@@ -88,6 +87,5 @@ public class PasswordTest extends MainTest {
     passwordManager.createNewPassword(username, password);
     boolean result = passwordManager.checkPasswordValid(username, "password");
     Assert.assertEquals(false, result);
-    passwordManager.deletePassword(username);
   }
 }
