@@ -41,7 +41,6 @@ public class PasswordManager {
 
   public boolean deletePassword(String userName) {
     JSONObject jsonObject = getPasswordRefTable();
-    System.out.println(jsonObject.get(userName));
     if (jsonObject.get(userName) == null) {
       return false;
     }

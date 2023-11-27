@@ -5,7 +5,10 @@ import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.Test.model.MainTest;
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.time.DateUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -299,6 +302,42 @@ public class CouponTest extends MainTest {
     Coupon coupon2 = couponManager.extractCouponFromJson(couponJson);
 
     Assert.assertEquals(coupon.toString(), coupon2.toString());
+    couponManager.deleteCoupon(coupon);
+  }
+
+  @Test
+  public void pointConversionTest() {
+    String couponCode = "rCouponTest";
+    double intrinsicValue = 10.0;
+    String type = "Redeemable";
+    String expirationDate = sdf.format(DateUtils.addYears(new Date(), 1));
+
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(new Date());
+    int thisYear = cal.get(Calendar.YEAR);
+    boolean isThisYearLeap =
+      ((thisYear % 4 == 0) && (thisYear % 100 != 0) || (thisYear % 400 == 0));
+    int nextYear = cal.get(Calendar.YEAR) + 1;
+    boolean isNextYearLeap =
+      ((nextYear % 4 == 0) && (nextYear % 100 != 0) || (nextYear % 400 == 0));
+
+    Coupon coupon = couponManager.createCoupon(
+      couponCode,
+      intrinsicValue,
+      type,
+      expirationDate
+    );
+
+    double result = coupon.pointConversion();
+
+    if (isThisYearLeap) {
+      Assert.assertEquals(intrinsicValue + 182, result, 0.0);
+    } else if (isNextYearLeap) {
+      Assert.assertEquals(intrinsicValue + 183, result, 0.0);
+    } else {
+      Assert.assertEquals(intrinsicValue + 182.5, result, 0.0);
+    }
+
     couponManager.deleteCoupon(coupon);
   }
 }

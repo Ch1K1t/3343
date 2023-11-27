@@ -79,4 +79,89 @@ public class ShopTest extends MainTest {
     boolean result = shopManager.deleteShop(shop);
     Assert.assertEquals(true, result);
   }
+
+  @Test
+  public void deleteShopTestFail() {
+    String shopName = "shopTest";
+
+    Shop shop = new Shop(shopName);
+    boolean result = shopManager.deleteShop(shop);
+    Assert.assertEquals(false, result);
+  }
+
+  @Test
+  public void getShopTest() {
+    String shopName = "shopTest";
+
+    Shop shop = shopManager.createShop(shopName);
+    Shop shop2 = shopManager.getShop(shopName);
+
+    Assert.assertEquals(shop.toString(), shop2.toString());
+    shopManager.deleteShop(shop);
+  }
+
+  @Test
+  public void getShopTestFail() {
+    String shopName = "shopTest";
+
+    Shop shop = shopManager.getShop(shopName);
+
+    Assert.assertEquals(null, shop);
+  }
+
+  @Test
+  public void getShopByStaffTest() {
+    String shopName = "shopTest";
+    String staffName = "staffTest";
+
+    Shop shop1 = shopManager.createShop(shopName);
+    shop1.addStaff(staffName);
+    shopManager.updateShop(shop1);
+
+    Shop shop2 = shopManager.getShopByStaff(staffName);
+
+    Assert.assertEquals(shop1.toString(), shop2.toString());
+    shopManager.deleteShop(shop1);
+  }
+
+  @Test
+  public void getShopByStaffTestFail() {
+    String staffName = "staffTest";
+
+    Shop shop = shopManager.getShopByStaff(staffName);
+
+    Assert.assertEquals(null, shop);
+  }
+
+  @Test
+  public void getShopListTest() {
+    String shopName = "shopTest";
+    String shopName2 = "shopTest2";
+
+    List<Shop> shopList = new ArrayList<>();
+    shopList.add(shopManager.createShop(shopName));
+    shopList.add(shopManager.createShop(shopName2));
+
+    List<Shop> shopList2 = shopManager.getShopList();
+
+    for (int i = 0; i < shopList.size(); i++) {
+      Assert.assertEquals(
+        shopList.get(i).toString(),
+        shopList2.get(i).toString()
+      );
+      shopManager.deleteShop(shopList.get(i));
+    }
+  }
+
+  @Test
+  public void extractShopFromJsonTest() {
+    String shopName = "shopTest";
+
+    Shop shop1 = shopManager.createShop(shopName);
+    JSONObject shopJson = jsonFileManager.searchJSON(shopName);
+    Shop shop2 = shopManager.extractShopFromJson(shopJson);
+
+    Assert.assertEquals(shop1.toString(), shop2.toString());
+    shopManager.deleteShop(shop1);
+  }
 }

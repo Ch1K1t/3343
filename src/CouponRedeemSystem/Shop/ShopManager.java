@@ -44,7 +44,6 @@ public class ShopManager {
 
   public boolean deleteShop(Shop shop) {
     if (shop == null) {
-      System.out.println("Shop does not exist");
       return false;
     }
 
@@ -83,7 +82,7 @@ public class ShopManager {
     return shopList;
   }
 
-  private Shop extractShopFromJson(JSONObject shopJson) {
+  public Shop extractShopFromJson(JSONObject shopJson) {
     String shopName = shopJson.getString("shopName");
     JSONArray Arr = shopJson.getJSONArray("couponList");
     List<String> couponList = new ArrayList<>();

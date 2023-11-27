@@ -6,6 +6,7 @@ import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.time.DateUtils;
 
@@ -45,9 +46,9 @@ public class DiscountManager {
       Discount discount = new Discount(
         discountName,
         shop,
+        value,
         startDate,
-        expireDate,
-        value
+        expireDate
       );
       this.updateDiscount(discount);
 
@@ -56,10 +57,6 @@ public class DiscountManager {
       e.printStackTrace();
       return null;
     }
-  }
-
-  public boolean deleteDiscount(Discount discount) {
-    return jsonFileManager.deleteJSON("Discount", discount.getDiscountName());
   }
 
   public boolean updateDiscount(Discount discount) {
@@ -78,6 +75,10 @@ public class DiscountManager {
     );
   }
 
+  public boolean deleteDiscount(Discount discount) {
+    return jsonFileManager.deleteJSON("Discount", discount.getDiscountName());
+  }
+
   public Discount getDiscount(String discountName) {
     JSONObject discountJson = jsonFileManager.searchJSON(discountName);
 
@@ -88,7 +89,7 @@ public class DiscountManager {
     }
   }
 
-  private Discount extractDiscountFromJson(JSONObject discountJson) {
+  public Discount extractDiscountFromJson(JSONObject discountJson) {
     ShopManager shopManager = ShopManager.getInstance();
 
     String discountName = discountJson.getString("discountName");
@@ -97,17 +98,10 @@ public class DiscountManager {
     String expireDate = discountJson.getString("expireDate");
     double value = discountJson.getDouble("value");
 
-    return new Discount(discountName, shop, startDate, expireDate, value);
+    return new Discount(discountName, shop, value, startDate, expireDate);
   }
 
   public String jsonToString(JSONObject jsonObject) {
-    /*
-     *  private String discountName;
-  private Shop shop;
-  private Date startDate;
-  private Date expireDate;
-  private double value;
-     */
     String discountName = jsonObject.getString("discountName");
     String shopName = jsonObject.getString("shop");
     String startDate = jsonObject.getString("startDate");
@@ -132,8 +126,8 @@ public class DiscountManager {
   public void generateDemoDiscount() {
     ShopManager shopManager = ShopManager.getInstance();
     Shop shop1 = shopManager.getShop("shop1");
-    createDiscount("discount1", shop1, 2, "22/11/2023", 10);
+    createDiscount("discount1", shop1, 2, sdf.format(new Date()), 7);
     Shop shop2 = shopManager.getShop("shop2");
-    createDiscount("discount2", shop2, 2, "22/11/2023", 5);
+    createDiscount("discount2", shop2, 2, "01/12/2023", 5);
   }
 }

@@ -1,11 +1,16 @@
 package CouponRedeemSystem.Test;
 
 import CouponRedeemSystem.Account.model.Account;
+import CouponRedeemSystem.Coupon.model.Coupon;
+import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.Test.model.MainTest;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.time.DateUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -204,5 +209,105 @@ public class AccountTest extends MainTest {
 
     Assert.assertEquals(account1.toString(), account2.toString());
     accountManager.deleteAccount(account1);
+  }
+
+  @Test
+  public void couponToPointsTest() {
+    String username = "userTest";
+    String role = "User";
+    int age = 20;
+    String telNo = "12345678";
+    String dateOfBirth = "11/11/2000";
+
+    Account account = accountManager.createAccount(
+      username,
+      role,
+      age,
+      telNo,
+      dateOfBirth
+    );
+
+    String couponCode = "rCouponTest";
+    double intrinsicValue = 10.0;
+    String type = "Redeemable";
+    String expirationDate = sdf.format(DateUtils.addYears(new Date(), 1));
+
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(new Date());
+    int thisYear = cal.get(Calendar.YEAR);
+    boolean isThisYearLeap =
+      ((thisYear % 4 == 0) && (thisYear % 100 != 0) || (thisYear % 400 == 0));
+    int nextYear = cal.get(Calendar.YEAR) + 1;
+    boolean isNextYearLeap =
+      ((nextYear % 4 == 0) && (nextYear % 100 != 0) || (nextYear % 400 == 0));
+
+    Coupon coupon = couponManager.createCoupon(
+      couponCode,
+      intrinsicValue,
+      type,
+      expirationDate
+    );
+
+    account.couponToPoints(coupon);
+
+    if (isThisYearLeap) {
+      Assert.assertEquals(intrinsicValue + 182, account.getPoints(), 0.0);
+    } else if (isNextYearLeap) {
+      Assert.assertEquals(intrinsicValue + 183, account.getPoints(), 0.0);
+    } else {
+      Assert.assertEquals(intrinsicValue + 182.5, account.getPoints(), 0.0);
+    }
+
+    Assert.assertEquals(false, coupon.isActive());
+
+    accountManager.deleteAccount(account);
+    couponManager.deleteCoupon(coupon);
+  }
+
+  @Test
+  public void pointsToCouponTest() {
+    String username = "userTest";
+    String role = "User";
+    int age = 20;
+    String telNo = "12345678";
+    String dateOfBirth = "11/11/2000";
+
+    Account account = accountManager.createAccount(
+      username,
+      role,
+      age,
+      telNo,
+      dateOfBirth
+    );
+    account.setPoints(100.0);
+    accountManager.updateAccount(account);
+
+    Shop shop = new Shop("shopTest");
+    String couponCode = "pCouponTest";
+    double intrinsicValue = 10.0;
+    double points = 15.0;
+    String type = "Purchasable";
+    String expirationDate = "11/11/2025";
+
+    Coupon coupon = couponManager.createCoupon(
+      couponCode,
+      intrinsicValue,
+      points,
+      shop,
+      type,
+      expirationDate
+    );
+
+    account.pointsToCoupon(coupon);
+
+    Assert.assertEquals(85.0, account.getPoints(), 0.0);
+    List<String> couponIDs = new ArrayList<String>();
+    couponIDs.add(coupon.getCouponCode());
+    Assert.assertEquals(couponIDs, account.getCouponIDs());
+
+    Assert.assertEquals(account, coupon.getOwner());
+
+    accountManager.deleteAccount(account);
+    couponManager.deleteCoupon(coupon);
   }
 }

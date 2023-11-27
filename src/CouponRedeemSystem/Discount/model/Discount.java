@@ -9,9 +9,9 @@ public class Discount {
 
   private String discountName;
   private Shop shop;
+  private double value;
   private Date startDate;
   private Date expireDate;
-  private double value;
 
   private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -20,16 +20,16 @@ public class Discount {
   public Discount(
     String discountName,
     Shop shop,
+    double value,
     String startDate,
-    String expireDate,
-    double value
+    String expireDate
   ) {
     try {
       this.discountName = discountName;
       this.shop = shop;
+      this.value = value;
       this.startDate = sdf.parse(startDate);
       this.expireDate = sdf.parse(expireDate);
-      this.value = value;
     } catch (ParseException e) {
       e.printStackTrace();
     }

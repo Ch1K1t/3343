@@ -1,8 +1,8 @@
 {
   "discountName": "discount2",
   "shop": "shop2",
-  "startDate": "22/11/2023",
-  "expireDate": "27/11/2023",
+  "startDate": "01/12/2023",
+  "expireDate": "06/12/2023",
   "value": 2,
-  "active": true
+  "active": false
 }

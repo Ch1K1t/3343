@@ -9,29 +9,33 @@ import CouponRedeemSystem.Page.ShopManagerPage;
 import CouponRedeemSystem.Page.StaffPage;
 import CouponRedeemSystem.Page.UserPage;
 import CouponRedeemSystem.Shop.ShopManager;
-import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import net.sf.json.JSONObject;
+import java.io.File;
 
 public class Main {
 
-  public static void initializeUser() {
-    AccountManager accountManager = AccountManager.getInstance();
-    accountManager.generateDemoAccount();
+  public static void initializeSystem() {
+    AccountManager.getInstance().generateDemoAccount();
+    ShopManager.getInstance().generateDemoShop();
+    CouponManager.getInstance().generateDemoCoupon();
+    DiscountManager.getInstance().generateDemoDiscount();
   }
 
-  public static void initializeShop() {
-    ShopManager shopManager = ShopManager.getInstance();
-    shopManager.generateDemoShop();
-  }
+  public static void initializeTest() {
+    String[] dirList = new String[] {
+      "Account",
+      "Coupon/Purchasable",
+      "Coupon/Redeemable",
+      "Shop",
+      "Discount",
+      "Password",
+    };
 
-  public static void initializeCoupon() {
-    CouponManager couponManager = CouponManager.getInstance();
-    couponManager.generateDemoCoupon();
-  }
-
-  public static void initializeDiscount() {
-    DiscountManager discountManager = DiscountManager.getInstance();
-    discountManager.generateDemoDiscount();
+    for (String dir : dirList) {
+      File[] fileList = new File("Data/" + dir).listFiles();
+      for (File file : fileList) {
+        file.delete();
+      }
+    }
   }
 
   public static void main(String[] args) {
@@ -40,11 +44,7 @@ public class Main {
     // new ShopManagerPage().execute();
     // new StaffPage("staff1").execute();
     // new UserPage("user").execute();
-
-    // initializeUser();
-    // initializeShop();
-    // initializeCoupon();
-    // initializeDiscount();
-
+    initializeSystem();
+    // initializeTest();
   }
 }
