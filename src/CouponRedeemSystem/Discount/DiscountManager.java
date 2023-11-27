@@ -66,7 +66,6 @@ public class DiscountManager {
     jsonObject.put("startDate", sdf.format(discount.getStartDate()));
     jsonObject.put("expireDate", sdf.format(discount.getExpireDate()));
     jsonObject.put("value", discount.getValue());
-    jsonObject.put("active", discount.validateTime());
 
     return jsonFileManager.modifyJSON(
       "Discount",
