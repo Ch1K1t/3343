@@ -122,12 +122,4 @@ public class DiscountManager {
       "}"
     );
   }
-
-  public void generateDemoDiscount() {
-    ShopManager shopManager = ShopManager.getInstance();
-    Shop shop1 = shopManager.getShop("shop1");
-    createDiscount("discount1", shop1, 2, sdf.format(new Date()), 7);
-    Shop shop2 = shopManager.getShop("shop2");
-    createDiscount("discount2", shop2, 2, "01/12/2023", 5);
-  }
 }

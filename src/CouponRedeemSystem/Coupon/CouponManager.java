@@ -214,14 +214,4 @@ public class CouponManager {
 
     return result;
   }
-
-  public void generateDemoCoupon() {
-    ShopManager shopManager = ShopManager.getInstance();
-    Shop shop1 = shopManager.getShop("shop1");
-    createCoupon("P1", 10.0, 15.0, shop1, "Purchasable", "11/11/2025");
-    Shop shop2 = shopManager.getShop("shop2");
-    createCoupon("P2", 10.0, 15.0, shop2, "Purchasable", "11/11/2025");
-    createCoupon("R1", 1.0, "Redeemable", "11/11/2025");
-    createCoupon("R2", 1.0, "Redeemable", "11/11/2025");
-  }
 }

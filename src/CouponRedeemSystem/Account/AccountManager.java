@@ -161,28 +161,4 @@ public class AccountManager {
 
     return result;
   }
-
-  public void generateDemoAccount() {
-    boolean isCreated;
-    isCreated = createPassword("admin", "admin");
-    if (isCreated) {
-      createAccount("admin", "Admin");
-    }
-    isCreated = createPassword("shop", "shop");
-    if (isCreated) {
-      createAccount("shop", "Shop Manager");
-    }
-    isCreated = createPassword("staff1", "staff1");
-    if (isCreated) {
-      createAccount("staff1", "Staff");
-    }
-    isCreated = createPassword("staff2", "staff2");
-    if (isCreated) {
-      createAccount("staff2", "Staff");
-    }
-    isCreated = createPassword("user", "user");
-    if (isCreated) {
-      createAccount("user", "User", 20, "12345678", "01/01/2000");
-    }
-  }
 }

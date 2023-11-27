@@ -121,17 +121,4 @@ public class ShopManager {
       "}"
     );
   }
-
-  public void generateDemoShop() {
-    Shop shop = createShop("shop1");
-    shop.addStaff("staff1");
-    shop.addPurchasableCoupon("P1");
-    shop.addDiscount("discount1");
-    updateShop(shop);
-    Shop shop2 = createShop("shop2");
-    shop2.addStaff("staff2");
-    shop2.addPurchasableCoupon("P2");
-    shop2.addDiscount("discount2");
-    updateShop(shop2);
-  }
 }

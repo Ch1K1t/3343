@@ -37,7 +37,7 @@ public class Discount {
 
   public boolean validateTime() {
     return (
-      new Date().compareTo(this.startDate) > 0 &&
+      new Date().compareTo(this.startDate) >= 0 &&
       new Date().compareTo(this.expireDate) < 0
     );
   }

@@ -4,6 +4,7 @@ import CouponRedeemSystem.Discount.model.Discount;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.Test.model.MainTest;
 import java.text.ParseException;
+import java.util.Date;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.time.DateUtils;
 import org.junit.Assert;
@@ -16,7 +17,7 @@ public class DiscountTest extends MainTest {
     String discountName = "discountTest";
     Shop shop = new Shop("shopTest");
     double value = 10.0;
-    String startDate = "11/11/2020";
+    String startDate = "11/11/2023";
     int day = 10;
     String expireDate = sdf.format(
       DateUtils.addDays(sdf.parse(startDate), day)
@@ -52,7 +53,7 @@ public class DiscountTest extends MainTest {
     String discountName = "discountTest";
     Shop shop = new Shop("shopTest");
     double value = 10.0;
-    String startDate = "11/11/2020";
+    String startDate = "11/11/2023";
     int day = 10;
 
     Discount discount = discountManager.createDiscount(
@@ -79,7 +80,7 @@ public class DiscountTest extends MainTest {
     String discountName = "discountTest";
     Shop shop = new Shop("shopTest");
     double value = 10.0;
-    String startDate = "11/11/2020";
+    String startDate = "11/11/2023";
     int day = 10;
     String expireDate = sdf.format(
       DateUtils.addDays(sdf.parse(startDate), day)
@@ -120,7 +121,7 @@ public class DiscountTest extends MainTest {
     String discountName = "discountTest";
     Shop shop = new Shop("shopTest");
     double value = 10.0;
-    String startDate = "11/11/2020";
+    String startDate = "11/11/2023";
     int day = 10;
 
     Discount discount = discountManager.createDiscount(
@@ -141,7 +142,7 @@ public class DiscountTest extends MainTest {
     String discountName = "discountTest";
     Shop shop = new Shop("shopTest");
     double value = 10.0;
-    String startDate = "11/11/2020";
+    String startDate = "11/11/2023";
     int day = 10;
 
     String expireDate = sdf.format(
@@ -166,7 +167,7 @@ public class DiscountTest extends MainTest {
     String shopName = "shopTest";
     Shop shop = shopManager.createShop(shopName);
     double value = 10.0;
-    String startDate = "11/11/2020";
+    String startDate = "11/11/2023";
     int day = 10;
 
     Discount discount = discountManager.createDiscount(
@@ -198,7 +199,7 @@ public class DiscountTest extends MainTest {
     String discountName = "discountTest";
     Shop shop = shopManager.createShop("shopTest");
     double value = 10.0;
-    String startDate = "11/11/2020";
+    String startDate = "11/11/2023";
     int day = 10;
 
     Discount discount = discountManager.createDiscount(
@@ -213,6 +214,48 @@ public class DiscountTest extends MainTest {
     Discount discount2 = discountManager.extractDiscountFromJson(discountJson);
 
     Assert.assertEquals(discount.toString(), discount2.toString());
+    discountManager.deleteDiscount(discount);
+    shopManager.deleteShop(shop);
+  }
+
+  @Test
+  public void validateTimeTest() {
+    String discountName = "discountTest";
+    Shop shop = shopManager.createShop("shopTest");
+    double value = 10.0;
+    String startDate = sdf.format(DateUtils.addDays(new Date(), -1));
+    int day = 10;
+
+    Discount discount = discountManager.createDiscount(
+      discountName,
+      shop,
+      value,
+      startDate,
+      day
+    );
+
+    Assert.assertEquals(true, discount.validateTime());
+    discountManager.deleteDiscount(discount);
+    shopManager.deleteShop(shop);
+  }
+
+  @Test
+  public void validateTimeTestFail() {
+    String discountName = "discountTest";
+    Shop shop = shopManager.createShop("shopTest");
+    double value = 10.0;
+    String startDate = sdf.format(DateUtils.addDays(new Date(), 1));
+    int day = 10;
+
+    Discount discount = discountManager.createDiscount(
+      discountName,
+      shop,
+      value,
+      startDate,
+      day
+    );
+
+    Assert.assertEquals(false, discount.validateTime());
     discountManager.deleteDiscount(discount);
     shopManager.deleteShop(shop);
   }
