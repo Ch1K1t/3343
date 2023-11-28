@@ -31,7 +31,7 @@ public class Main {
     accountManager.createPassword("staff2", "staff2");
     accountManager.createAccount("staff2", "Staff");
     accountManager.createPassword("user", "user");
-    accountManager.createAccount("user", "User", 20, "12345678", "01/01/2000");
+    accountManager.createAccount("user", "User", "12345678", "28/11/2000");
 
     Shop shop1 = shopManager.createShop("shop1");
     shop1.addStaff("staff1");
@@ -92,13 +92,13 @@ public class Main {
   }
 
   public static void main(String[] args) {
-    // new HomePage().execute();
+    new HomePage().execute();
     // new AdminPage().execute();
     // new ShopManagerPage().execute();
     // new StaffPage("staff1").execute();
     // new UserPage("user").execute();
 
-    // initializeSystem();
     // clearSystem();
+    // initializeSystem();
   }
 }

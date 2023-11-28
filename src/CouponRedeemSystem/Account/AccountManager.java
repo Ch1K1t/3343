@@ -41,11 +41,10 @@ public class AccountManager {
   public Account createAccount(
     String userName,
     String role,
-    int age,
     String telNo,
     String dob
   ) {
-    Account account = new Account(userName, role, age, telNo, dob);
+    Account account = new Account(userName, role, telNo, dob);
     this.updateAccount(account);
 
     return account;

@@ -86,7 +86,6 @@ public class AccountTest extends MainTest {
     Account account = accountManager.createAccount(
       userName,
       role,
-      age,
       telNo,
       dateOfBirth
     );
@@ -132,7 +131,7 @@ public class AccountTest extends MainTest {
   public void updateUserAccount() {
     String role = "User";
 
-    accountManager.createAccount(userName, role, age, telNo, dateOfBirth);
+    accountManager.createAccount(userName, role, telNo, dateOfBirth);
 
     JSONObject accountJson = jsonFileManager.searchJSON(userName);
 
@@ -208,7 +207,6 @@ public class AccountTest extends MainTest {
     Account account = accountManager.createAccount(
       userName,
       role,
-      age,
       telNo,
       dateOfBirth
     );
@@ -255,7 +253,6 @@ public class AccountTest extends MainTest {
     Account account = accountManager.createAccount(
       userName,
       role,
-      age,
       telNo,
       dateOfBirth
     );
