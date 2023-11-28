@@ -23,15 +23,10 @@ public class ShopManagerPage extends Page {
     ShopManager shopManager = ShopManager.getInstance();
 
     String shopName = strInput("shop name");
-    Shop shop = shopManager.createShop(shopName);
+    shopManager.createShop(shopName);
 
-    if (shop != null) {
-      System.out.println();
-      System.out.println("Shop created");
-    } else {
-      System.out.println();
-      System.out.println("Shop creation failed");
-    }
+    System.out.println();
+    System.out.println("Shop created");
   }
 
   public void deleteShop() {

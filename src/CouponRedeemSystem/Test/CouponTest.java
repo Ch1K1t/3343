@@ -9,19 +9,34 @@ import java.util.Calendar;
 import java.util.Date;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.time.DateUtils;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class CouponTest extends MainTest {
 
+  private final Shop shop = shopManager.createShop(shopName);
+
+  @After
+  public void reset() {
+    Coupon coupon = couponManager.getCoupon("rCouponTest");
+    if (coupon != null) {
+      couponManager.deleteCoupon(coupon);
+    }
+    coupon = couponManager.getCoupon("pCouponTest");
+    if (coupon != null) {
+      couponManager.deleteCoupon(coupon);
+    }
+    Shop shop = shopManager.getShop(shopName);
+    if (shop != null) {
+      shopManager.deleteShop(shop);
+    }
+  }
+
   @Test
   public void createPurchasableCouponTest() throws ParseException {
-    Shop shop = new Shop("shopTest");
     String couponCode = "pCouponTest";
-    double intrinsicValue = 10.0;
-    double points = 15.0;
     String type = "Purchasable";
-    String expirationDate = "11/11/2025";
 
     Coupon coupon = couponManager.createCoupon(
       couponCode,
@@ -52,19 +67,14 @@ public class CouponTest extends MainTest {
       "}";
 
     Assert.assertEquals(expectedOutput, coupon.toString());
-    couponManager.deleteCoupon(coupon);
   }
 
   @Test
   public void createPurchasableCouponTestFail() {
-    Shop shop = new Shop("shopTest");
     String couponCode = "pCouponTest";
-    double intrinsicValue = 10.0;
-    double points = 15.0;
     String type = "Purchasable";
-    String expirationDate = "11/11/2025";
 
-    Coupon coupon = couponManager.createCoupon(
+    couponManager.createCoupon(
       couponCode,
       intrinsicValue,
       points,
@@ -82,15 +92,12 @@ public class CouponTest extends MainTest {
     );
 
     Assert.assertEquals(null, coupon2);
-    couponManager.deleteCoupon(coupon);
   }
 
   @Test
   public void createRedeemableCouponTest() throws ParseException {
     String couponCode = "rCouponTest";
-    double intrinsicValue = 10.0;
     String type = "Redeemable";
-    String expirationDate = "11/11/2025";
 
     Coupon coupon = couponManager.createCoupon(
       couponCode,
@@ -113,17 +120,14 @@ public class CouponTest extends MainTest {
       "}";
 
     Assert.assertEquals(expectedOutput, coupon.toString());
-    couponManager.deleteCoupon(coupon);
   }
 
   @Test
   public void createRedeemableCouponTestFail() {
     String couponCode = "rCouponTest";
-    double intrinsicValue = 10.0;
     String type = "Redeemable";
-    String expirationDate = "11/11/2025";
 
-    Coupon coupon = couponManager.createCoupon(
+    couponManager.createCoupon(
       couponCode,
       intrinsicValue,
       type,
@@ -137,19 +141,14 @@ public class CouponTest extends MainTest {
     );
 
     Assert.assertEquals(null, coupon2);
-    couponManager.deleteCoupon(coupon);
   }
 
   @Test
   public void updatePurchasableCouponTest() {
-    Shop shop = new Shop("shopTest");
     String couponCode = "pCouponTest";
-    double intrinsicValue = 10.0;
-    double points = 15.0;
     String type = "Purchasable";
-    String expirationDate = "11/11/2025";
 
-    Coupon coupon = couponManager.createCoupon(
+    couponManager.createCoupon(
       couponCode,
       intrinsicValue,
       points,
@@ -180,17 +179,14 @@ public class CouponTest extends MainTest {
       "\"}";
 
     Assert.assertEquals(expectedOutput, couponManager.jsonToString(couponJson));
-    couponManager.deleteCoupon(coupon);
   }
 
   @Test
   public void updateRedeemableCouponTest() {
     String couponCode = "rCouponTest";
-    double intrinsicValue = 10.0;
     String type = "Redeemable";
-    String expirationDate = "11/11/2025";
 
-    Coupon coupon = couponManager.createCoupon(
+    couponManager.createCoupon(
       couponCode,
       intrinsicValue,
       type,
@@ -213,15 +209,12 @@ public class CouponTest extends MainTest {
       "\"}";
 
     Assert.assertEquals(expectedOutput, couponManager.jsonToString(couponJson));
-    couponManager.deleteCoupon(coupon);
   }
 
   @Test
   public void deleteCouponTest() {
     String couponCode = "rCouponTest";
-    double intrinsicValue = 10.0;
     String type = "Redeemable";
-    String expirationDate = "11/11/2025";
 
     Coupon coupon = couponManager.createCoupon(
       couponCode,
@@ -237,9 +230,7 @@ public class CouponTest extends MainTest {
   @Test
   public void deleteCouponTestFail() throws ParseException {
     String couponCode = "rCouponTest";
-    double intrinsicValue = 10.0;
     String type = "Redeemable";
-    String expirationDate = "11/11/2025";
 
     Coupon coupon = new RedeemableCoupon(
       couponCode,
@@ -257,9 +248,7 @@ public class CouponTest extends MainTest {
   @Test
   public void getCouponTest() throws ParseException {
     String couponCode = "rCouponTest";
-    double intrinsicValue = 10.0;
     String type = "Redeemable";
-    String expirationDate = "11/11/2025";
 
     Coupon coupon = couponManager.createCoupon(
       couponCode,
@@ -271,7 +260,6 @@ public class CouponTest extends MainTest {
     Coupon result = couponManager.getCoupon(couponCode);
 
     Assert.assertEquals(coupon.toString(), result.toString());
-    couponManager.deleteCoupon(coupon);
   }
 
   @Test
@@ -286,9 +274,7 @@ public class CouponTest extends MainTest {
   @Test
   public void extractCouponFromJsonTest() {
     String couponCode = "rCouponTest";
-    double intrinsicValue = 10.0;
     String type = "Redeemable";
-    String expirationDate = "11/11/2025";
 
     Coupon coupon = couponManager.createCoupon(
       couponCode,
@@ -298,17 +284,16 @@ public class CouponTest extends MainTest {
       type,
       expirationDate
     );
+
     JSONObject couponJson = jsonFileManager.searchJSON(couponCode);
     Coupon coupon2 = couponManager.extractCouponFromJson(couponJson);
 
     Assert.assertEquals(coupon.toString(), coupon2.toString());
-    couponManager.deleteCoupon(coupon);
   }
 
   @Test
   public void pointConversionTest() {
     String couponCode = "rCouponTest";
-    double intrinsicValue = 10.0;
     String type = "Redeemable";
     String expirationDate = sdf.format(DateUtils.addYears(new Date(), 1));
 
@@ -337,7 +322,5 @@ public class CouponTest extends MainTest {
     } else {
       Assert.assertEquals(intrinsicValue + 182.5, result, 0.0);
     }
-
-    couponManager.deleteCoupon(coupon);
   }
 }

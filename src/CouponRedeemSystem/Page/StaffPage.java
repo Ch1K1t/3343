@@ -79,7 +79,7 @@ public class StaffPage extends Page {
 
     double points = doubleInput("coupon's purchasing value");
 
-    Coupon coupon = couponManager.createCoupon(
+    couponManager.createCoupon(
       couponCode,
       intrinsicValue,
       points,
@@ -88,13 +88,8 @@ public class StaffPage extends Page {
       expirationDate
     );
 
-    if (coupon != null) {
-      System.out.println();
-      System.out.println("Coupon created");
-    } else {
-      System.out.println();
-      System.out.println("Coupon creation failed");
-    }
+    System.out.println();
+    System.out.println("Coupon created");
   }
 
   public void deleteCoupon() {
@@ -168,21 +163,10 @@ public class StaffPage extends Page {
 
     int day = intInput("discount's duration in day");
 
-    Discount discount = discountManager.createDiscount(
-      discountName,
-      shop,
-      value,
-      startDate,
-      day
-    );
+    discountManager.createDiscount(discountName, shop, value, startDate, day);
 
-    if (discount != null) {
-      System.out.println();
-      System.out.println("Discount created");
-    } else {
-      System.out.println();
-      System.out.println("Discount creation failed");
-    }
+    System.out.println();
+    System.out.println("Discount created");
   }
 
   public void deleteDiscount() {

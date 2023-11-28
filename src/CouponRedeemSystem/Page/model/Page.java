@@ -1,7 +1,6 @@
 package CouponRedeemSystem.Page.model;
 
 import CouponRedeemSystem.Account.AccountManager;
-import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import java.text.ParseException;
@@ -11,7 +10,8 @@ import java.util.Scanner;
 
 public abstract class Page {
 
-  protected Scanner s;
+  protected static Scanner s;
+
   protected final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   public Page() {
@@ -173,24 +173,17 @@ public abstract class Page {
       shop.addStaff(username);
       shopManager.updateShop(shop);
 
-      Account account = accountManager.createAccount(username, role);
-      if (account != null) {
-        System.out.println();
-        System.out.println("Account created");
-      } else {
-        System.out.println();
-        System.out.println("Account creation failed");
-      }
+      accountManager.createAccount(username, role);
+      System.out.println();
+      System.out.println("Account created");
+
       return;
     } else if (!role.equals("User")) {
-      Account account = accountManager.createAccount(username, role);
-      if (account != null) {
-        System.out.println();
-        System.out.println("Account created");
-      } else {
-        System.out.println();
-        System.out.println("Account creation failed");
-      }
+      accountManager.createAccount(username, role);
+      System.out.println();
+      System.out.println("Account created");
+
+      return;
     }
 
     int age = intInput("age");
@@ -199,27 +192,21 @@ public abstract class Page {
 
     String dob = beforeDateInput("date of birth");
 
-    Account account = accountManager.createAccount(
-      username,
-      "user",
-      age,
-      telNo,
-      dob
-    );
-    if (account != null) {
-      System.out.println();
-      System.out.println("Account created");
-    } else {
-      System.out.println();
-      System.out.println("Account creation failed");
-    }
+    accountManager.createAccount(username, "user", age, telNo, dob);
+    System.out.println();
+    System.out.println("Account created");
   }
 
   public void exit() {
+    System.out.println();
     System.out.println("Thank you for using Coupon Redeem System");
     System.out.println("Goodbye");
     System.out.println();
     s.close();
     System.exit(0);
+  }
+
+  public static void setS(Scanner s) {
+    Page.s = s;
   }
 }

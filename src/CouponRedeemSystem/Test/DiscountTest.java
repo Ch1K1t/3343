@@ -7,27 +7,36 @@ import java.text.ParseException;
 import java.util.Date;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.time.DateUtils;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class DiscountTest extends MainTest {
 
+  private final Shop shop = shopManager.createShop(shopName);
+
+  @After
+  public void reset() {
+    Shop shop = shopManager.getShop(shopName);
+    if (shop != null) {
+      shopManager.deleteShop(shop);
+    }
+    Discount discount = discountManager.getDiscount(discountName);
+    if (discount != null) {
+      discountManager.deleteDiscount(discount);
+    }
+  }
+
   @Test
   public void createDiscountTest() throws ParseException {
-    String discountName = "discountTest";
-    Shop shop = new Shop("shopTest");
-    double value = 10.0;
-    String startDate = "11/11/2023";
-    int day = 10;
-    String expireDate = sdf.format(
-      DateUtils.addDays(sdf.parse(startDate), day)
-    );
+    Date startDate = sdf.parse(startDateStr);
+    Date expireDate = sdf.parse(expireDateStr);
 
     Discount discount = discountManager.createDiscount(
       discountName,
       shop,
       value,
-      startDate,
+      startDateStr,
       day
     );
 
@@ -37,60 +46,43 @@ public class DiscountTest extends MainTest {
       "\", shop=" +
       shop +
       ", startDate=" +
-      sdf.parse(startDate) +
+      startDate +
       ", expireDate=" +
-      sdf.parse(expireDate) +
+      expireDate +
       ", value=" +
       value +
       "}";
 
     Assert.assertEquals(expectedOutput, discount.toString());
-    discountManager.deleteDiscount(discount);
   }
 
   @Test
   public void createDiscountTestFail() throws ParseException {
-    String discountName = "discountTest";
-    Shop shop = new Shop("shopTest");
-    double value = 10.0;
-    String startDate = "11/11/2023";
-    int day = 10;
-
-    Discount discount = discountManager.createDiscount(
+    discountManager.createDiscount(
       discountName,
       shop,
       value,
-      startDate,
+      startDateStr,
       day
     );
     Discount discount2 = discountManager.createDiscount(
       discountName,
       shop,
       value,
-      startDate,
+      startDateStr,
       day
     );
 
     Assert.assertEquals(null, discount2);
-    discountManager.deleteDiscount(discount);
   }
 
   @Test
   public void updateDiscountTest() throws ParseException {
-    String discountName = "discountTest";
-    Shop shop = new Shop("shopTest");
-    double value = 10.0;
-    String startDate = "11/11/2023";
-    int day = 10;
-    String expireDate = sdf.format(
-      DateUtils.addDays(sdf.parse(startDate), day)
-    );
-
-    Discount discount = discountManager.createDiscount(
+    discountManager.createDiscount(
       discountName,
       shop,
       value,
-      startDate,
+      startDateStr,
       day
     );
 
@@ -100,11 +92,11 @@ public class DiscountTest extends MainTest {
       "{\"discountName\":\"" +
       discountName +
       "\", \"shop\":\"" +
-      shop.getShopName() +
+      shopName +
       "\", \"startDate\":\"" +
-      startDate +
+      startDateStr +
       "\", \"expireDate\":\"" +
-      expireDate +
+      expireDateStr +
       "\", \"value\":" +
       value +
       "}";
@@ -113,22 +105,15 @@ public class DiscountTest extends MainTest {
       expectedOutput,
       discountManager.jsonToString(discountJson)
     );
-    discountManager.deleteDiscount(discount);
   }
 
   @Test
   public void deleteDiscountTest() {
-    String discountName = "discountTest";
-    Shop shop = new Shop("shopTest");
-    double value = 10.0;
-    String startDate = "11/11/2023";
-    int day = 10;
-
     Discount discount = discountManager.createDiscount(
       discountName,
       shop,
       value,
-      startDate,
+      startDateStr,
       day
     );
 
@@ -139,21 +124,12 @@ public class DiscountTest extends MainTest {
 
   @Test
   public void deleteDiscountTestFail() throws ParseException {
-    String discountName = "discountTest";
-    Shop shop = new Shop("shopTest");
-    double value = 10.0;
-    String startDate = "11/11/2023";
-    int day = 10;
-
-    String expireDate = sdf.format(
-      DateUtils.addDays(sdf.parse(startDate), day)
-    );
     Discount discount = new Discount(
       discountName,
       shop,
       value,
-      startDate,
-      expireDate
+      startDateStr,
+      expireDateStr
     );
 
     boolean result = discountManager.deleteDiscount(discount);
@@ -163,32 +139,21 @@ public class DiscountTest extends MainTest {
 
   @Test
   public void getDiscountTest() {
-    String discountName = "discountTest";
-    String shopName = "shopTest";
-    Shop shop = shopManager.createShop(shopName);
-    double value = 10.0;
-    String startDate = "11/11/2023";
-    int day = 10;
-
     Discount discount = discountManager.createDiscount(
       discountName,
       shop,
       value,
-      startDate,
+      startDateStr,
       day
     );
 
     Discount discount2 = discountManager.getDiscount(discountName);
 
     Assert.assertEquals(discount.toString(), discount2.toString());
-    discountManager.deleteDiscount(discount);
-    shopManager.deleteShop(shop);
   }
 
   @Test
   public void getDiscountTestFail() {
-    String discountName = "discountTest";
-
     Discount discount = discountManager.getDiscount(discountName);
 
     Assert.assertEquals(null, discount);
@@ -196,17 +161,11 @@ public class DiscountTest extends MainTest {
 
   @Test
   public void extractDiscountFromJsonTest() {
-    String discountName = "discountTest";
-    Shop shop = shopManager.createShop("shopTest");
-    double value = 10.0;
-    String startDate = "11/11/2023";
-    int day = 10;
-
     Discount discount = discountManager.createDiscount(
       discountName,
       shop,
       value,
-      startDate,
+      startDateStr,
       day
     );
 
@@ -214,38 +173,26 @@ public class DiscountTest extends MainTest {
     Discount discount2 = discountManager.extractDiscountFromJson(discountJson);
 
     Assert.assertEquals(discount.toString(), discount2.toString());
-    discountManager.deleteDiscount(discount);
-    shopManager.deleteShop(shop);
   }
 
   @Test
   public void validateTimeTest() {
-    String discountName = "discountTest";
-    Shop shop = shopManager.createShop("shopTest");
-    double value = 10.0;
-    String startDate = sdf.format(DateUtils.addDays(new Date(), -1));
-    int day = 10;
+    String startDateStr = sdf.format(DateUtils.addDays(new Date(), -1));
 
     Discount discount = discountManager.createDiscount(
       discountName,
       shop,
       value,
-      startDate,
+      startDateStr,
       day
     );
 
     Assert.assertEquals(true, discount.validateTime());
-    discountManager.deleteDiscount(discount);
-    shopManager.deleteShop(shop);
   }
 
   @Test
   public void validateTimeTestFail() {
-    String discountName = "discountTest";
-    Shop shop = shopManager.createShop("shopTest");
-    double value = 10.0;
     String startDate = sdf.format(DateUtils.addDays(new Date(), 1));
-    int day = 10;
 
     Discount discount = discountManager.createDiscount(
       discountName,
@@ -256,7 +203,5 @@ public class DiscountTest extends MainTest {
     );
 
     Assert.assertEquals(false, discount.validateTime());
-    discountManager.deleteDiscount(discount);
-    shopManager.deleteShop(shop);
   }
 }

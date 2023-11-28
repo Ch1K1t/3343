@@ -3,7 +3,6 @@ package CouponRedeemSystem.Page;
 import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
-import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Page.model.Page;
 
 public class AdminPage extends Page {
@@ -33,39 +32,27 @@ public class AdminPage extends Page {
       return;
     }
 
-    boolean isDeleted = accountManager.deleteAccount(account);
-    if (isDeleted) {
-      System.out.println();
-      System.out.println("Account deleted");
-    } else {
-      System.out.println();
-      System.out.println("Account deletion failed");
-    }
+    accountManager.deleteAccount(account);
+    System.out.println();
+    System.out.println("Account deleted");
   }
 
   public void createRedeemableCoupon() {
     CouponManager couponManager = CouponManager.getInstance();
 
+    String couponCode = strInput("coupon's code");
     double intrinsicValue = doubleInput("coupon's intrinsic value");
-
     String expirationDate = afterDateInput("coupon's expiration date");
 
-    String couponCode = strInput("coupon's code");
-
-    Coupon coupon = couponManager.createCoupon(
+    couponManager.createCoupon(
       couponCode,
       intrinsicValue,
-      expirationDate,
-      "Redeemable"
+      "Redeemable",
+      expirationDate
     );
 
-    if (coupon != null) {
-      System.out.println();
-      System.out.println("Coupon created");
-    } else {
-      System.out.println();
-      System.out.println("Coupon creation failed");
-    }
+    System.out.println();
+    System.out.println("Coupon created");
   }
 
   public void execute() {

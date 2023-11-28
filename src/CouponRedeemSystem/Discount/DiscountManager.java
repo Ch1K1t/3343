@@ -6,7 +6,6 @@ import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.time.DateUtils;
 

@@ -11,66 +11,80 @@ import java.util.Date;
 import java.util.List;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.time.DateUtils;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class AccountTest extends MainTest {
 
+  // private final String userName = "accountTest";
+  // private final String password = "passwordTest";
+  private final int age = 20;
+
+  // private final String telNo = "12345678";
+  // private final String dateOfBirth = "11/11/2000";
+
+  @After
+  public void reset() {
+    if (
+      passwordManager.checkPasswordValid(userName, password).equals("success")
+    ) {
+      passwordManager.deletePassword(userName);
+    }
+    Account account = accountManager.getAccount(userName);
+    if (account != null) {
+      accountManager.deleteAccount(account);
+    }
+    Coupon coupon = couponManager.getCoupon("rCouponTest");
+    if (coupon != null) {
+      couponManager.deleteCoupon(coupon);
+    }
+    coupon = couponManager.getCoupon("pCouponTest");
+    if (coupon != null) {
+      couponManager.deleteCoupon(coupon);
+    }
+  }
+
   @Test
   public void createPasswordTest() {
-    String username = "userTest";
-    String password = "passwordTest";
-
-    accountManager.createPassword(username, password);
+    accountManager.createPassword(userName, password);
     JSONObject jsonObject = passwordManager.getPasswordRefTable();
-    String text = jsonObject.get(username).toString();
+    String text = jsonObject.get(userName).toString();
     Assert.assertEquals(
       true,
       encryptionManager.decryption(text).equals(password)
     );
-    passwordManager.deletePassword(username);
   }
 
   @Test
   public void createPasswordTestFail() {
-    String username = "userTest";
     String role = "Admin";
-    String password = "passwordTest";
 
-    Account account = accountManager.createAccount(username, role);
-    boolean result = accountManager.createPassword(username, password);
+    accountManager.createAccount(userName, role);
+    boolean result = accountManager.createPassword(userName, password);
     Assert.assertEquals(false, result);
-    passwordManager.deletePassword(username);
-    accountManager.deleteAccount(account);
   }
 
   @Test
   public void createNonUserAccountTest() {
-    String username = "userTest";
     String[] roleList = new String[] { "Admin", "Shop", "Staff" };
 
     for (String role : roleList) {
-      Account account = accountManager.createAccount(username, role);
+      Account account = accountManager.createAccount(userName, role);
 
       String expectedOutput =
-        "Account{userName=\"" + "" + username + "\", role=\"" + role + "\"}";
+        "Account{userName=\"" + "" + userName + "\", role=\"" + role + "\"}";
 
       Assert.assertEquals(expectedOutput, account.toString());
-      accountManager.deleteAccount(account);
     }
   }
 
   @Test
   public void createUserAccountTest() throws ParseException {
-    String username = "userTest";
     String role = "User";
-    int age = 20;
-    String telNo = "12345678";
-    String dateOfBirth = "11/11/2000";
-    List<String> couponIDs = new ArrayList<String>();
 
     Account account = accountManager.createAccount(
-      username,
+      userName,
       role,
       age,
       telNo,
@@ -79,7 +93,7 @@ public class AccountTest extends MainTest {
 
     String expectedOutput =
       "Account{userName=\"" +
-      username +
+      userName +
       "\", role=\"" +
       role +
       "\", age=" +
@@ -90,56 +104,41 @@ public class AccountTest extends MainTest {
       sdf.parse(dateOfBirth) +
       ", points=" +
       0.0 +
-      ", couponIDs=" +
-      couponIDs +
-      "}";
+      ", couponIDs=[]}";
 
     Assert.assertEquals(expectedOutput, account.toString());
-    accountManager.deleteAccount(account);
   }
 
   @Test
   public void updateNonUserAccount() {
-    String username = "userTest";
     String[] roleList = new String[] { "Admin", "Shop", "Staff" };
 
     for (String role : roleList) {
-      Account account = accountManager.createAccount(username, role);
+      accountManager.createAccount(userName, role);
 
-      JSONObject accountJson = jsonFileManager.searchJSON(username);
+      JSONObject accountJson = jsonFileManager.searchJSON(userName);
 
       String expectedOutput =
-        "{\"userName\":\"" + username + "\", \"role\":\"" + role + "\"}";
+        "{\"userName\":\"" + userName + "\", \"role\":\"" + role + "\"}";
 
       Assert.assertEquals(
         expectedOutput,
         accountManager.jsonToString(accountJson)
       );
-      accountManager.deleteAccount(account);
     }
   }
 
   @Test
   public void updateUserAccount() {
-    String username = "userTest";
     String role = "User";
-    int age = 20;
-    String telNo = "12345678";
-    String dateOfBirth = "11/11/2000";
 
-    Account account = accountManager.createAccount(
-      username,
-      role,
-      age,
-      telNo,
-      dateOfBirth
-    );
+    accountManager.createAccount(userName, role, age, telNo, dateOfBirth);
 
-    JSONObject accountJson = jsonFileManager.searchJSON(username);
+    JSONObject accountJson = jsonFileManager.searchJSON(userName);
 
     String expectedOutput =
       "{\"userName\":\"" +
-      username +
+      userName +
       "\", \"role\":\"" +
       role +
       "\", \"age\":" +
@@ -156,71 +155,58 @@ public class AccountTest extends MainTest {
       expectedOutput,
       accountManager.jsonToString(accountJson)
     );
-    accountManager.deleteAccount(account);
   }
 
   @Test
   public void deleteAccountTest() {
-    String username = "userTest";
     String role = "Admin";
 
-    Account account = accountManager.createAccount(username, role);
+    Account account = accountManager.createAccount(userName, role);
     boolean result = accountManager.deleteAccount(account);
     Assert.assertEquals(true, result);
   }
 
   @Test
   public void deleteAccountTestFail() {
-    String username = "userTest";
     String role = "Admin";
 
-    Account account = new Account(username, role);
+    Account account = new Account(userName, role);
     boolean result = accountManager.deleteAccount(account);
     Assert.assertEquals(false, result);
   }
 
   @Test
   public void getAccountTest() {
-    String username = "userTest";
     String role = "Admin";
 
-    Account account1 = accountManager.createAccount(username, role);
-    Account account2 = accountManager.getAccount(username);
-    Assert.assertEquals(account1.toString(), account2.toString());
-    accountManager.deleteAccount(account1);
+    Account account = accountManager.createAccount(userName, role);
+    Account account2 = accountManager.getAccount(userName);
+    Assert.assertEquals(account.toString(), account2.toString());
   }
 
   @Test
   public void getAccountTestFail() {
-    String username = "userTest";
-
-    Account account = accountManager.getAccount(username);
+    Account account = accountManager.getAccount(userName);
     Assert.assertEquals(null, account);
   }
 
   @Test
   public void extractAccountFromJsonTest() {
-    String username = "userTest";
     String role = "Admin";
 
-    Account account1 = accountManager.createAccount(username, role);
-    JSONObject jsonObject = jsonFileManager.searchJSON(username);
+    Account account = accountManager.createAccount(userName, role);
+    JSONObject jsonObject = jsonFileManager.searchJSON(userName);
     Account account2 = accountManager.extractAccountFromJson(jsonObject);
 
-    Assert.assertEquals(account1.toString(), account2.toString());
-    accountManager.deleteAccount(account1);
+    Assert.assertEquals(account.toString(), account2.toString());
   }
 
   @Test
   public void couponToPointsTest() {
-    String username = "userTest";
     String role = "User";
-    int age = 20;
-    String telNo = "12345678";
-    String dateOfBirth = "11/11/2000";
 
     Account account = accountManager.createAccount(
-      username,
+      userName,
       role,
       age,
       telNo,
@@ -259,21 +245,15 @@ public class AccountTest extends MainTest {
     }
 
     Assert.assertEquals(false, coupon.isActive());
-
-    accountManager.deleteAccount(account);
-    couponManager.deleteCoupon(coupon);
   }
 
   @Test
   public void pointsToCouponTest() {
-    String username = "userTest";
+    List<String> couponIDs = new ArrayList<String>();
     String role = "User";
-    int age = 20;
-    String telNo = "12345678";
-    String dateOfBirth = "11/11/2000";
 
     Account account = accountManager.createAccount(
-      username,
+      userName,
       role,
       age,
       telNo,
@@ -301,13 +281,10 @@ public class AccountTest extends MainTest {
     account.pointsToCoupon(coupon);
 
     Assert.assertEquals(85.0, account.getPoints(), 0.0);
-    List<String> couponIDs = new ArrayList<String>();
+
     couponIDs.add(coupon.getCouponCode());
     Assert.assertEquals(couponIDs, account.getCouponIDs());
 
     Assert.assertEquals(account, coupon.getOwner());
-
-    accountManager.deleteAccount(account);
-    couponManager.deleteCoupon(coupon);
   }
 }

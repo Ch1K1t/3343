@@ -1,29 +1,22 @@
 package CouponRedeemSystem.Test;
 
-import CouponRedeemSystem.System.Password.EncryptionManager;
 import CouponRedeemSystem.Test.model.MainTest;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class EncryptTest extends MainTest {
 
-  EncryptionManager encryptionManager = EncryptionManager.getInstance();
-
   @Test
   public void encryptionTest() {
-    String textToEncrypt = "123456";
-    String expected = "A/f9RMarL3ZrzpzGjTylKQ==";
+    String result = encryptionManager.encryption(textDecrypted);
 
-    String textEncrypted = encryptionManager.encryption(textToEncrypt);
-    Assert.assertEquals(expected, textEncrypted);
+    Assert.assertEquals(textEncrypted, result);
   }
 
   @Test
   public void decryptionTest() {
-    String textToDecrypt = "A/f9RMarL3ZrzpzGjTylKQ==";
-    String expected = "123456";
+    String result = encryptionManager.decryption(textEncrypted);
 
-    String textDecrypted = encryptionManager.decryption(textToDecrypt);
-    Assert.assertEquals(expected, textDecrypted);
+    Assert.assertEquals(textDecrypted, result);
   }
 }

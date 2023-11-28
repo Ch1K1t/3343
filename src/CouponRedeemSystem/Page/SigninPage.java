@@ -7,24 +7,41 @@ import CouponRedeemSystem.System.Password.PasswordManager;
 
 public class SigninPage extends Page {
 
-  public void execute() {
+  public Account signin() {
     PasswordManager passwordManager = PasswordManager.getInstance();
     AccountManager accountManager = AccountManager.getInstance();
 
-    String username = strInput("user name");
-
+    String userName = strInput("user name");
     String password = strInput("password");
 
-    if (!passwordManager.checkPasswordValid(username, password)) return;
-    System.out.println();
-    System.out.println("Signin successfully");
+    switch (passwordManager.checkPasswordValid(userName, password)) {
+      case "not found":
+        System.out.println();
+        System.out.println("Account is not found!");
+        return null;
+      case "not correct":
+        System.out.println();
+        System.out.println("Password is not correct!");
+        return null;
+      case "success":
+        System.out.println();
+        System.out.println("Signin successfully");
+        Account account = accountManager.getAccount(userName);
+        return account;
+      default:
+        return null;
+    }
+  }
 
-    Account account = accountManager.getAccount(username);
+  public void execute() {
+    Account account = signin();
+    if (account == null) return;
+
     String role = account.getRole();
 
     switch (role) {
       case "User":
-        new UserPage(username).execute();
+        new UserPage(account.getUserName()).execute();
         break;
       case "Admin":
         new AdminPage().execute();
@@ -33,7 +50,7 @@ public class SigninPage extends Page {
         new ShopManagerPage().execute();
         break;
       case "Staff":
-        new StaffPage(username).execute();
+        new StaffPage(account.getUserName()).execute();
         break;
     }
   }

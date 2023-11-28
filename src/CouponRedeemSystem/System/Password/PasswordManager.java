@@ -33,6 +33,10 @@ public class PasswordManager {
 
   public boolean createNewPassword(String userName, String password) {
     JSONObject jsonObject = getPasswordRefTable();
+    if (jsonObject.get(userName) != null) {
+      return false;
+    }
+
     String encryptedPassword = encryptionManager.encryption(password);
     jsonObject.put(userName, encryptedPassword);
 
@@ -50,19 +54,18 @@ public class PasswordManager {
     return jsonFileManager.modifyJSON("Password", "ReferenceTable", jsonObject);
   }
 
-  public boolean checkPasswordValid(String userName, String password) {
+  public String checkPasswordValid(String userName, String password) {
     JSONObject jsonObject = getPasswordRefTable();
     Object textBeforeEncrypt = jsonObject.get(userName);
     if (textBeforeEncrypt == null) {
-      System.out.println("Account is not found!");
-      return false;
+      return "not found";
     }
     String text = encryptionManager.decryption(textBeforeEncrypt.toString());
     if (text.equals(password)) {
-      return true;
+      return "success";
     } else {
-      System.out.println("Password is not correct!");
-      return false;
+      // System.out.println("Password is not correct!");
+      return "not correct";
     }
   }
 }
