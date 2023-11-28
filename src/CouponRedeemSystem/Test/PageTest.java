@@ -1,6 +1,7 @@
 package CouponRedeemSystem.Test;
 
 import CouponRedeemSystem.Account.model.Account;
+import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Page.AdminPage;
 import CouponRedeemSystem.Page.HomePage;
 import CouponRedeemSystem.Page.SigninPage;
@@ -39,6 +40,10 @@ public class PageTest extends MainTest {
     Shop shop = shopManager.getShop(shopName);
     if (shop != null) {
       shopManager.deleteShop(shop);
+    }
+    Coupon coupon = couponManager.getCoupon("couponCode");
+    if (coupon != null) {
+      couponManager.deleteCoupon(coupon);
     }
   }
 
