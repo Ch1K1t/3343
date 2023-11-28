@@ -3,7 +3,6 @@ package CouponRedeemSystem.Test;
 import CouponRedeemSystem.Page.HomePage;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Test.model.MainTest;
-import java.util.Scanner;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
