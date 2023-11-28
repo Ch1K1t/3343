@@ -190,7 +190,7 @@ public abstract class Page {
 
     String dob = beforeDateInput("date of birth");
 
-    accountManager.createAccount(username, "user", telNo, dob);
+    accountManager.createAccount(username, role, telNo, dob);
     System.out.println();
     System.out.println("Account created");
   }
