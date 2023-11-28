@@ -11,8 +11,8 @@ import java.util.Scanner;
 
 public abstract class Page {
 
-  protected static Scanner s;
-  private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+  protected Scanner s;
+  protected final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   public Page() {
     if (s == null) {

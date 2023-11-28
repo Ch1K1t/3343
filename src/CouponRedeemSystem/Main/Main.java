@@ -26,6 +26,7 @@ public class Main {
     accountManager.createAccount("admin", "Admin");
     accountManager.createPassword("shop", "shop");
     accountManager.createAccount("shop", "Shop Manager");
+    accountManager.createPassword("staff1", "staff1");
     accountManager.createAccount("staff1", "Staff");
     accountManager.createPassword("staff2", "staff2");
     accountManager.createAccount("staff2", "Staff");

@@ -3,6 +3,7 @@ package CouponRedeemSystem.Test;
 import CouponRedeemSystem.Page.HomePage;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Test.model.MainTest;
+import java.util.Scanner;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -50,34 +51,35 @@ public class PageTest extends MainTest {
     Assert.assertEquals(input, result);
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
   }
-  // @Test
-  // public void intInputTest() {
-  //   String fieldName = "test field";
-  //   String input = "1";
-  //   systemIn.provideLines(input);
 
-  //   Page Page = new HomePage();
-  //   int result = Page.intInput(fieldName);
-  //   String expectedOutput = "\r\nPlease input the " + fieldName + ":\r\n";
+  @Test
+  public void intInputTest() {
+    String fieldName = "test field";
+    String input = "1";
+    systemIn.provideLines(input);
 
-  //   Assert.assertEquals(Integer.parseInt(input), result);
-  //   Assert.assertEquals(expectedOutput, systemOutRule.getLog());
-  // }
+    Page Page = new HomePage();
+    int result = Page.intInput(fieldName);
+    String expectedOutput = "\r\nPlease input the " + fieldName + ":\r\n";
 
-  // @Test
-  // public void intInputMultipleTest() {
-  //   String fieldName = "test field";
-  //   String input = "1";
-  //   systemIn.provideLines("", input);
+    Assert.assertEquals(Integer.parseInt(input), result);
+    Assert.assertEquals(expectedOutput, systemOutRule.getLog());
+  }
 
-  //   Page Page = new HomePage();
-  //   int result = Page.intInput(fieldName);
-  //   String expectedOutput =
-  //     "\r\nPlease input the " +
-  //     fieldName +
-  //     ":\r\nInvalid value, please input again:\r\n";
+  @Test
+  public void intInputMultipleTest() {
+    String fieldName = "test field";
+    String input = "1";
+    systemIn.provideLines("", input);
 
-  //   Assert.assertEquals(Integer.parseInt(input), result);
-  //   Assert.assertEquals(expectedOutput, systemOutRule.getLog());
-  // }
+    Page Page = new HomePage();
+    int result = Page.intInput(fieldName);
+    String expectedOutput =
+      "\r\nPlease input the " +
+      fieldName +
+      ":\r\nInvalid value, please input again:\r\n";
+
+    Assert.assertEquals(Integer.parseInt(input), result);
+    Assert.assertEquals(expectedOutput, systemOutRule.getLog());
+  }
 }

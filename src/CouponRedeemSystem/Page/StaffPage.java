@@ -9,15 +9,12 @@ import CouponRedeemSystem.Discount.model.Discount;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 public class StaffPage extends Page {
 
   private Account account;
-
-  private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   public StaffPage(String username) {
     AccountManager accountManager = AccountManager.getInstance();
