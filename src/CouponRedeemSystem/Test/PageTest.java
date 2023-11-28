@@ -17,8 +17,6 @@ import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 
 public class PageTest extends MainTest {
 
-  private final Shop shop = shopManager.createShop(shopName);
-
   @Rule
   public TextFromStandardInputStream systemIn = TextFromStandardInputStream.emptyStandardInputStream();
 
@@ -244,6 +242,7 @@ public class PageTest extends MainTest {
   // create Staff account with correct shop name
   @Test
   public void createAccountTest2() {
+    shopManager.createShop(shopName);
     systemIn.provideLines(userName, password, shopName);
 
     Page page = new HomePage();
@@ -260,6 +259,7 @@ public class PageTest extends MainTest {
   // create Staff account with incorrect shop name
   @Test
   public void createAccountTest3() {
+    shopManager.createShop(shopName);
     systemIn.provideLines(userName, password, "incorrectShop", shopName);
 
     Page page = new HomePage();
