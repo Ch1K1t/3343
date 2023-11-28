@@ -3,6 +3,7 @@ package CouponRedeemSystem.Test;
 import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.Util.Util;
 import CouponRedeemSystem.Test.model.MainTest;
 import java.text.ParseException;
 import java.util.Calendar;
@@ -63,7 +64,7 @@ public class CouponTest extends MainTest {
       ", type=\"" +
       type +
       "\", expirationDate=" +
-      sdf.parse(couponExpirationDate) +
+      Util.sdf.parse(couponExpirationDate) +
       "}";
 
     Assert.assertEquals(expectedOutput, coupon.toString());
@@ -116,7 +117,7 @@ public class CouponTest extends MainTest {
       ", type=\"" +
       type +
       "\", expirationDate=" +
-      sdf.parse(couponExpirationDate) +
+      Util.sdf.parse(couponExpirationDate) +
       "}";
 
     Assert.assertEquals(expectedOutput, coupon.toString());
@@ -295,7 +296,7 @@ public class CouponTest extends MainTest {
   public void pointConversionTest() {
     String couponCode = "rCouponTest";
     String type = "Redeemable";
-    String expirationDate = sdf.format(DateUtils.addYears(new Date(), 1));
+    String expirationDate = Util.sdf.format(DateUtils.addYears(new Date(), 1));
 
     Calendar cal = Calendar.getInstance();
     cal.setTime(new Date());

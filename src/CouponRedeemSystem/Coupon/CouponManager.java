@@ -8,14 +8,13 @@ import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
-import java.text.SimpleDateFormat;
+import CouponRedeemSystem.System.Util.Util;
 import net.sf.json.JSONObject;
 
 public class CouponManager {
 
   private static CouponManager instance;
   private CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
-  private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   private CouponManager() {}
 
@@ -94,13 +93,19 @@ public class CouponManager {
       );
       jsonObject.put("active", coupon.isActive());
       jsonObject.put("type", coupon.getType());
-      jsonObject.put("expirationDate", sdf.format(coupon.getExpirationDate()));
+      jsonObject.put(
+        "expirationDate",
+        Util.sdf.format(coupon.getExpirationDate())
+      );
     } else {
       jsonObject.put("couponCode", coupon.getCouponCode());
       jsonObject.put("intrinsicValue", coupon.getIntrinsicValue());
       jsonObject.put("active", coupon.isActive());
       jsonObject.put("type", coupon.getType());
-      jsonObject.put("expirationDate", sdf.format(coupon.getExpirationDate()));
+      jsonObject.put(
+        "expirationDate",
+        Util.sdf.format(coupon.getExpirationDate())
+      );
     }
 
     return jsonFileManager.modifyJSON(

@@ -3,6 +3,7 @@ package CouponRedeemSystem.Test;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.Util.Util;
 import CouponRedeemSystem.Test.model.MainTest;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -86,7 +87,6 @@ public class AccountTest extends MainTest {
     Account account = accountManager.createAccount(
       userName,
       role,
-      age,
       telNo,
       dateOfBirth
     );
@@ -101,7 +101,7 @@ public class AccountTest extends MainTest {
       ", telNo=\"" +
       telNo +
       "\", dateOfBirth=" +
-      sdf.parse(dateOfBirth) +
+      Util.sdf.parse(dateOfBirth) +
       ", points=" +
       0.0 +
       ", couponIDs=[]}";
@@ -132,7 +132,7 @@ public class AccountTest extends MainTest {
   public void updateUserAccount() {
     String role = "User";
 
-    accountManager.createAccount(userName, role, age, telNo, dateOfBirth);
+    accountManager.createAccount(userName, role, telNo, dateOfBirth);
 
     JSONObject accountJson = jsonFileManager.searchJSON(userName);
 
@@ -212,7 +212,6 @@ public class AccountTest extends MainTest {
     Account account = accountManager.createAccount(
       userName,
       role,
-      age,
       telNo,
       dateOfBirth
     );
@@ -257,7 +256,6 @@ public class AccountTest extends MainTest {
     Account account = accountManager.createAccount(
       userName,
       role,
-      age,
       telNo,
       dateOfBirth
     );
@@ -294,7 +292,6 @@ public class AccountTest extends MainTest {
     Account account = accountManager.createAccount(
       userName,
       role,
-      age,
       telNo,
       dateOfBirth
     );
