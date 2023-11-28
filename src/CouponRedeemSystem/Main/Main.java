@@ -8,10 +8,11 @@ import CouponRedeemSystem.Page.HomePage;
 import CouponRedeemSystem.Page.ShopManagerPage;
 import CouponRedeemSystem.Page.StaffPage;
 import CouponRedeemSystem.Page.UserPage;
+import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.Util.Util;
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Main {
@@ -67,7 +68,7 @@ public class Main {
       "discount1",
       shop1,
       2,
-      new SimpleDateFormat("dd/MM/yyyy").format(new Date()),
+      Util.sdf.format(new Date()),
       7
     );
     discountManager.createDiscount("discount2", shop2, 2, "01/12/2023", 5);
@@ -92,13 +93,13 @@ public class Main {
   }
 
   public static void main(String[] args) {
-    new HomePage().execute();
+    // new HomePage().execute();
     // new AdminPage().execute();
     // new ShopManagerPage().execute();
     // new StaffPage("staff1").execute();
     // new UserPage("user").execute();
 
     // clearSystem();
-    // initializeSystem(); 
+    // initializeSystem();
   }
 }

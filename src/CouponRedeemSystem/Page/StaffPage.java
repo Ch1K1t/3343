@@ -9,6 +9,7 @@ import CouponRedeemSystem.Discount.model.Discount;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.Util.Util;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class StaffPage extends Page {
       );
       System.out.println("Coupon Points: " + coupon.getPoints());
       System.out.println(
-        "Coupon Expiration Date: " + sdf.format(coupon.getExpirationDate())
+        "Coupon Expiration Date: " + Util.sdf.format(coupon.getExpirationDate())
       );
     }
 
@@ -134,10 +135,10 @@ public class StaffPage extends Page {
       System.out.println("Discount Name: " + discount.getDiscountName());
       System.out.println("Discount Value: " + discount.getValue());
       System.out.println(
-        "Discount Start Date: " + sdf.format(discount.getStartDate())
+        "Discount Start Date: " + Util.sdf.format(discount.getStartDate())
       );
       System.out.println(
-        "Discount Expire Date: " + sdf.format(discount.getExpireDate())
+        "Discount Expire Date: " + Util.sdf.format(discount.getExpireDate())
       );
       System.out.println();
     }

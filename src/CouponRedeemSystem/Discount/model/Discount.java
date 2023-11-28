@@ -1,8 +1,8 @@
 package CouponRedeemSystem.Discount.model;
 
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.Util.Util;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Discount {
@@ -12,8 +12,6 @@ public class Discount {
   private double value;
   private Date startDate;
   private Date expireDate;
-
-  private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   public Discount() {}
 
@@ -28,8 +26,8 @@ public class Discount {
       this.discountName = discountName;
       this.shop = shop;
       this.value = value;
-      this.startDate = sdf.parse(startDate);
-      this.expireDate = sdf.parse(expireDate);
+      this.startDate = Util.sdf.parse(startDate);
+      this.expireDate = Util.sdf.parse(expireDate);
     } catch (ParseException e) {
       e.printStackTrace();
     }

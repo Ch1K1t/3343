@@ -2,9 +2,9 @@ package CouponRedeemSystem.Coupon.model;
 
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.Util.Util;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -18,8 +18,6 @@ public abstract class Coupon {
   private boolean active;
   private String type;
   private Date expirationDate;
-
-  private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   // Purchasable Coupon
   public Coupon(
@@ -40,7 +38,7 @@ public abstract class Coupon {
       this.owner = owner;
       this.active = active;
       this.type = type;
-      this.expirationDate = sdf.parse(expirationDate);
+      this.expirationDate = Util.sdf.parse(expirationDate);
     } catch (ParseException e) {
       e.printStackTrace();
     }
@@ -59,7 +57,7 @@ public abstract class Coupon {
       this.intrinsicValue = intrinsicValue;
       this.active = active;
       this.type = type;
-      this.expirationDate = sdf.parse(expirationDate);
+      this.expirationDate = Util.sdf.parse(expirationDate);
     } catch (ParseException e) {
       e.printStackTrace();
     }

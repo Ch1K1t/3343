@@ -6,8 +6,8 @@ import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Discount.DiscountManager;
 import CouponRedeemSystem.Discount.model.Discount;
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.Util.Util;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,7 +39,7 @@ public class Account {
     try {
       this.userName = userName;
       this.role = role;
-      this.dateOfBirth = new SimpleDateFormat("dd/MM/yyyy").parse(dateOfBirth);
+      this.dateOfBirth = Util.sdf.parse(dateOfBirth);
       Calendar today = Calendar.getInstance();
       Calendar dob = Calendar.getInstance();
       dob.setTime(this.dateOfBirth);

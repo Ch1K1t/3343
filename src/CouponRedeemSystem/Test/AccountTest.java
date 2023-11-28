@@ -3,6 +3,7 @@ package CouponRedeemSystem.Test;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.Util.Util;
 import CouponRedeemSystem.Test.model.MainTest;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -100,7 +101,7 @@ public class AccountTest extends MainTest {
       ", telNo=\"" +
       telNo +
       "\", dateOfBirth=" +
-      sdf.parse(dateOfBirth) +
+      Util.sdf.parse(dateOfBirth) +
       ", points=" +
       0.0 +
       ", couponIDs=[]}";
@@ -214,7 +215,7 @@ public class AccountTest extends MainTest {
     String couponCode = "rCouponTest";
     double intrinsicValue = 10.0;
     String type = "Redeemable";
-    String expirationDate = sdf.format(DateUtils.addYears(new Date(), 1));
+    String expirationDate = Util.sdf.format(DateUtils.addYears(new Date(), 1));
 
     Calendar cal = Calendar.getInstance();
     cal.setTime(new Date());

@@ -3,16 +3,14 @@ package CouponRedeemSystem.Page.model;
 import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.Util.Util;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
 public abstract class Page {
 
   protected static Scanner s;
-
-  protected final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   public Page() {
     if (s == null) {
@@ -96,7 +94,7 @@ public abstract class Page {
           System.out.println("Invalid date format, please input again:");
           continue;
         }
-        Date date = sdf.parse(dateStr);
+        Date date = Util.sdf.parse(dateStr);
         isBeforeToday = date.compareTo(new Date()) <= 0;
         if (!isBeforeToday) {
           System.out.println("Date must be before today, please input again:");
@@ -128,7 +126,7 @@ public abstract class Page {
           System.out.println("Invalid date format, please input again:");
           continue;
         }
-        Date date = sdf.parse(dateStr);
+        Date date = Util.sdf.parse(dateStr);
         isAfterToday = date.compareTo(new Date()) >= 0;
         if (!isAfterToday) {
           System.out.println("Date must be after today, please input again:");

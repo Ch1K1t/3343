@@ -2,6 +2,7 @@ package CouponRedeemSystem.Test;
 
 import CouponRedeemSystem.Discount.model.Discount;
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.Util.Util;
 import CouponRedeemSystem.Test.model.MainTest;
 import java.text.ParseException;
 import java.util.Date;
@@ -29,8 +30,8 @@ public class DiscountTest extends MainTest {
 
   @Test
   public void createDiscountTest() throws ParseException {
-    Date startDate = sdf.parse(startDateStr);
-    Date expireDate = sdf.parse(expireDateStr);
+    Date startDate = Util.sdf.parse(startDateStr);
+    Date expireDate = Util.sdf.parse(expireDateStr);
 
     Discount discount = discountManager.createDiscount(
       discountName,
@@ -177,7 +178,7 @@ public class DiscountTest extends MainTest {
 
   @Test
   public void validateTimeTest() {
-    String startDateStr = sdf.format(DateUtils.addDays(new Date(), -1));
+    String startDateStr = Util.sdf.format(DateUtils.addDays(new Date(), -1));
 
     Discount discount = discountManager.createDiscount(
       discountName,
@@ -192,7 +193,7 @@ public class DiscountTest extends MainTest {
 
   @Test
   public void validateTimeTestFail() {
-    String startDate = sdf.format(DateUtils.addDays(new Date(), 1));
+    String startDate = Util.sdf.format(DateUtils.addDays(new Date(), 1));
 
     Discount discount = discountManager.createDiscount(
       discountName,

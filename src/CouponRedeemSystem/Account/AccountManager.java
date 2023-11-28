@@ -3,8 +3,8 @@ package CouponRedeemSystem.Account;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import CouponRedeemSystem.System.Password.PasswordManager;
+import CouponRedeemSystem.System.Util.Util;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,8 +16,6 @@ public class AccountManager {
   private static AccountManager instance;
   private CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
   private PasswordManager passwordManager = PasswordManager.getInstance();
-
-  private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   private AccountManager() {}
 
@@ -69,7 +67,7 @@ public class AccountManager {
       jsonObject.put("couponIDs", account.getCouponIDs());
       jsonObject.put("age", account.getAge());
       jsonObject.put("telNo", account.getTelNo());
-      jsonObject.put("dateOfBirth", sdf.format(account.getDateOfBirth()));
+      jsonObject.put("dateOfBirth", Util.sdf.format(account.getDateOfBirth()));
     }
 
     return jsonFileManager.modifyJSON(
@@ -104,7 +102,7 @@ public class AccountManager {
       int age = accountJson.getInt("age");
       String telNo = accountJson.getString("telNo");
       double points = accountJson.getDouble("points");
-      Date dateOfBirth = sdf.parse(accountJson.getString("dateOfBirth"));
+      Date dateOfBirth = Util.sdf.parse(accountJson.getString("dateOfBirth"));
       JSONArray couponIDsArray = accountJson.getJSONArray("couponIDs");
       List<String> couponIDs = new ArrayList<>();
       for (int i = 0; i < couponIDsArray.size(); i++) {

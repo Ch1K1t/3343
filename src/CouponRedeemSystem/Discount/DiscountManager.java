@@ -4,8 +4,8 @@ import CouponRedeemSystem.Discount.model.Discount;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
+import CouponRedeemSystem.System.Util.Util;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.time.DateUtils;
 
@@ -14,7 +14,6 @@ public class DiscountManager {
   private static DiscountManager instance;
 
   private final CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
-  private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
   private DiscountManager() {}
 
@@ -39,8 +38,8 @@ public class DiscountManager {
         return null;
       }
 
-      String expireDate = sdf.format(
-        DateUtils.addDays(sdf.parse(startDate), day)
+      String expireDate = Util.sdf.format(
+        DateUtils.addDays(Util.sdf.parse(startDate), day)
       );
       Discount discount = new Discount(
         discountName,
@@ -62,8 +61,8 @@ public class DiscountManager {
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("discountName", discount.getDiscountName());
     jsonObject.put("shop", discount.getShop().getShopName());
-    jsonObject.put("startDate", sdf.format(discount.getStartDate()));
-    jsonObject.put("expireDate", sdf.format(discount.getExpireDate()));
+    jsonObject.put("startDate", Util.sdf.format(discount.getStartDate()));
+    jsonObject.put("expireDate", Util.sdf.format(discount.getExpireDate()));
     jsonObject.put("value", discount.getValue());
 
     return jsonFileManager.modifyJSON(
