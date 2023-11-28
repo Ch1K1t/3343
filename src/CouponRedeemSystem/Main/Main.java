@@ -1,6 +1,7 @@
 package CouponRedeemSystem.Main;
 
 import CouponRedeemSystem.Account.AccountManager;
+import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Discount.DiscountManager;
 import CouponRedeemSystem.Page.AdminPage;
@@ -34,7 +35,7 @@ public class Main {
     accountManager.createPassword("staff2", "staff2");
     accountManager.createAccount("staff2", "Staff");
     accountManager.createPassword("user", "user");
-    accountManager.createAccount("user", "User", "12345678", "28/11/2000");
+    accountManager.createAccount("user", "User", "12345678", "01/01/2000");
 
     Shop shop1 = shopManager.createShop("shop1");
     shop1.addStaff("staff1");
@@ -86,6 +87,13 @@ public class Main {
       "Password",
     };
 
+    for (String string : dirList) {
+      File dir = new File("Data/" + string);
+      if (!dir.exists()) {
+        dir.mkdirs();
+      }
+    }
+
     for (String dir : dirList) {
       File[] fileList = new File("Data/" + dir).listFiles();
       for (File file : fileList) {
@@ -102,6 +110,6 @@ public class Main {
     // new UserPage("user").execute();
 
     // clearSystem();
-    // initializeSystem();
+    initializeSystem();
   }
 }

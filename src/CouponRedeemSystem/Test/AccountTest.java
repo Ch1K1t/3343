@@ -17,8 +17,6 @@ import org.junit.Test;
 
 public class AccountTest extends MainTest {
 
-  private final int age = 20;
-
   @After
   public void reset() {
     if (

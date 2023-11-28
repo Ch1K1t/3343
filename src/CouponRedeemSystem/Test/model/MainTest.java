@@ -35,7 +35,7 @@ public class MainTest {
   // Account attributes
   protected final String userName = "accountTest";
   protected final String password = "passwordTest";
-  protected final String age = "20";
+  protected final String age = "23";
   protected final String telNo = "12345678";
   protected final String dateOfBirth = "01/01/2000";
 
