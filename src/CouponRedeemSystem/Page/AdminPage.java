@@ -60,7 +60,7 @@ public class AdminPage extends Page {
 
     do {
       getInstruction();
-      cmd = s.nextLine().toLowerCase();
+      cmd = s.nextLine();
 
       switch (cmd) {
         case "1":

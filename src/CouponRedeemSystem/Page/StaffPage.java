@@ -28,7 +28,7 @@ public class StaffPage extends Page {
     System.out.println("2. Create Purchasable Coupon");
     System.out.println("3. Delete Coupon");
     System.out.println("4. Check Discount");
-    System.out.println("5. Create Discount By Day");
+    System.out.println("5. Create Discount");
     System.out.println("6. Delete Discount");
     System.out.println("7. Signout");
     System.out.println("8. Exit");
@@ -202,6 +202,7 @@ public class StaffPage extends Page {
     do {
       getInstruction();
       cmd = s.nextLine();
+
       switch (cmd) {
         case "1":
           checkCoupon();

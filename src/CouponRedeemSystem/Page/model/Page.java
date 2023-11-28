@@ -192,7 +192,7 @@ public abstract class Page {
 
     String dob = beforeDateInput("date of birth");
 
-    accountManager.createAccount(username, "user", age, telNo, dob);
+    accountManager.createAccount(username, role, age, telNo, dob);
     System.out.println();
     System.out.println("Account created");
   }

@@ -17,6 +17,8 @@ import java.util.Date;
 public class Main {
 
   public static void initializeSystem() {
+    clearSystem();
+
     AccountManager accountManager = AccountManager.getInstance();
     ShopManager shopManager = ShopManager.getInstance();
     CouponManager couponManager = CouponManager.getInstance();

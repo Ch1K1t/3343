@@ -27,8 +27,9 @@ public class UserPage extends Page {
     System.out.println("1. Check Remaining Points");
     System.out.println("2. Purchase Coupon");
     System.out.println("3. Redeem Coupon");
-    System.out.println("4. Signout");
-    System.out.println("5. Exit");
+    System.out.println("4. Use Coupon");
+    System.out.println("5. Signout");
+    System.out.println("6. Exit");
     System.out.println();
   }
 
@@ -37,7 +38,7 @@ public class UserPage extends Page {
     System.out.println("Your remaining points is: " + account.getPoints());
   }
 
-  public void purchaseCoupon() {
+  public void getPurchasableCouponList() {
     CouponManager couponManager = CouponManager.getInstance();
     ShopManager shopManager = ShopManager.getInstance();
 
@@ -103,6 +104,22 @@ public class UserPage extends Page {
       }
       System.out.println();
     }
+  }
+
+  public void getResultMessage(boolean isSuccess, String action) {
+    if (isSuccess) {
+      System.out.println();
+      System.out.println(action + " successfully");
+    } else {
+      System.out.println();
+      System.out.println(action + " failed");
+    }
+  }
+
+  public void purchaseCoupon() {
+    CouponManager couponManager = CouponManager.getInstance();
+
+    getPurchasableCouponList();
 
     String couponCode = strInput("coupon's code");
     Coupon coupon = couponManager.getCoupon(couponCode);
@@ -125,14 +142,7 @@ public class UserPage extends Page {
     }
 
     boolean isSuccess = account.pointsToCoupon(coupon);
-
-    if (isSuccess) {
-      System.out.println();
-      System.out.println("Purchase successfully");
-    } else {
-      System.out.println();
-      System.out.println("Purchase failed");
-    }
+    getResultMessage(isSuccess, "Purchase");
   }
 
   public void redeemCoupon() {
@@ -154,14 +164,58 @@ public class UserPage extends Page {
       return;
     }
     boolean isSuccess = account.couponToPoints(coupon);
+    getResultMessage(isSuccess, "Redeem");
+  }
 
-    if (isSuccess) {
-      System.out.println();
-      System.out.println("Redeem successfully");
-    } else {
-      System.out.println();
-      System.out.println("Redeem failed");
+  public boolean getOwnedCouponList() {
+    CouponManager couponManager = CouponManager.getInstance();
+
+    System.out.println();
+    System.out.println("Your owned coupons are:");
+    List<String> couponList = account.getCouponIDs();
+    if (couponList.size() == 0) {
+      System.out.println("You have no coupon");
+      return false;
     }
+    for (String s : couponList) {
+      Coupon coupon = couponManager.getCoupon(s);
+      if (coupon.getExpirationDate().before(new Date()) && coupon.isActive()) {
+        continue;
+      }
+
+      System.out.println(
+        String.format("%-15s", "Code: " + coupon.getCouponCode()) +
+        "Intrinsic Value: " +
+        coupon.getIntrinsicValue()
+      );
+    }
+    return true;
+  }
+
+  public void useCoupon() {
+    CouponManager couponManager = CouponManager.getInstance();
+
+    if (!getOwnedCouponList()) {
+      return;
+    }
+
+    String couponID = strInput("coupon's code");
+    Coupon coupon = couponManager.getCoupon(couponID);
+    if (coupon == null) {
+      System.out.println();
+      System.out.println("Coupon not found");
+      return;
+    } else if (!coupon.isActive()) {
+      System.out.println();
+      System.out.println("Coupon has been used!");
+      return;
+    } else if (coupon.getExpirationDate().before(new Date())) {
+      System.out.println();
+      System.out.println("Coupon has expired!");
+      return;
+    }
+    boolean isSuccess = account.useCoupon(coupon);
+    getResultMessage(isSuccess, "Use");
   }
 
   public void execute() {
@@ -169,7 +223,7 @@ public class UserPage extends Page {
 
     do {
       getInstruction();
-      cmd = s.nextLine().toLowerCase();
+      cmd = s.nextLine();
 
       switch (cmd) {
         case "1":
@@ -182,15 +236,18 @@ public class UserPage extends Page {
           redeemCoupon();
           break;
         case "4":
-          System.out.println("Signout successfully");
+          useCoupon();
           break;
         case "5":
+          System.out.println("Signout successfully");
+          break;
+        case "6":
           exit();
           break;
         default:
           System.out.println("Unknown command");
           break;
       }
-    } while (!cmd.equals("4"));
+    } while (!cmd.equals("5"));
   }
 }

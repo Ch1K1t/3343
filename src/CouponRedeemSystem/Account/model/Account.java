@@ -111,6 +111,19 @@ public class Account {
     return isAccUpdated && isCouponUpdated;
   }
 
+  public boolean useCoupon(Coupon coupon) {
+    AccountManager accountManager = AccountManager.getInstance();
+    CouponManager couponManager = CouponManager.getInstance();
+
+    this.deleteCouponID(coupon.getCouponCode());
+    boolean isAccUpdated = accountManager.updateAccount(this);
+
+    coupon.setActive(false);
+    boolean isCouponUpdated = couponManager.updateCoupon(coupon);
+
+    return isAccUpdated && isCouponUpdated;
+  }
+
   @Override
   public String toString() {
     if (role.equals("User")) {
@@ -164,30 +177,6 @@ public class Account {
 
   public double getPoints() {
     return points;
-  }
-
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
-
-  public void setRole(String role) {
-    this.role = role;
-  }
-
-  public void setAge(int age) {
-    this.age = age;
-  }
-
-  public void setTelNo(String telNo) {
-    this.telNo = telNo;
-  }
-
-  public void setDateOfBirth(Date dateOfBirth) {
-    this.dateOfBirth = dateOfBirth;
-  }
-
-  public void setCoupons(List<String> coupons) {
-    this.couponIDs = coupons;
   }
 
   public void setPoints(double score) {

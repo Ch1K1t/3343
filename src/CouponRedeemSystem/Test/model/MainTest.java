@@ -40,12 +40,12 @@ public class MainTest {
   protected final String password = "passwordTest";
   protected final String age = "20";
   protected final String telNo = "12345678";
-  protected final String dateOfBirth = "11/11/2000";
+  protected final String dateOfBirth = "01/01/2000";
 
   // Coupon attributes
   protected final double intrinsicValue = 10.0;
   protected final double points = 15.0;
-  protected final String expirationDate = "11/11/2025";
+  protected final String couponExpirationDate = "01/01/2025";
 
   // Shop attributes
   protected final String shopName = "shopTest";

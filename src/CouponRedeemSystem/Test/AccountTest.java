@@ -10,19 +10,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang.time.DateUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class AccountTest extends MainTest {
 
-  // private final String userName = "accountTest";
-  // private final String password = "passwordTest";
   private final int age = 20;
-
-  // private final String telNo = "12345678";
-  // private final String dateOfBirth = "11/11/2000";
 
   @After
   public void reset() {
@@ -43,6 +37,10 @@ public class AccountTest extends MainTest {
     if (coupon != null) {
       couponManager.deleteCoupon(coupon);
     }
+    Shop shop = shopManager.getShop("shopTest");
+    if (shop != null) {
+      shopManager.deleteShop(shop);
+    }
   }
 
   @Test
@@ -50,6 +48,7 @@ public class AccountTest extends MainTest {
     accountManager.createPassword(userName, password);
     JSONObject jsonObject = passwordManager.getPasswordRefTable();
     String text = jsonObject.get(userName).toString();
+
     Assert.assertEquals(
       true,
       encryptionManager.decryption(text).equals(password)
@@ -62,6 +61,7 @@ public class AccountTest extends MainTest {
 
     accountManager.createAccount(userName, role);
     boolean result = accountManager.createPassword(userName, password);
+
     Assert.assertEquals(false, result);
   }
 
@@ -163,6 +163,7 @@ public class AccountTest extends MainTest {
 
     Account account = accountManager.createAccount(userName, role);
     boolean result = accountManager.deleteAccount(account);
+
     Assert.assertEquals(true, result);
   }
 
@@ -172,6 +173,7 @@ public class AccountTest extends MainTest {
 
     Account account = new Account(userName, role);
     boolean result = accountManager.deleteAccount(account);
+
     Assert.assertEquals(false, result);
   }
 
@@ -181,12 +183,14 @@ public class AccountTest extends MainTest {
 
     Account account = accountManager.createAccount(userName, role);
     Account account2 = accountManager.getAccount(userName);
+
     Assert.assertEquals(account.toString(), account2.toString());
   }
 
   @Test
   public void getAccountTestFail() {
     Account account = accountManager.getAccount(userName);
+
     Assert.assertEquals(null, account);
   }
 
@@ -214,9 +218,7 @@ public class AccountTest extends MainTest {
     );
 
     String couponCode = "rCouponTest";
-    double intrinsicValue = 10.0;
     String type = "Redeemable";
-    String expirationDate = sdf.format(DateUtils.addYears(new Date(), 1));
 
     Calendar cal = Calendar.getInstance();
     cal.setTime(new Date());
@@ -231,7 +233,7 @@ public class AccountTest extends MainTest {
       couponCode,
       intrinsicValue,
       type,
-      expirationDate
+      couponExpirationDate
     );
 
     account.couponToPoints(coupon);
@@ -262,12 +264,9 @@ public class AccountTest extends MainTest {
     account.setPoints(100.0);
     accountManager.updateAccount(account);
 
-    Shop shop = new Shop("shopTest");
+    Shop shop = shopManager.createShop(shopName);
     String couponCode = "pCouponTest";
-    double intrinsicValue = 10.0;
-    double points = 15.0;
     String type = "Purchasable";
-    String expirationDate = "11/11/2025";
 
     Coupon coupon = couponManager.createCoupon(
       couponCode,
@@ -275,7 +274,7 @@ public class AccountTest extends MainTest {
       points,
       shop,
       type,
-      expirationDate
+      couponExpirationDate
     );
 
     account.pointsToCoupon(coupon);
@@ -286,5 +285,40 @@ public class AccountTest extends MainTest {
     Assert.assertEquals(couponIDs, account.getCouponIDs());
 
     Assert.assertEquals(account, coupon.getOwner());
+  }
+
+  @Test
+  public void useCouponTest() {
+    String role = "User";
+
+    Account account = accountManager.createAccount(
+      userName,
+      role,
+      age,
+      telNo,
+      dateOfBirth
+    );
+    account.addCouponID("pCouponTest");
+    accountManager.updateAccount(account);
+
+    String couponCode = "pCouponTest";
+    String type = "Purchasable";
+    Shop shop = shopManager.createShop(shopName);
+    Coupon coupon = couponManager.createCoupon(
+      couponCode,
+      intrinsicValue,
+      points,
+      shop,
+      type,
+      couponExpirationDate
+    );
+    coupon.setOwner(account);
+    couponManager.updateCoupon(coupon);
+
+    account.useCoupon(coupon);
+
+    Assert.assertEquals("[]", account.getCouponIDs().toString());
+    Assert.assertEquals(false, coupon.isActive());
+    Assert.assertEquals(userName, coupon.getOwner().getUserName());
   }
 }

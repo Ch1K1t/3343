@@ -18,7 +18,7 @@ public class HomePage extends Page {
     String cmd;
     do {
       getInstruction();
-      cmd = s.nextLine().toLowerCase();
+      cmd = s.nextLine();
 
       switch (cmd) {
         case "1":

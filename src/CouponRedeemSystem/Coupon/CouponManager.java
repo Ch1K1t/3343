@@ -90,7 +90,7 @@ public class CouponManager {
       jsonObject.put("shop", coupon.getShop().getShopName());
       jsonObject.put(
         "owner",
-        coupon.getOwner() == null ? "null" : coupon.getOwner()
+        coupon.getOwner() == null ? "null" : coupon.getOwner().getUserName()
       );
       jsonObject.put("active", coupon.isActive());
       jsonObject.put("type", coupon.getType());
