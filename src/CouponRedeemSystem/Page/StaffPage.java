@@ -46,7 +46,7 @@ public class StaffPage extends Page {
     List<String> couponList = shop.getPurchasableCouponList();
     for (String s : couponList) {
       Coupon coupon = couponManager.getCoupon(s);
-      if (coupon.getExpirationDate().before(new Date())) continue;
+      if (coupon.getExpirationDate().before(Util.today)) continue;
       noCoupon = false;
       System.out.println("Coupon Code: " + coupon.getCouponCode());
       System.out.println(

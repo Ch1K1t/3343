@@ -178,7 +178,7 @@ public class DiscountTest extends MainTest {
 
   @Test
   public void validateTimeTest() {
-    String startDateStr = Util.sdf.format(DateUtils.addDays(new Date(), -1));
+    String startDateStr = Util.sdf.format(DateUtils.addDays(Util.today, -1));
 
     Discount discount = discountManager.createDiscount(
       discountName,
@@ -193,7 +193,7 @@ public class DiscountTest extends MainTest {
 
   @Test
   public void validateTimeTestFail() {
-    String startDate = Util.sdf.format(DateUtils.addDays(new Date(), 1));
+    String startDate = Util.sdf.format(DateUtils.addDays(Util.today, 1));
 
     Discount discount = discountManager.createDiscount(
       discountName,

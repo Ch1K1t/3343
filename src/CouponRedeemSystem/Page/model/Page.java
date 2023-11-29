@@ -95,7 +95,7 @@ public abstract class Page {
           continue;
         }
         Date date = Util.sdf.parse(dateStr);
-        isBeforeToday = date.compareTo(new Date()) <= 0;
+        isBeforeToday = date.compareTo(Util.today) <= 0;
         if (!isBeforeToday) {
           System.out.println("Date must be before today, please input again:");
           continue;
@@ -127,7 +127,7 @@ public abstract class Page {
           continue;
         }
         Date date = Util.sdf.parse(dateStr);
-        isAfterToday = date.compareTo(new Date()) >= 0;
+        isAfterToday = date.compareTo(Util.today) >= 0;
         if (!isAfterToday) {
           System.out.println("Date must be after today, please input again:");
           continue;

@@ -68,7 +68,7 @@ public class Main {
       "discount1",
       shop1,
       2,
-      Util.sdf.format(new Date()),
+      Util.sdf.format(Util.today),
       7
     );
     discountManager.createDiscount("discount2", shop2, 2, "01/12/2023", 5);
@@ -99,7 +99,7 @@ public class Main {
     // new StaffPage("staff1").execute();
     // new UserPage("user").execute();
 
-    // clearSystem();
     // initializeSystem();
+    // clearSystem();
   }
 }

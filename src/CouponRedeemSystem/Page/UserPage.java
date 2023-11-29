@@ -9,7 +9,7 @@ import CouponRedeemSystem.Discount.model.Discount;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
-import java.util.Date;
+import CouponRedeemSystem.System.Util.Util;
 import java.util.List;
 
 public class UserPage extends Page {
@@ -52,7 +52,7 @@ public class UserPage extends Page {
       List<String> couponList = shop.getPurchasableCouponList();
       for (String s : couponList) {
         Coupon coupon = couponManager.getCoupon(s);
-        if (coupon.getExpirationDate().before(new Date())) continue;
+        if (coupon.getExpirationDate().before(Util.today)) continue;
         if (coupon.getOwner() != null) continue;
         hasCouponToPurchase = true;
         break;
@@ -79,7 +79,7 @@ public class UserPage extends Page {
 
       for (String s : couponList) {
         Coupon coupon = couponManager.getCoupon(s);
-        if (coupon.getExpirationDate().before(new Date())) continue;
+        if (coupon.getExpirationDate().before(Util.today)) continue;
         if (coupon.getOwner() != null) continue;
 
         if (discountTotal > 0) {
@@ -118,12 +118,13 @@ public class UserPage extends Page {
       System.out.println();
       System.out.println("Insufficient points");
       return;
-    } else if (coupon.getExpirationDate().before(new Date())) {
+    } else if (coupon.getExpirationDate().before(Util.today)) {
       System.out.println();
       System.out.println("Coupon has expired");
       return;
     }
 
+    // TODO: more concise variable name
     boolean isSuccess = account.pointsToCoupon(coupon);
 
     if (isSuccess) {
@@ -148,7 +149,7 @@ public class UserPage extends Page {
       System.out.println();
       System.out.println("Coupon has been used!");
       return;
-    } else if (coupon.getExpirationDate().before(new Date())) {
+    } else if (coupon.getExpirationDate().before(Util.today)) {
       System.out.println();
       System.out.println("Coupon has expired!");
       return;

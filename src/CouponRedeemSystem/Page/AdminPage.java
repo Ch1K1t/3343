@@ -4,6 +4,8 @@ import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Page.model.Page;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AdminPage extends Page {
 
@@ -56,39 +58,64 @@ public class AdminPage extends Page {
   }
 
   public void execute() {
+    // String cmd;
+
+    // do {
+    //   getInstruction();
+    //   cmd = s.nextLine().toLowerCase();
+
+    //   switch (cmd) {
+    //     case "1":
+    //       createAccount("Admin");
+    //       break;
+    //     case "2":
+    //       createAccount("Shop Manager");
+    //       break;
+    //     case "3":
+    //       createAccount("Staff");
+    //       break;
+    //     case "4":
+    //       createAccount("User");
+    //     case "5":
+    //       deleteAccount();
+    //       break;
+    //     case "6":
+    //       createRedeemableCoupon();
+    //       break;
+    //     case "7":
+    //       System.out.println("Signout successfully");
+    //       break;
+    //     case "8":
+    //       exit();
+    //       break;
+    //     default:
+    //       System.out.println("Unknown command");
+    //       break;
+    //   }
+    // } while (!cmd.equals("7"));
+
+    // TODO: Replace switch statement to improve readability
     String cmd;
+
+    Map<String, Runnable> cmdMap = new HashMap<>();
+    cmdMap.put("1", () -> createAccount("Admin"));
+    cmdMap.put("2", () -> createAccount("Shop Manager"));
+    cmdMap.put("3", () -> createAccount("Staff"));
+    cmdMap.put("4", () -> createAccount("User"));
+    cmdMap.put("5", this::deleteAccount);
+    cmdMap.put("6", this::createRedeemableCoupon);
+    cmdMap.put("7", () -> System.out.println("Signout successfully"));
+    cmdMap.put("8", this::exit);
 
     do {
       getInstruction();
       cmd = s.nextLine().toLowerCase();
 
-      switch (cmd) {
-        case "1":
-          createAccount("Admin");
-          break;
-        case "2":
-          createAccount("Shop Manager");
-          break;
-        case "3":
-          createAccount("Staff");
-          break;
-        case "4":
-          createAccount("User");
-        case "5":
-          deleteAccount();
-          break;
-        case "6":
-          createRedeemableCoupon();
-          break;
-        case "7":
-          System.out.println("Signout successfully");
-          break;
-        case "8":
-          exit();
-          break;
-        default:
-          System.out.println("Unknown command");
-          break;
+      Runnable command = cmdMap.get(cmd);
+      if (command != null) {
+        command.run();
+      } else {
+        System.out.println("Unknown command");
       }
     } while (!cmd.equals("7"));
   }
