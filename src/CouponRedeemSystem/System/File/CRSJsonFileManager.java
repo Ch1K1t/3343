@@ -42,26 +42,20 @@ public class CRSJsonFileManager {
     }
   }
 
-  public boolean modifyJSON(
-    String dirName,
-    String fileName,
-    JSONObject content
-  ) {
+  public void modifyJSON(String dirName, String fileName, JSONObject content) {
     try {
       File file = createJSONFile(dirName, fileName);
       FileWriter fileWriter = new FileWriter(file);
       fileWriter.write(content.toString());
       fileWriter.close();
-      return true;
     } catch (IOException e) {
       e.printStackTrace();
-      return false;
     }
   }
 
-  public boolean deleteJSON(String dirName, String fileName) {
+  public void deleteJSON(String dirName, String fileName) {
     File file = new File("Data/" + dirName + "/" + fileName + ".json");
-    return file.delete();
+    file.delete();
   }
 
   public JSONObject searchJSON(String fileName) {

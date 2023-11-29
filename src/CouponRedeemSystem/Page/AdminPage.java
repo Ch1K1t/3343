@@ -3,6 +3,7 @@ package CouponRedeemSystem.Page;
 import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
+import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Page.model.Page;
 
 public class AdminPage extends Page {
@@ -41,6 +42,13 @@ public class AdminPage extends Page {
     CouponManager couponManager = CouponManager.getInstance();
 
     String couponCode = strInput("coupon's code");
+    Coupon coupon = couponManager.getCoupon(couponCode);
+    if (coupon != null) {
+      System.out.println();
+      System.out.println("Coupon already exists");
+      return;
+    }
+    
     double intrinsicValue = doubleInput("coupon's intrinsic value");
     String expirationDate = afterDateInput("coupon's expiration date");
 

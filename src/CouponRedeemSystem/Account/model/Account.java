@@ -15,13 +15,13 @@ import java.util.List;
 
 public class Account {
 
-  String userName;
-  String role;
-  int age;
-  String telNo;
-  Date dateOfBirth;
-  double points;
-  List<String> couponIDs;
+  private String userName;
+  private String role;
+  private double points;
+  private List<String> couponIDs;
+  private Date dateOfBirth;
+  private int age;
+  private String telNo;
 
   // Constructor for creating a new non-user account
   public Account(String userName, String role) {
@@ -33,17 +33,17 @@ public class Account {
   public Account(
     String userName,
     String role,
-    String telNo,
-    String dateOfBirth
+    String dateOfBirth,
+    String telNo
   ) {
     try {
       this.userName = userName;
       this.role = role;
-      this.dateOfBirth = Util.sdf.parse(dateOfBirth);
-      this.age = this.calculateAge();
-      this.telNo = telNo;
       this.points = 0;
       this.couponIDs = new ArrayList<String>();
+      this.dateOfBirth = Util.sdf.parse(dateOfBirth);
+      this.age = Account.calculateAge(this.dateOfBirth);
+      this.telNo = telNo;
     } catch (ParseException e) {
       e.printStackTrace();
     }
@@ -53,25 +53,25 @@ public class Account {
   public Account(
     String userName,
     String role,
-    int age,
-    String telNo,
-    Date dateOfBirth,
     double points,
-    List<String> coupons
+    List<String> coupons,
+    Date dateOfBirth,
+    int age,
+    String telNo
   ) {
     this.userName = userName;
     this.role = role;
-    this.age = calculateAge();
-    this.telNo = telNo;
     this.points = points;
-    this.dateOfBirth = dateOfBirth;
     this.couponIDs = coupons;
+    this.dateOfBirth = dateOfBirth;
+    this.age = age;
+    this.telNo = telNo;
   }
 
-  public int calculateAge() {
+  public static int calculateAge(Date dateOfBirth) {
     Calendar today = Calendar.getInstance();
     Calendar dob = Calendar.getInstance();
-    dob.setTime(this.dateOfBirth);
+    dob.setTime(dateOfBirth);
     int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
     if (
       dob.get(Calendar.MONTH) > today.get(Calendar.MONTH) ||
@@ -85,21 +85,19 @@ public class Account {
     return age;
   }
 
-  public boolean couponToPoints(Coupon coupon) {
+  public void couponToPoints(Coupon coupon) {
     AccountManager accountManager = AccountManager.getInstance();
     CouponManager couponManager = CouponManager.getInstance();
 
     double points = coupon.pointConversion();
     this.addPoints(points);
-    boolean isAccUpdated = accountManager.updateAccount(this);
+    accountManager.updateAccount(this);
 
     coupon.setActive(false);
-    boolean isCouponUpdated = couponManager.updateCoupon(coupon);
-
-    return isAccUpdated && isCouponUpdated;
+    couponManager.updateCoupon(coupon);
   }
 
-  public boolean pointsToCoupon(Coupon coupon) {
+  public void pointsToCoupon(Coupon coupon) {
     AccountManager accountManager = AccountManager.getInstance();
     CouponManager couponManager = CouponManager.getInstance();
 
@@ -115,30 +113,26 @@ public class Account {
     }
 
     this.deductPoints(
-        coupon.getPoints() - discountTotal < 1
+        coupon.getPurchasingValue() - discountTotal < 1
           ? 1
-          : coupon.getPoints() - discountTotal
+          : coupon.getPurchasingValue() - discountTotal
       );
     this.couponIDs.add(coupon.getCouponCode());
-    boolean isAccUpdated = accountManager.updateAccount(this);
+    accountManager.updateAccount(this);
 
     coupon.setOwner(this);
-    boolean isCouponUpdated = couponManager.updateCoupon(coupon);
-
-    return isAccUpdated && isCouponUpdated;
+    couponManager.updateCoupon(coupon);
   }
 
-  public boolean useCoupon(Coupon coupon) {
+  public void useCoupon(Coupon coupon) {
     AccountManager accountManager = AccountManager.getInstance();
     CouponManager couponManager = CouponManager.getInstance();
 
     this.deleteCouponID(coupon.getCouponCode());
-    boolean isAccUpdated = accountManager.updateAccount(this);
+    accountManager.updateAccount(this);
 
     coupon.setActive(false);
-    boolean isCouponUpdated = couponManager.updateCoupon(coupon);
-
-    return isAccUpdated && isCouponUpdated;
+    couponManager.updateCoupon(coupon);
   }
 
   @Override
@@ -194,10 +188,6 @@ public class Account {
 
   public double getPoints() {
     return points;
-  }
-
-  public void setPoints(double score) {
-    this.points = score;
   }
 
   public void addCouponID(String couponID) {

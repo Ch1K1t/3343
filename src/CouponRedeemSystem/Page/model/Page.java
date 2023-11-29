@@ -3,6 +3,7 @@ package CouponRedeemSystem.Page.model;
 import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.Password.PasswordManager;
 import CouponRedeemSystem.System.Util.Util;
 import java.text.ParseException;
 import java.util.Date;
@@ -142,18 +143,22 @@ public abstract class Page {
   }
 
   public void createAccount(String role) {
+    PasswordManager passwordManager = PasswordManager.getInstance();
     AccountManager accountManager = AccountManager.getInstance();
 
-    String username = strInput("user name");
-
+    String userName = strInput("user name");
     String password = strInput("password");
-
-    boolean isPwdCreated = accountManager.createPassword(username, password);
-    if (!isPwdCreated) {
+    if (
+      !passwordManager
+        .checkPasswordValid(userName, password)
+        .equals("not found")
+    ) {
       System.out.println();
       System.out.println("User already exists");
       return;
     }
+
+    accountManager.createPassword(userName, password);
 
     if (role.equals("Staff")) {
       ShopManager shopManager = ShopManager.getInstance();
@@ -168,27 +173,26 @@ public abstract class Page {
           System.out.println("Shop " + shopName + " does not exist!");
         }
       } while (shop == null);
-      shop.addStaff(username);
+      shop.addStaff(userName);
       shopManager.updateShop(shop);
 
-      accountManager.createAccount(username, role);
+      accountManager.createAccount(userName, role);
       System.out.println();
       System.out.println("Account created");
 
       return;
     } else if (!role.equals("User")) {
-      accountManager.createAccount(username, role);
+      accountManager.createAccount(userName, role);
       System.out.println();
       System.out.println("Account created");
 
       return;
     }
 
+    String dob = beforeDateInput("date of birth");
     String telNo = telInput();
 
-    String dob = beforeDateInput("date of birth");
-
-    accountManager.createAccount(username, role, telNo, dob);
+    accountManager.createAccount(userName, role, dob, telNo);
     System.out.println();
     System.out.println("Account created");
   }

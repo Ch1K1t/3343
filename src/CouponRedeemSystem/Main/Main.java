@@ -1,7 +1,6 @@
 package CouponRedeemSystem.Main;
 
 import CouponRedeemSystem.Account.AccountManager;
-import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Discount.DiscountManager;
 import CouponRedeemSystem.Page.AdminPage;
@@ -87,17 +86,14 @@ public class Main {
       "Password",
     };
 
-    for (String string : dirList) {
-      File dir = new File("Data/" + string);
-      if (!dir.exists()) {
-        dir.mkdirs();
-      }
-    }
-
     for (String dir : dirList) {
-      File[] fileList = new File("Data/" + dir).listFiles();
-      for (File file : fileList) {
-        file.delete();
+      File file = new File("Data/" + dir);
+      if (!file.exists()) {
+        file.mkdirs();
+      }
+      File[] fileList = file.listFiles();
+      for (File f : fileList) {
+        f.delete();
       }
     }
   }
@@ -110,6 +106,6 @@ public class Main {
     // new UserPage("user").execute();
 
     // clearSystem();
-    initializeSystem();
+    // initializeSystem();
   }
 }

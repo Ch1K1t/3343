@@ -26,23 +26,18 @@ public class AccountManager {
     return instance;
   }
 
-  public boolean createPassword(String userName, String Password) {
-    JSONObject jsonObject = jsonFileManager.searchJSON(userName);
-    if (jsonObject != null) {
-      return false;
-    }
-
-    return passwordManager.createNewPassword(userName, Password);
+  public void createPassword(String userName, String Password) {
+    passwordManager.createNewPassword(userName, Password);
   }
 
   // Create new user account
   public Account createAccount(
     String userName,
     String role,
-    String telNo,
-    String dob
+    String dob,
+    String telNo
   ) {
-    Account account = new Account(userName, role, telNo, dob);
+    Account account = new Account(userName, role, dob, telNo);
     this.updateAccount(account);
 
     return account;
@@ -56,7 +51,7 @@ public class AccountManager {
     return account;
   }
 
-  public boolean updateAccount(Account account) {
+  public void updateAccount(Account account) {
     String role = account.getRole();
 
     JSONObject jsonObject = new JSONObject();
@@ -65,20 +60,16 @@ public class AccountManager {
     if (role.equals("User")) {
       jsonObject.put("points", account.getPoints());
       jsonObject.put("couponIDs", account.getCouponIDs());
+      jsonObject.put("dateOfBirth", Util.sdf.format(account.getDateOfBirth()));
       jsonObject.put("age", account.getAge());
       jsonObject.put("telNo", account.getTelNo());
-      jsonObject.put("dateOfBirth", Util.sdf.format(account.getDateOfBirth()));
     }
 
-    return jsonFileManager.modifyJSON(
-      "Account",
-      account.getUserName(),
-      jsonObject
-    );
+    jsonFileManager.modifyJSON("Account", account.getUserName(), jsonObject);
   }
 
-  public boolean deleteAccount(Account account) {
-    return jsonFileManager.deleteJSON("Account", account.getUserName());
+  public void deleteAccount(Account account) {
+    jsonFileManager.deleteJSON("Account", account.getUserName());
   }
 
   public Account getAccount(String userName) {
@@ -112,11 +103,11 @@ public class AccountManager {
       return new Account(
         userName,
         role,
-        age,
-        telNo,
-        dateOfBirth,
         points,
-        couponIDs
+        couponIDs,
+        dateOfBirth,
+        age,
+        telNo
       );
     } catch (ParseException e) {
       e.printStackTrace();
@@ -132,27 +123,27 @@ public class AccountManager {
     if (!role.equals("User")) {
       result = "{\"userName\":\"" + userName + "\", \"role\":\"" + role + "\"}";
     } else {
+      double points = jsonObject.getDouble("points");
+      JSONArray couponIDs = jsonObject.getJSONArray("couponIDs");
+      String dateOfBirth = jsonObject.getString("dateOfBirth");
       int age = jsonObject.getInt("age");
       String telNo = jsonObject.getString("telNo");
-      double points = jsonObject.getDouble("points");
-      String dateOfBirth = jsonObject.getString("dateOfBirth");
-      JSONArray couponIDs = jsonObject.getJSONArray("couponIDs");
 
       result =
         "{\"userName\":\"" +
         userName +
         "\", \"role\":\"" +
         role +
-        "\", \"age\":" +
-        age +
-        ", \"telNo\":\"" +
-        telNo +
-        "\", \"dateOfBirth\":\"" +
-        dateOfBirth +
         "\", \"points\":" +
         points +
         ", \"couponIDs\":" +
         couponIDs +
+        "\", \"dateOfBirth\":\"" +
+        dateOfBirth +
+        "\", \"age\":" +
+        age +
+        ", \"telNo\":\"" +
+        telNo +
         "}";
     }
 

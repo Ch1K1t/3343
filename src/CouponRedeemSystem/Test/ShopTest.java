@@ -35,14 +35,6 @@ public class ShopTest extends MainTest {
   }
 
   @Test
-  public void createShopTestFail() {
-    shopManager.createShop(shopName);
-    Shop shop2 = shopManager.createShop(shopName);
-
-    Assert.assertEquals(null, shop2);
-  }
-
-  @Test
   public void updateShopTest() {
     shopManager.createShop(shopName);
 
@@ -59,17 +51,10 @@ public class ShopTest extends MainTest {
   @Test
   public void deleteShopTest() {
     Shop shop = shopManager.createShop(shopName);
-    boolean result = shopManager.deleteShop(shop);
+    shopManager.deleteShop(shop);
+    Shop shop2 = shopManager.getShop(shopName);
 
-    Assert.assertEquals(true, result);
-  }
-
-  @Test
-  public void deleteShopTestFail() {
-    Shop shop = new Shop(shopName);
-    boolean result = shopManager.deleteShop(shop);
-
-    Assert.assertEquals(false, result);
+    Assert.assertEquals(null, shop2);
   }
 
   @Test

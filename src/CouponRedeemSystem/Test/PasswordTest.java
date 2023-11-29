@@ -38,24 +38,22 @@ public class PasswordTest extends MainTest {
 
   @Test
   public void createPasswordTest() {
-    boolean result = passwordManager.createNewPassword(userName, password);
+    passwordManager.createNewPassword(userName, password);
+    JSONObject jsonObject = passwordManager.getPasswordRefTable();
+    Object text = jsonObject.get(userName);
 
-    Assert.assertEquals(true, result);
+    Assert.assertNotEquals(null, text);
   }
 
   @Test
   public void deletePasswordTest() {
     passwordManager.createNewPassword(userName, password);
-    boolean result = passwordManager.deletePassword(userName);
+    passwordManager.deletePassword(userName);
 
-    Assert.assertEquals(true, result);
-  }
+    JSONObject jsonObject = passwordManager.getPasswordRefTable();
+    Object text = jsonObject.get(userName);
 
-  @Test
-  public void deletePasswordTestFail() {
-    boolean result = passwordManager.deletePassword(userName);
-
-    Assert.assertEquals(false, result);
+    Assert.assertEquals(null, text);
   }
 
   @Test
@@ -66,6 +64,7 @@ public class PasswordTest extends MainTest {
     Assert.assertEquals("success", result);
   }
 
+  // Check non-exist user
   @Test
   public void checkPasswordTestFail() {
     String result = passwordManager.checkPasswordValid(userName, password);
@@ -73,6 +72,7 @@ public class PasswordTest extends MainTest {
     Assert.assertEquals("not found", result);
   }
 
+  // Check wrong password
   @Test
   public void checkPasswordTestFail2() {
     passwordManager.createNewPassword(userName, password);

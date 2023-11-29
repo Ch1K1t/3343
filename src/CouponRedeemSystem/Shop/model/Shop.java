@@ -48,16 +48,8 @@ public class Shop {
     return shopName;
   }
 
-  public void setShopName(String shopName) {
-    this.shopName = shopName;
-  }
-
   public List<String> getPurchasableCouponList() {
     return couponList;
-  }
-
-  public void setPurchasableCouponList(List<String> couponList) {
-    this.couponList = couponList;
   }
 
   public void addPurchasableCoupon(String couponCode) {
@@ -72,10 +64,6 @@ public class Shop {
     return staffList;
   }
 
-  public void setStaffList(List<String> staffList) {
-    this.staffList = staffList;
-  }
-
   public void addStaff(String staff) {
     staffList.add(staff);
   }
@@ -86,10 +74,6 @@ public class Shop {
 
   public List<String> getDiscountList() {
     return discountList;
-  }
-
-  public void setDiscountList(List<String> discountList) {
-    this.discountList = discountList;
   }
 
   public void addDiscount(String discountCode) {

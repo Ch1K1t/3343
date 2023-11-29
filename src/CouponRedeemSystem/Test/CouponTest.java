@@ -1,7 +1,6 @@
 package CouponRedeemSystem.Test;
 
 import CouponRedeemSystem.Coupon.model.Coupon;
-import CouponRedeemSystem.Coupon.model.RedeemableCoupon;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.Util.Util;
 import CouponRedeemSystem.Test.model.MainTest;
@@ -42,7 +41,7 @@ public class CouponTest extends MainTest {
     Coupon coupon = couponManager.createCoupon(
       couponCode,
       intrinsicValue,
-      points,
+      purchasingValue,
       shop,
       type,
       couponExpirationDate
@@ -53,8 +52,8 @@ public class CouponTest extends MainTest {
       couponCode +
       "\", intrinsicValue=" +
       intrinsicValue +
-      ", points=" +
-      points +
+      ", purchasingValue=" +
+      purchasingValue +
       ", shop=" +
       shop +
       ", owner=" +
@@ -68,31 +67,6 @@ public class CouponTest extends MainTest {
       "}";
 
     Assert.assertEquals(expectedOutput, coupon.toString());
-  }
-
-  @Test
-  public void createPurchasableCouponTestFail() {
-    String couponCode = "pCouponTest";
-    String type = "Purchasable";
-
-    couponManager.createCoupon(
-      couponCode,
-      intrinsicValue,
-      points,
-      shop,
-      type,
-      couponExpirationDate
-    );
-    Coupon coupon2 = couponManager.createCoupon(
-      couponCode,
-      intrinsicValue,
-      points,
-      shop,
-      type,
-      couponExpirationDate
-    );
-
-    Assert.assertEquals(null, coupon2);
   }
 
   @Test
@@ -124,27 +98,6 @@ public class CouponTest extends MainTest {
   }
 
   @Test
-  public void createRedeemableCouponTestFail() {
-    String couponCode = "rCouponTest";
-    String type = "Redeemable";
-
-    couponManager.createCoupon(
-      couponCode,
-      intrinsicValue,
-      type,
-      couponExpirationDate
-    );
-    Coupon coupon2 = couponManager.createCoupon(
-      couponCode,
-      intrinsicValue,
-      type,
-      couponExpirationDate
-    );
-
-    Assert.assertEquals(null, coupon2);
-  }
-
-  @Test
   public void updatePurchasableCouponTest() {
     String couponCode = "pCouponTest";
     String type = "Purchasable";
@@ -152,7 +105,7 @@ public class CouponTest extends MainTest {
     couponManager.createCoupon(
       couponCode,
       intrinsicValue,
-      points,
+      purchasingValue,
       shop,
       type,
       couponExpirationDate
@@ -165,8 +118,8 @@ public class CouponTest extends MainTest {
       couponCode +
       "\", \"intrinsicValue\":" +
       intrinsicValue +
-      ", \"points\":" +
-      points +
+      ", \"purchasingValue\":" +
+      purchasingValue +
       ", \"shop\":\"" +
       shop.getShopName() +
       "\", \"owner\":" +
@@ -224,26 +177,10 @@ public class CouponTest extends MainTest {
       couponExpirationDate
     );
 
-    boolean result = couponManager.deleteCoupon(coupon);
-    Assert.assertEquals(true, result);
-  }
+    couponManager.deleteCoupon(coupon);
+    Coupon coupon2 = couponManager.getCoupon(couponCode);
 
-  @Test
-  public void deleteCouponTestFail() throws ParseException {
-    String couponCode = "rCouponTest";
-    String type = "Redeemable";
-
-    Coupon coupon = new RedeemableCoupon(
-      couponCode,
-      intrinsicValue,
-      true,
-      type,
-      couponExpirationDate
-    );
-
-    boolean result = couponManager.deleteCoupon(coupon);
-
-    Assert.assertEquals(false, result);
+    Assert.assertEquals(null, coupon2);
   }
 
   @Test

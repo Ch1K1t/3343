@@ -33,14 +33,10 @@ public class DiscountManager {
     int day
   ) {
     try {
-      JSONObject jsonObject = jsonFileManager.searchJSON(discountName);
-      if (jsonObject != null) {
-        return null;
-      }
-
       String expireDate = Util.sdf.format(
         DateUtils.addDays(Util.sdf.parse(startDate), day)
       );
+
       Discount discount = new Discount(
         discountName,
         shop,
@@ -57,7 +53,7 @@ public class DiscountManager {
     }
   }
 
-  public boolean updateDiscount(Discount discount) {
+  public void updateDiscount(Discount discount) {
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("discountName", discount.getDiscountName());
     jsonObject.put("shop", discount.getShop().getShopName());
@@ -65,15 +61,15 @@ public class DiscountManager {
     jsonObject.put("expireDate", Util.sdf.format(discount.getExpireDate()));
     jsonObject.put("value", discount.getValue());
 
-    return jsonFileManager.modifyJSON(
+    jsonFileManager.modifyJSON(
       "Discount",
       discount.getDiscountName(),
       jsonObject
     );
   }
 
-  public boolean deleteDiscount(Discount discount) {
-    return jsonFileManager.deleteJSON("Discount", discount.getDiscountName());
+  public void deleteDiscount(Discount discount) {
+    jsonFileManager.deleteJSON("Discount", discount.getDiscountName());
   }
 
   public Discount getDiscount(String discountName) {

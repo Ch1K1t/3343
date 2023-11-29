@@ -61,39 +61,19 @@ public class Discount {
     return discountName;
   }
 
-  public void setDiscountName(String discountName) {
-    this.discountName = discountName;
-  }
-
   public Shop getShop() {
     return shop;
-  }
-
-  public void setShop(Shop shop) {
-    this.shop = shop;
   }
 
   public Date getStartDate() {
     return startDate;
   }
 
-  public void setStartDate(Date startDate) {
-    this.startDate = startDate;
-  }
-
   public Date getExpireDate() {
     return expireDate;
   }
 
-  public void setExpireDate(Date expireDate) {
-    this.expireDate = expireDate;
-  }
-
   public double getValue() {
     return value;
-  }
-
-  public void setValue(double value) {
-    this.value = value;
   }
 }

@@ -21,33 +21,24 @@ public class ShopManager {
   }
 
   public Shop createShop(String shopName) {
-    JSONObject jsonObject = jsonFileManager.searchJSON(shopName);
-    if (jsonObject != null) {
-      return null;
-    }
-
     Shop shop = new Shop(shopName);
     this.updateShop(shop);
 
     return shop;
   }
 
-  public boolean updateShop(Shop shop) {
+  public void updateShop(Shop shop) {
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("shopName", shop.getShopName());
     jsonObject.put("couponList", shop.getPurchasableCouponList());
     jsonObject.put("staffList", shop.getStaffList());
     jsonObject.put("discountList", shop.getDiscountList());
 
-    return jsonFileManager.modifyJSON("Shop", shop.getShopName(), jsonObject);
+    jsonFileManager.modifyJSON("Shop", shop.getShopName(), jsonObject);
   }
 
-  public boolean deleteShop(Shop shop) {
-    if (shop == null) {
-      return false;
-    }
-
-    return jsonFileManager.deleteJSON("Shop", shop.getShopName());
+  public void deleteShop(Shop shop) {
+    jsonFileManager.deleteJSON("Shop", shop.getShopName());
   }
 
   public Shop getShop(String shopName) {

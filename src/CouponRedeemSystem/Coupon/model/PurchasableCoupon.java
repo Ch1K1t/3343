@@ -8,7 +8,7 @@ public class PurchasableCoupon extends Coupon {
   public PurchasableCoupon(
     String couponCode,
     double intrinsicValue,
-    double points,
+    double purchasingValue,
     Shop shop,
     Account owner,
     boolean active,
@@ -18,7 +18,7 @@ public class PurchasableCoupon extends Coupon {
     super(
       couponCode,
       intrinsicValue,
-      points,
+      purchasingValue,
       shop,
       owner,
       active,

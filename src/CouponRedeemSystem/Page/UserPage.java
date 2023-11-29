@@ -86,33 +86,26 @@ public class UserPage extends Page {
         if (discountTotal > 0) {
           System.out.println(
             String.format("%-15s", "Code: " + coupon.getCouponCode()) +
-            String.format("%-30s", "Original Points: " + coupon.getPoints()) +
+            String.format(
+              "%-30s",
+              "Original Points: " + coupon.getPurchasingValue()
+            ) +
             "After Discount: " +
             (
-              coupon.getPoints() - discountTotal < 1
+              coupon.getPurchasingValue() - discountTotal < 1
                 ? 1
-                : coupon.getPoints() - discountTotal
+                : coupon.getPurchasingValue() - discountTotal
             )
           );
         } else {
           System.out.println(
             String.format("%-15s", "Code: " + coupon.getCouponCode()) +
             "Required Points: " +
-            coupon.getPoints()
+            coupon.getPurchasingValue()
           );
         }
       }
       System.out.println();
-    }
-  }
-
-  public void getResultMessage(boolean isSuccess, String action) {
-    if (isSuccess) {
-      System.out.println();
-      System.out.println(action + " successfully");
-    } else {
-      System.out.println();
-      System.out.println(action + " failed");
     }
   }
 
@@ -131,7 +124,7 @@ public class UserPage extends Page {
       System.out.println();
       System.out.println("This coupon is not purchasable");
       return;
-    } else if (coupon.getPoints() > account.getPoints()) {
+    } else if (coupon.getPurchasingValue() > account.getPoints()) {
       System.out.println();
       System.out.println("Insufficient points");
       return;
@@ -141,8 +134,9 @@ public class UserPage extends Page {
       return;
     }
 
-    boolean isSuccess = account.pointsToCoupon(coupon);
-    getResultMessage(isSuccess, "Purchase");
+    account.pointsToCoupon(coupon);
+    System.out.println();
+    System.out.println("Coupon purchased");
   }
 
   public void redeemCoupon() {
@@ -163,8 +157,9 @@ public class UserPage extends Page {
       System.out.println("Coupon has expired!");
       return;
     }
-    boolean isSuccess = account.couponToPoints(coupon);
-    getResultMessage(isSuccess, "Redeem");
+    account.couponToPoints(coupon);
+    System.out.println();
+    System.out.println("Coupon redeemed");
   }
 
   public boolean getOwnedCouponList() {
@@ -214,8 +209,9 @@ public class UserPage extends Page {
       System.out.println("Coupon has expired!");
       return;
     }
-    boolean isSuccess = account.useCoupon(coupon);
-    getResultMessage(isSuccess, "Use");
+    account.useCoupon(coupon);
+    System.out.println();
+    System.out.println("Coupon used");
   }
 
   public void execute() {

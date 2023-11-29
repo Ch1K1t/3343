@@ -52,7 +52,7 @@ public class StaffPage extends Page {
       System.out.println(
         "Coupon Intrinsic Value: " + coupon.getIntrinsicValue()
       );
-      System.out.println("Coupon Points: " + coupon.getPoints());
+      System.out.println("Coupon Points: " + coupon.getPurchasingValue());
       System.out.println(
         "Coupon Expiration Date: " + Util.sdf.format(coupon.getExpirationDate())
       );
@@ -64,26 +64,30 @@ public class StaffPage extends Page {
   }
 
   public void createPurchasableCoupon() {
+    ShopManager shopManager = ShopManager.getInstance();
     CouponManager couponManager = CouponManager.getInstance();
 
-    double intrinsicValue = doubleInput("coupon's intrinsic value");
-
-    String expirationDate = afterDateInput("coupon's expiration date");
-
     String couponCode = strInput("coupon's code");
+    Coupon coupon = couponManager.getCoupon(couponCode);
+    if (coupon != null) {
+      System.out.println();
+      System.out.println("Coupon already exists");
+      return;
+    }
 
-    ShopManager shopManager = ShopManager.getInstance();
+    double intrinsicValue = doubleInput("coupon's intrinsic value");
+    double purchasingValue = doubleInput("coupon's purchasing value");
 
     Shop shop = shopManager.getShopByStaff(account.getUserName());
     shop.addPurchasableCoupon(couponCode);
     shopManager.updateShop(shop);
 
-    double points = doubleInput("coupon's purchasing value");
+    String expirationDate = afterDateInput("coupon's expiration date");
 
     couponManager.createCoupon(
       couponCode,
       intrinsicValue,
-      points,
+      purchasingValue,
       shop,
       "Purchasable",
       expirationDate
@@ -109,15 +113,10 @@ public class StaffPage extends Page {
     shop.removePurchasableCoupon(couponCode);
     shopManager.updateShop(shop);
 
-    boolean isDeleted = couponManager.deleteCoupon(coupon);
+    couponManager.deleteCoupon(coupon);
 
-    if (isDeleted) {
-      System.out.println();
-      System.out.println("Coupon deleted");
-    } else {
-      System.out.println();
-      System.out.println("Coupon deletion failed");
-    }
+    System.out.println();
+    System.out.println("Coupon deleted");
   }
 
   public void checkDiscount() {
@@ -186,15 +185,10 @@ public class StaffPage extends Page {
     shop.removeDiscount(discountName);
     shopManager.updateShop(shop);
 
-    boolean isDeleted = discountManager.deleteDiscount(discount);
+    discountManager.deleteDiscount(discount);
 
-    if (isDeleted) {
-      System.out.println();
-      System.out.println("Discount deleted");
-    } else {
-      System.out.println();
-      System.out.println("Discount deletion failed");
-    }
+    System.out.println();
+    System.out.println("Discount deleted");
   }
 
   public void execute() {

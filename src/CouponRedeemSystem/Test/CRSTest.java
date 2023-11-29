@@ -66,16 +66,10 @@ public class CRSTest extends MainTest {
   @Test
   public void deleteJSONTest() {
     jsonFileManager.createJSONFile(dirName, fileName);
-    boolean result = jsonFileManager.deleteJSON(dirName, fileName);
+    jsonFileManager.deleteJSON(dirName, fileName);
+    JSONObject json = jsonFileManager.searchJSON(fileName);
 
-    Assert.assertEquals(true, result);
-  }
-
-  @Test
-  public void deleteJSONTestFail() {
-    boolean result = jsonFileManager.deleteJSON(dirName, fileName);
-
-    Assert.assertEquals(false, result);
+    Assert.assertEquals(null, json);
   }
 
   @Test

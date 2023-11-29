@@ -58,26 +58,6 @@ public class DiscountTest extends MainTest {
   }
 
   @Test
-  public void createDiscountTestFail() throws ParseException {
-    discountManager.createDiscount(
-      discountName,
-      shop,
-      value,
-      startDateStr,
-      day
-    );
-    Discount discount2 = discountManager.createDiscount(
-      discountName,
-      shop,
-      value,
-      startDateStr,
-      day
-    );
-
-    Assert.assertEquals(null, discount2);
-  }
-
-  @Test
   public void updateDiscountTest() throws ParseException {
     discountManager.createDiscount(
       discountName,
@@ -118,24 +98,10 @@ public class DiscountTest extends MainTest {
       day
     );
 
-    boolean result = discountManager.deleteDiscount(discount);
+    discountManager.deleteDiscount(discount);
+    Discount discount2 = discountManager.getDiscount(discountName);
 
-    Assert.assertEquals(true, result);
-  }
-
-  @Test
-  public void deleteDiscountTestFail() throws ParseException {
-    Discount discount = new Discount(
-      discountName,
-      shop,
-      value,
-      startDateStr,
-      expireDateStr
-    );
-
-    boolean result = discountManager.deleteDiscount(discount);
-
-    Assert.assertEquals(false, result);
+    Assert.assertEquals(null, discount2);
   }
 
   @Test

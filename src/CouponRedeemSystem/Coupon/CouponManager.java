@@ -29,7 +29,7 @@ public class CouponManager {
   public Coupon createCoupon(
     String couponCode,
     double intrinsicValue,
-    double points,
+    double purchasingValue,
     Shop shop,
     String type,
     String expirationDate
@@ -42,7 +42,7 @@ public class CouponManager {
     Coupon coupon = new PurchasableCoupon(
       couponCode,
       intrinsicValue,
-      points,
+      purchasingValue,
       shop,
       null,
       true,
@@ -61,11 +61,6 @@ public class CouponManager {
     String type,
     String expirationDate
   ) {
-    JSONObject json = jsonFileManager.searchJSON(couponCode);
-    if (json != null) {
-      return null;
-    }
-
     Coupon coupon = new RedeemableCoupon(
       couponCode,
       intrinsicValue,
@@ -78,14 +73,14 @@ public class CouponManager {
     return coupon;
   }
 
-  public boolean updateCoupon(Coupon coupon) {
+  public void updateCoupon(Coupon coupon) {
     String type = coupon.getType();
 
     JSONObject jsonObject = new JSONObject();
     if (type.equals("Purchasable")) {
       jsonObject.put("couponCode", coupon.getCouponCode());
       jsonObject.put("intrinsicValue", coupon.getIntrinsicValue());
-      jsonObject.put("points", coupon.getPoints());
+      jsonObject.put("purchasingValue", coupon.getPurchasingValue());
       jsonObject.put("shop", coupon.getShop().getShopName());
       jsonObject.put(
         "owner",
@@ -108,15 +103,15 @@ public class CouponManager {
       );
     }
 
-    return jsonFileManager.modifyJSON(
+    jsonFileManager.modifyJSON(
       "Coupon/" + type,
       coupon.getCouponCode(),
       jsonObject
     );
   }
 
-  public boolean deleteCoupon(Coupon coupon) {
-    return jsonFileManager.deleteJSON(
+  public void deleteCoupon(Coupon coupon) {
+    jsonFileManager.deleteJSON(
       "Coupon/" + coupon.getType(),
       coupon.getCouponCode()
     );
@@ -154,12 +149,12 @@ public class CouponManager {
         Account owner = accountManager.getAccount(
           couponJson.getString("owner")
         );
-        double points = couponJson.getDouble("points");
+        double purchasingValue = couponJson.getDouble("purchasingValue");
 
         return new PurchasableCoupon(
           couponCode,
           intrinsicValue,
-          points,
+          purchasingValue,
           shop,
           owner,
           active,
@@ -181,7 +176,7 @@ public class CouponManager {
     String expirationDate = jsonObject.getString("expirationDate");
 
     if (type.equals("Purchasable")) {
-      double points = jsonObject.getDouble("points");
+      double purchasingValue = jsonObject.getDouble("purchasingValue");
       String shop = jsonObject.getString("shop");
       String owner = jsonObject.getString("owner");
       result =
@@ -189,8 +184,8 @@ public class CouponManager {
         couponCode +
         "\", \"intrinsicValue\":" +
         intrinsicValue +
-        ", \"points\":" +
-        points +
+        ", \"purchasingValue\":" +
+        purchasingValue +
         ", \"shop\":\"" +
         shop +
         "\", \"owner\":" +

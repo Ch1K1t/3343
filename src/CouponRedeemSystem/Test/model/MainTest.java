@@ -7,7 +7,10 @@ import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import CouponRedeemSystem.System.Password.EncryptionManager;
 import CouponRedeemSystem.System.Password.PasswordManager;
+import CouponRedeemSystem.System.Util.Util;
 import java.io.File;
+import java.util.Date;
+import org.apache.commons.lang.time.DateUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -41,8 +44,10 @@ public class MainTest {
 
   // Coupon attributes
   protected final double intrinsicValue = 10.0;
-  protected final double points = 15.0;
-  protected final String couponExpirationDate = "01/01/2025";
+  protected final double purchasingValue = 15.0;
+  protected final String couponExpirationDate = Util.sdf.format(
+    DateUtils.addYears(new Date(), 1)
+  );
 
   // Shop attributes
   protected final String shopName = "shopTest";

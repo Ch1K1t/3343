@@ -12,7 +12,7 @@ public abstract class Coupon {
 
   private String couponCode;
   private double intrinsicValue;
-  private Double points;
+  private Double purchasingValue;
   private Shop shop;
   private Account owner;
   private boolean active;
@@ -23,7 +23,7 @@ public abstract class Coupon {
   public Coupon(
     String couponCode,
     double intrinsicValue,
-    double points,
+    double purchasingValue,
     Shop shop,
     Account owner,
     boolean active,
@@ -33,7 +33,7 @@ public abstract class Coupon {
     try {
       this.couponCode = couponCode;
       this.intrinsicValue = intrinsicValue;
-      this.points = points;
+      this.purchasingValue = purchasingValue;
       this.shop = shop;
       this.owner = owner;
       this.active = active;
@@ -89,8 +89,8 @@ public abstract class Coupon {
         couponCode +
         "\", intrinsicValue=" +
         intrinsicValue +
-        ", points=" +
-        points +
+        ", purchasingValue=" +
+        purchasingValue +
         ", shop=" +
         shop +
         ", owner=" +
@@ -124,24 +124,12 @@ public abstract class Coupon {
     return intrinsicValue;
   }
 
-  public void setIntrinsicValue(double intrinsicValue) {
-    this.intrinsicValue = intrinsicValue;
-  }
-
   public Shop getShop() {
     return shop;
   }
 
-  public void setShop(Shop shop) {
-    this.shop = shop;
-  }
-
   public Date getExpirationDate() {
     return expirationDate;
-  }
-
-  public void setExpirationDate(Date expirationDate) {
-    this.expirationDate = expirationDate;
   }
 
   public boolean isActive() {
@@ -156,10 +144,6 @@ public abstract class Coupon {
     return couponCode;
   }
 
-  public void setCouponCode(String couponCode) {
-    this.couponCode = couponCode;
-  }
-
   public Account getOwner() {
     return owner;
   }
@@ -168,19 +152,11 @@ public abstract class Coupon {
     this.owner = owner;
   }
 
-  public Double getPoints() {
-    return points;
-  }
-
-  public void setPoints(Double points) {
-    this.points = points;
+  public Double getPurchasingValue() {
+    return purchasingValue;
   }
 
   public String getType() {
     return type;
-  }
-
-  public void setType(String type) {
-    this.type = type;
   }
 }

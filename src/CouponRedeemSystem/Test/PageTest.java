@@ -4,7 +4,9 @@ import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Page.AdminPage;
 import CouponRedeemSystem.Page.HomePage;
+import CouponRedeemSystem.Page.ShopManagerPage;
 import CouponRedeemSystem.Page.SigninPage;
+import CouponRedeemSystem.Page.StaffPage;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.Test.model.MainTest;
@@ -39,9 +41,13 @@ public class PageTest extends MainTest {
     if (shop != null) {
       shopManager.deleteShop(shop);
     }
-    Coupon coupon = couponManager.getCoupon("couponCode");
-    if (coupon != null) {
-      couponManager.deleteCoupon(coupon);
+    Coupon rCoupon = couponManager.getCoupon("rCouponTest");
+    if (rCoupon != null) {
+      couponManager.deleteCoupon(rCoupon);
+    }
+    Coupon pCoupon = couponManager.getCoupon("pCouponTest");
+    if (pCoupon != null) {
+      couponManager.deleteCoupon(pCoupon);
     }
   }
 
@@ -224,16 +230,15 @@ public class PageTest extends MainTest {
   // create User account
   @Test
   public void createAccountTest() {
-    systemIn.provideLines(userName, password, age, telNo, dateOfBirth);
+    systemIn.provideLines(userName, password, dateOfBirth, telNo);
 
     Page page = new HomePage();
     page.createAccount("User");
     String expectedOutput =
       "\r\nPlease input the user name:\r\n" +
       "\r\nPlease input the password:\r\n" +
-      "\r\nPlease input the age:\r\n" +
-      "\r\nPlease input telephone number:\r\n" +
       "\r\nPlease input date of birth (dd/MM/yyyy):\r\n" +
+      "\r\nPlease input telephone number:\r\n" +
       "\r\nAccount created\r\n";
 
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
@@ -336,6 +341,7 @@ public class PageTest extends MainTest {
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
   }
 
+  // signin with non-existing account
   @Test
   public void signinTestFail() {
     systemIn.provideLines(userName, password);
@@ -350,6 +356,7 @@ public class PageTest extends MainTest {
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
   }
 
+  // signin with incorrect password
   @Test
   public void signinTestFail2() {
     passwordManager.createNewPassword(userName, password);
@@ -392,7 +399,11 @@ public class PageTest extends MainTest {
 
   @Test
   public void createRedeemableCouponTest() {
-    systemIn.provideLines("couponCode", "10.0", "11/11/2025");
+    systemIn.provideLines(
+      "rCouponTest",
+      Double.toString(intrinsicValue),
+      couponExpirationDate
+    );
 
     AdminPage page = new AdminPage();
     page.createRedeemableCoupon();
@@ -401,6 +412,220 @@ public class PageTest extends MainTest {
       "\r\nPlease input the coupon's intrinsic value:\r\n" +
       "\r\nPlease input coupon's expiration date (dd/MM/yyyy):\r\n" +
       "\r\nCoupon created\r\n";
+
+    Assert.assertEquals(expectedOutput, systemOutRule.getLog());
+  }
+
+  @Test
+  public void createRedeemableCouponTestFail() {
+    String couponCode = "rCouponTest";
+    String type = "Redeemable";
+
+    couponManager.createCoupon(
+      couponCode,
+      intrinsicValue,
+      type,
+      couponExpirationDate
+    );
+    systemIn.provideLines(couponCode);
+
+    AdminPage page = new AdminPage();
+    page.createRedeemableCoupon();
+    String expectedOutput =
+      "\r\nPlease input the coupon's code:\r\n" +
+      "\r\nCoupon already exists\r\n";
+
+    Assert.assertEquals(expectedOutput, systemOutRule.getLog());
+  }
+
+  @Test
+  public void createShopTest() {
+    systemIn.provideLines(shopName);
+
+    ShopManagerPage page = new ShopManagerPage();
+    page.createShop();
+    String expectedOutput =
+      "\r\nPlease input the shop name:\r\n" + "\r\nShop created\r\n";
+
+    Assert.assertEquals(expectedOutput, systemOutRule.getLog());
+  }
+
+  @Test
+  public void createShopTestFail() {
+    shopManager.createShop(shopName);
+    systemIn.provideLines(shopName);
+
+    ShopManagerPage page = new ShopManagerPage();
+    page.createShop();
+    String expectedOutput =
+      "\r\nPlease input the shop name:\r\n" + "\r\nShop already exists\r\n";
+
+    Assert.assertEquals(expectedOutput, systemOutRule.getLog());
+  }
+
+  @Test
+  public void deleteShopTest() {
+    shopManager.createShop(shopName);
+    systemIn.provideLines(shopName);
+
+    ShopManagerPage page = new ShopManagerPage();
+    page.deleteShop();
+    String expectedOutput =
+      "\r\nPlease input the shop name:\r\n" + "\r\nShop deleted\r\n";
+
+    Assert.assertEquals(expectedOutput, systemOutRule.getLog());
+  }
+
+  @Test
+  public void deleteShopTestFail() {
+    systemIn.provideLines(shopName);
+
+    ShopManagerPage page = new ShopManagerPage();
+    page.deleteShop();
+    String expectedOutput =
+      "\r\nPlease input the shop name:\r\n" + "\r\nShop does not exist\r\n";
+
+    Assert.assertEquals(expectedOutput, systemOutRule.getLog());
+  }
+
+  @Test
+  public void shopManagerDeleteAccountTest() {
+    accountManager.createAccount(userName, "Staff");
+    Shop shop = shopManager.createShop(shopName);
+    shop.addStaff(userName);
+    shopManager.updateShop(shop);
+    systemIn.provideLines(userName);
+
+    ShopManagerPage page = new ShopManagerPage();
+    page.deleteAccount();
+    String expectedOutput =
+      "\r\nPlease input the staff name:\r\n" + "\r\nAccount deleted\r\n";
+
+    Assert.assertEquals(expectedOutput, systemOutRule.getLog());
+  }
+
+  // delete non-existing account
+  @Test
+  public void shopManagerDeleteAccountTestFail() {
+    systemIn.provideLines(userName);
+
+    ShopManagerPage page = new ShopManagerPage();
+    page.deleteAccount();
+    String expectedOutput =
+      "\r\nPlease input the staff name:\r\n" + "\r\nAccount does not exist\r\n";
+
+    Assert.assertEquals(expectedOutput, systemOutRule.getLog());
+  }
+
+  // delete account that is not a staff account
+  @Test
+  public void shopManagerDeleteAccountTestFail2() {
+    accountManager.createAccount(userName, "Admin");
+    systemIn.provideLines(userName);
+
+    ShopManagerPage page = new ShopManagerPage();
+    page.deleteAccount();
+    String expectedOutput =
+      "\r\nPlease input the staff name:\r\n" +
+      "\r\nThis account is not a staff account\r\n";
+
+    Assert.assertEquals(expectedOutput, systemOutRule.getLog());
+  }
+
+  @Test
+  public void createPurchasableCouponTest() {
+    accountManager.createAccount(userName, "Staff");
+    Shop shop = shopManager.createShop(shopName);
+    shop.addStaff(userName);
+    shopManager.updateShop(shop);
+
+    systemIn.provideLines(
+      "pCouponTest",
+      Double.toString(intrinsicValue),
+      Double.toString(purchasingValue),
+      couponExpirationDate
+    );
+
+    StaffPage page = new StaffPage(userName);
+    page.createPurchasableCoupon();
+
+    String expectedOutput =
+      "\r\nPlease input the coupon's code:\r\n" +
+      "\r\nPlease input the coupon's intrinsic value:\r\n" +
+      "\r\nPlease input the coupon's purchasing value:\r\n" +
+      "\r\nPlease input coupon's expiration date (dd/MM/yyyy):\r\n" +
+      "\r\nCoupon created\r\n";
+
+    Assert.assertEquals(expectedOutput, systemOutRule.getLog());
+  }
+
+  @Test
+  public void createPurchasableCouponTestFail() {
+    accountManager.createAccount(userName, "Staff");
+    Shop shop = shopManager.createShop(shopName);
+    shop.addStaff(userName);
+    shopManager.updateShop(shop);
+
+    couponManager.createCoupon(
+      "pCouponTest",
+      intrinsicValue,
+      purchasingValue,
+      shop,
+      "Purchasable",
+      couponExpirationDate
+    );
+    systemIn.provideLines("pCouponTest");
+
+    StaffPage page = new StaffPage(userName);
+    page.createPurchasableCoupon();
+
+    String expectedOutput =
+      "\r\nPlease input the coupon's code:\r\n" +
+      "\r\nCoupon already exists\r\n";
+
+    Assert.assertEquals(expectedOutput, systemOutRule.getLog());
+  }
+
+  @Test
+  public void deleteCouponTest() {
+    accountManager.createAccount(userName, "Staff");
+    Shop shop = shopManager.createShop(shopName);
+    shop.addStaff(userName);
+    shopManager.updateShop(shop);
+
+    couponManager.createCoupon(
+      "pCouponTest",
+      intrinsicValue,
+      purchasingValue,
+      shop,
+      "Purchasable",
+      couponExpirationDate
+    );
+    systemIn.provideLines("pCouponTest");
+
+    StaffPage page = new StaffPage(userName);
+    page.deleteCoupon();
+
+    String expectedOutput =
+      "\r\nPlease input the coupon's code:\r\n" + "\r\nCoupon deleted\r\n";
+
+    Assert.assertEquals(expectedOutput, systemOutRule.getLog());
+  }
+
+  @Test
+  public void deleteCouponTestFail() {
+    accountManager.createAccount(userName, "Staff");
+    Shop shop = shopManager.createShop(shopName);
+    shop.addStaff(userName);
+    shopManager.updateShop(shop);
+
+    systemIn.provideLines("pCouponTest");
+
+    StaffPage page = new StaffPage(userName);
+    page.deleteCoupon();
+
+    String expectedOutput =
+      "\r\nPlease input the coupon's code:\r\n" + "\r\nCoupon not found\r\n";
 
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
   }

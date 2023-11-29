@@ -31,27 +31,21 @@ public class PasswordManager {
     }
   }
 
-  public boolean createNewPassword(String userName, String password) {
+  public void createNewPassword(String userName, String password) {
     JSONObject jsonObject = getPasswordRefTable();
-    if (jsonObject.get(userName) != null) {
-      return false;
-    }
 
     String encryptedPassword = encryptionManager.encryption(password);
     jsonObject.put(userName, encryptedPassword);
 
-    return jsonFileManager.modifyJSON("Password", "ReferenceTable", jsonObject);
+    jsonFileManager.modifyJSON("Password", "ReferenceTable", jsonObject);
   }
 
-  public boolean deletePassword(String userName) {
+  public void deletePassword(String userName) {
     JSONObject jsonObject = getPasswordRefTable();
-    if (jsonObject.get(userName) == null) {
-      return false;
-    }
 
     jsonObject.remove(userName);
 
-    return jsonFileManager.modifyJSON("Password", "ReferenceTable", jsonObject);
+    jsonFileManager.modifyJSON("Password", "ReferenceTable", jsonObject);
   }
 
   public String checkPasswordValid(String userName, String password) {
@@ -64,7 +58,6 @@ public class PasswordManager {
     if (text.equals(password)) {
       return "success";
     } else {
-      // System.out.println("Password is not correct!");
       return "not correct";
     }
   }

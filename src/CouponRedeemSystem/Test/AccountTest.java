@@ -55,16 +55,6 @@ public class AccountTest extends MainTest {
   }
 
   @Test
-  public void createPasswordTestFail() {
-    String role = "Admin";
-
-    accountManager.createAccount(userName, role);
-    boolean result = accountManager.createPassword(userName, password);
-
-    Assert.assertEquals(false, result);
-  }
-
-  @Test
   public void createNonUserAccountTest() {
     String[] roleList = new String[] { "Admin", "Shop", "Staff" };
 
@@ -85,9 +75,10 @@ public class AccountTest extends MainTest {
     Account account = accountManager.createAccount(
       userName,
       role,
-      telNo,
-      dateOfBirth
+      dateOfBirth,
+      telNo
     );
+    System.out.println(account);
 
     String expectedOutput =
       "Account{userName=\"" +
@@ -100,8 +91,7 @@ public class AccountTest extends MainTest {
       telNo +
       "\", dateOfBirth=" +
       Util.sdf.parse(dateOfBirth) +
-      ", points=" +
-      0.0 +
+      ", points=0.0" +
       ", couponIDs=[]}";
 
     Assert.assertEquals(expectedOutput, account.toString());
@@ -130,7 +120,7 @@ public class AccountTest extends MainTest {
   public void updateUserAccount() {
     String role = "User";
 
-    accountManager.createAccount(userName, role, telNo, dateOfBirth);
+    accountManager.createAccount(userName, role, dateOfBirth, telNo);
 
     JSONObject accountJson = jsonFileManager.searchJSON(userName);
 
@@ -139,15 +129,15 @@ public class AccountTest extends MainTest {
       userName +
       "\", \"role\":\"" +
       role +
+      "\", \"points\":0.0" +
+      ", \"couponIDs\":[]" +
+      "\", \"dateOfBirth\":\"" +
+      dateOfBirth +
       "\", \"age\":" +
       age +
       ", \"telNo\":\"" +
       telNo +
-      "\", \"dateOfBirth\":\"" +
-      dateOfBirth +
-      "\", \"points\":" +
-      0.0 +
-      ", \"couponIDs\":[]}";
+      "}";
 
     Assert.assertEquals(
       expectedOutput,
@@ -160,19 +150,10 @@ public class AccountTest extends MainTest {
     String role = "Admin";
 
     Account account = accountManager.createAccount(userName, role);
-    boolean result = accountManager.deleteAccount(account);
+    accountManager.deleteAccount(account);
+    Account account2 = accountManager.getAccount(userName);
 
-    Assert.assertEquals(true, result);
-  }
-
-  @Test
-  public void deleteAccountTestFail() {
-    String role = "Admin";
-
-    Account account = new Account(userName, role);
-    boolean result = accountManager.deleteAccount(account);
-
-    Assert.assertEquals(false, result);
+    Assert.assertEquals(null, account2);
   }
 
   @Test
@@ -204,14 +185,21 @@ public class AccountTest extends MainTest {
   }
 
   @Test
+  public void calculateAgeTest() throws ParseException {
+    Date dob = Util.sdf.parse(dateOfBirth);
+
+    Assert.assertEquals(Integer.parseInt(age), Account.calculateAge(dob));
+  }
+
+  @Test
   public void couponToPointsTest() {
     String role = "User";
 
     Account account = accountManager.createAccount(
       userName,
       role,
-      telNo,
-      dateOfBirth
+      dateOfBirth,
+      telNo
     );
 
     String couponCode = "rCouponTest";
@@ -254,10 +242,10 @@ public class AccountTest extends MainTest {
     Account account = accountManager.createAccount(
       userName,
       role,
-      telNo,
-      dateOfBirth
+      dateOfBirth,
+      telNo
     );
-    account.setPoints(100.0);
+    account.addPoints(100.0);
     accountManager.updateAccount(account);
 
     Shop shop = shopManager.createShop(shopName);
@@ -267,7 +255,7 @@ public class AccountTest extends MainTest {
     Coupon coupon = couponManager.createCoupon(
       couponCode,
       intrinsicValue,
-      points,
+      purchasingValue,
       shop,
       type,
       couponExpirationDate
@@ -290,8 +278,8 @@ public class AccountTest extends MainTest {
     Account account = accountManager.createAccount(
       userName,
       role,
-      telNo,
-      dateOfBirth
+      dateOfBirth,
+      telNo
     );
     account.addCouponID("pCouponTest");
     accountManager.updateAccount(account);
@@ -302,7 +290,7 @@ public class AccountTest extends MainTest {
     Coupon coupon = couponManager.createCoupon(
       couponCode,
       intrinsicValue,
-      points,
+      purchasingValue,
       shop,
       type,
       couponExpirationDate

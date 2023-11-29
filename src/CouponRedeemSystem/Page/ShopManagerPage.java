@@ -23,6 +23,13 @@ public class ShopManagerPage extends Page {
     ShopManager shopManager = ShopManager.getInstance();
 
     String shopName = strInput("shop name");
+    Shop shop = shopManager.getShop(shopName);
+    if (shop != null) {
+      System.out.println();
+      System.out.println("Shop already exists");
+      return;
+    }
+
     shopManager.createShop(shopName);
 
     System.out.println();
@@ -34,23 +41,24 @@ public class ShopManagerPage extends Page {
 
     String shopName = strInput("shop name");
     Shop shop = shopManager.getShop(shopName);
-    boolean isDeleted = shopManager.deleteShop(shop);
-
-    if (isDeleted) {
+    if (shop == null) {
       System.out.println();
-      System.out.println("Shop deleted");
-    } else {
-      System.out.println();
-      System.out.println("Shop deletion failed");
+      System.out.println("Shop does not exist");
+      return;
     }
+
+    shopManager.deleteShop(shop);
+
+    System.out.println();
+    System.out.println("Shop deleted");
   }
 
   public void deleteAccount() {
     AccountManager accountManager = AccountManager.getInstance();
     ShopManager shopManager = ShopManager.getInstance();
 
-    String username = strInput("staff name");
-    Account account = accountManager.getAccount(username);
+    String userName = strInput("staff name");
+    Account account = accountManager.getAccount(userName);
     if (account == null) {
       System.out.println();
       System.out.println("Account does not exist");
@@ -58,18 +66,13 @@ public class ShopManagerPage extends Page {
     }
 
     if (account.getRole().equals("Staff")) {
-      Shop shop = shopManager.getShopByStaff(username);
-      shop.removeStaff(username);
+      Shop shop = shopManager.getShopByStaff(userName);
+      shop.removeStaff(userName);
       shopManager.updateShop(shop);
 
-      boolean isDeleted = accountManager.deleteAccount(account);
-      if (isDeleted) {
-        System.out.println();
-        System.out.println("Account deleted");
-      } else {
-        System.out.println();
-        System.out.println("Account deletion failed");
-      }
+      accountManager.deleteAccount(account);
+      System.out.println();
+      System.out.println("Account deleted");
     } else {
       System.out.println();
       System.out.println("This account is not a staff account");
