@@ -143,17 +143,17 @@ public class Account {
         userName +
         "\", role=\"" +
         role +
-        "\", age=" +
-        age +
-        ", telNo=\"" +
-        telNo +
-        "\", dateOfBirth=" +
-        dateOfBirth +
-        ", points=" +
+        "\", points=" +
         points +
         ", couponIDs=" +
         couponIDs +
-        "}"
+        ", dateOfBirth=" +
+        dateOfBirth +
+        ", age=" +
+        age +
+        ", telNo=\"" +
+        telNo +
+        "\"}"
       );
     } else {
       return (

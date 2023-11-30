@@ -47,7 +47,7 @@ public class UserPage extends Page {
     List<Shop> shopList = shopManager.getShopList();
     for (Shop shop : shopList) {
       boolean hasCouponToPurchase = false;
-      List<String> couponList = shop.getPurchasableCouponList();
+      List<String> couponList = shop.getCouponList();
       for (String s : couponList) {
         Coupon coupon = couponManager.getCoupon(s);
         if (coupon.getExpirationDate().before(Util.today)) continue;
@@ -218,7 +218,10 @@ public class UserPage extends Page {
 
     String couponID = strInput("coupon's code");
     Coupon coupon = couponManager.getCoupon(couponID);
-    if (coupon == null) {
+    if (
+      coupon == null ||
+      !coupon.getOwner().getUserName().equals(account.getUserName())
+    ) {
       System.out.println();
       System.out.println("Coupon not found");
       return;

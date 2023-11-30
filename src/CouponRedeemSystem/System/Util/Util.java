@@ -35,12 +35,12 @@ public class Util {
 
     Shop shop1 = shopManager.createShop("shop1");
     shop1.addStaff("staff1");
-    shop1.addPurchasableCoupon("P1");
+    shop1.addCoupon("P1");
     shop1.addDiscount("discount1");
     shopManager.updateShop(shop1);
     Shop shop2 = shopManager.createShop("shop2");
     shop2.addStaff("staff2");
-    shop2.addPurchasableCoupon("P2");
+    shop2.addCoupon("P2");
     shop2.addDiscount("discount2");
     shopManager.updateShop(shop2);
 

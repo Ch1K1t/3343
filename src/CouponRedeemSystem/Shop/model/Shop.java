@@ -48,15 +48,15 @@ public class Shop {
     return shopName;
   }
 
-  public List<String> getPurchasableCouponList() {
+  public List<String> getCouponList() {
     return couponList;
   }
 
-  public void addPurchasableCoupon(String couponCode) {
+  public void addCoupon(String couponCode) {
     couponList.add(couponCode);
   }
 
-  public void removePurchasableCoupon(String couponCode) {
+  public void removeCoupon(String couponCode) {
     couponList.remove(couponCode);
   }
 

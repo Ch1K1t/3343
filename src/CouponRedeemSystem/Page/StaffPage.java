@@ -43,7 +43,7 @@ public class StaffPage extends Page {
     Shop shop = shopManager.getShopByStaff(account.getUserName());
 
     boolean noCoupon = true;
-    List<String> couponList = shop.getPurchasableCouponList();
+    List<String> couponList = shop.getCouponList();
     for (String s : couponList) {
       Coupon coupon = couponManager.getCoupon(s);
       if (coupon.getExpirationDate().before(Util.today)) continue;
@@ -83,7 +83,7 @@ public class StaffPage extends Page {
     double purchasingValue = doubleInput("coupon's purchasing value");
 
     Shop shop = shopManager.getShopByStaff(account.getUserName());
-    shop.addPurchasableCoupon(couponCode);
+    shop.addCoupon(couponCode);
     shopManager.updateShop(shop);
 
     String expirationDate = afterDateInput("coupon's expiration date");
@@ -114,7 +114,7 @@ public class StaffPage extends Page {
     }
 
     Shop shop = coupon.getShop();
-    shop.removePurchasableCoupon(couponCode);
+    shop.removeCoupon(couponCode);
     shopManager.updateShop(shop);
 
     couponManager.deleteCoupon(coupon);

@@ -68,14 +68,15 @@ public class AccountTest extends MainTest {
       userName +
       "\", role=\"" +
       role +
-      "\", age=" +
+      "\", points=0.0" +
+      ", couponIDs=[]" +
+      ", dateOfBirth=" +
+      Util.sdf.parse(dateOfBirth) +
+      ", age=" +
       age +
       ", telNo=\"" +
       telNo +
-      "\", dateOfBirth=" +
-      Util.sdf.parse(dateOfBirth) +
-      ", points=0.0" +
-      ", couponIDs=[]}";
+      "\"}";
 
     Assert.assertEquals(expectedOutput, account.toString());
   }

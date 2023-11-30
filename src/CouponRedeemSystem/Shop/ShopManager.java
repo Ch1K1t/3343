@@ -30,7 +30,7 @@ public class ShopManager {
   public void updateShop(Shop shop) {
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("shopName", shop.getShopName());
-    jsonObject.put("couponList", shop.getPurchasableCouponList());
+    jsonObject.put("couponList", shop.getCouponList());
     jsonObject.put("staffList", shop.getStaffList());
     jsonObject.put("discountList", shop.getDiscountList());
 
