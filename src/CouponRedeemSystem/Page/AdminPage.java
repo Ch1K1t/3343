@@ -5,6 +5,8 @@ import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Coupon.model.Coupon;
 import CouponRedeemSystem.Page.model.Page;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AdminPage extends Page {
 
@@ -65,36 +67,20 @@ public class AdminPage extends Page {
   public void execute() {
     String cmd;
 
+    Map<String, Runnable> cmdMap = new HashMap<>();
+    cmdMap.put("1", () -> createAccount("Admin"));
+    cmdMap.put("2", () -> createAccount("Shop Manager"));
+    cmdMap.put("3", () -> createAccount("Staff"));
+    cmdMap.put("4", () -> createAccount("User"));
+    cmdMap.put("5", this::deleteAccount);
+    cmdMap.put("6", this::createRedeemableCoupon);
+    cmdMap.put("7", () -> System.out.println("Signout successfully"));
+    cmdMap.put("8", this::exit);
+
     do {
       getInstruction();
-      cmd = s.nextLine();
-
-      switch (cmd) {
-        case "1":
-          createAccount("Admin");
-          break;
-        case "2":
-          createAccount("Shop Manager");
-          break;
-        case "3":
-          createAccount("Staff");
-          break;
-        case "4":
-          createAccount("User");
-          break;
-        case "5":
-          deleteAccount();
-          break;
-        case "6":
-          createRedeemableCoupon();
-          break;
-        case "7":
-          System.out.println("Signout successfully");
-          break;
-        default:
-          System.out.println("Unknown command");
-          break;
-      }
+      cmd = s.nextLine().toLowerCase();
+      cmdExecute(cmdMap, cmd);
     } while (!cmd.equals("7"));
   }
 }

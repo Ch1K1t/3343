@@ -12,6 +12,7 @@ import java.util.Date;
 public class Util {
 
   public static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+  public static final Date today = new Date();
 
   public static void initializeSystem() {
     clearSystem();
@@ -66,7 +67,7 @@ public class Util {
       "discount1",
       shop1,
       2,
-      Util.sdf.format(new Date()),
+      Util.sdf.format(Util.today),
       7
     );
     discountManager.createDiscount("discount2", shop2, 2, "01/12/2023", 5);

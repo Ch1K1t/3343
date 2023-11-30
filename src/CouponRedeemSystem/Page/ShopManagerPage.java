@@ -5,6 +5,8 @@ import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShopManagerPage extends Page {
 
@@ -81,30 +83,17 @@ public class ShopManagerPage extends Page {
 
   public void execute() {
     String cmd;
+    Map<String, Runnable> cmdMap = new HashMap<>();
+    cmdMap.put("1", () -> createShop());
+    cmdMap.put("2", () -> deleteShop());
+    cmdMap.put("3", () -> createAccount("Staff"));
+    cmdMap.put("4", this::deleteAccount);
+    cmdMap.put("5", () -> System.out.println("Signout successfully"));
+    cmdMap.put("6", this::exit);
     do {
       getInstruction();
-      cmd = s.nextLine();
-
-      switch (cmd) {
-        case "1":
-          createShop();
-          break;
-        case "2":
-          deleteShop();
-          break;
-        case "3":
-          createAccount("Staff");
-          break;
-        case "4":
-          deleteAccount();
-          break;
-        case "5":
-          System.out.println("Signout successfully");
-          break;
-        default:
-          System.out.println("Unknown command");
-          break;
-      }
+      cmd = s.nextLine().toLowerCase();
+      cmdExecute(cmdMap, cmd);
     } while (!cmd.equals("5"));
   }
 }

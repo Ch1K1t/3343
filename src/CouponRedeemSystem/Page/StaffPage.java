@@ -10,8 +10,9 @@ import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.Util.Util;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StaffPage extends Page {
 
@@ -45,7 +46,7 @@ public class StaffPage extends Page {
     List<String> couponList = shop.getPurchasableCouponList();
     for (String s : couponList) {
       Coupon coupon = couponManager.getCoupon(s);
-      if (coupon.getExpirationDate().before(new Date())) continue;
+      if (coupon.getExpirationDate().before(Util.today)) continue;
       noCoupon = false;
       System.out.println();
       System.out.println("Coupon Code: " + coupon.getCouponCode());
@@ -203,37 +204,20 @@ public class StaffPage extends Page {
 
   public void execute() {
     String cmd;
+    Map<String, Runnable> cmdMap = new HashMap<>();
+    cmdMap.put("1", () -> checkCoupon());
+    cmdMap.put("2", () -> createPurchasableCoupon());
+    cmdMap.put("3", () -> deleteCoupon());
+    cmdMap.put("4", () -> checkDiscount());
+    cmdMap.put("5", () -> createDiscount());
+    cmdMap.put("6", () -> deleteDiscount());
+    cmdMap.put("7", () -> System.out.println("Signout successfully"));
+    cmdMap.put("8", this::exit);
 
     do {
       getInstruction();
       cmd = s.nextLine();
-
-      switch (cmd) {
-        case "1":
-          checkCoupon();
-          break;
-        case "2":
-          createPurchasableCoupon();
-          break;
-        case "3":
-          deleteCoupon();
-          break;
-        case "4":
-          checkDiscount();
-          break;
-        case "5":
-          createDiscount();
-          break;
-        case "6":
-          deleteDiscount();
-          break;
-        case "7":
-          System.out.println("Signout successfully");
-          break;
-        default:
-          System.out.println("Invalid command, please input again:");
-          break;
-      }
+      cmdExecute(cmdMap, cmd);
     } while (!cmd.equals("7"));
   }
 }

@@ -6,7 +6,6 @@ import CouponRedeemSystem.System.Util.Util;
 import CouponRedeemSystem.Test.model.MainTest;
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Date;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.time.DateUtils;
 import org.junit.After;
@@ -224,10 +223,10 @@ public class CouponTest extends MainTest {
   public void pointConversionTest() {
     String couponCode = "rCouponTest";
     String type = "Redeemable";
-    String expirationDate = Util.sdf.format(DateUtils.addYears(new Date(), 1));
+    String expirationDate = Util.sdf.format(DateUtils.addYears(Util.today, 1));
 
     Calendar cal = Calendar.getInstance();
-    cal.setTime(new Date());
+    cal.setTime(Util.today);
     int thisYear = cal.get(Calendar.YEAR);
     boolean isThisYearLeap =
       ((thisYear % 4 == 0) && (thisYear % 100 != 0) || (thisYear % 400 == 0));

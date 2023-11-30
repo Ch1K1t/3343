@@ -9,8 +9,10 @@ import CouponRedeemSystem.Discount.model.Discount;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
-import java.util.Date;
+import CouponRedeemSystem.System.Util.Util;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserPage extends Page {
 
@@ -48,7 +50,7 @@ public class UserPage extends Page {
       List<String> couponList = shop.getPurchasableCouponList();
       for (String s : couponList) {
         Coupon coupon = couponManager.getCoupon(s);
-        if (coupon.getExpirationDate().before(new Date())) continue;
+        if (coupon.getExpirationDate().before(Util.today)) continue;
         if (coupon.getOwner() != null) continue;
         hasCouponToPurchase = true;
         break;
@@ -84,7 +86,7 @@ public class UserPage extends Page {
 
       for (String s : couponList) {
         Coupon coupon = couponManager.getCoupon(s);
-        if (coupon.getExpirationDate().before(new Date())) continue;
+        if (coupon.getExpirationDate().before(Util.today)) continue;
         if (coupon.getOwner() != null) continue;
 
         if (discountTotal > 0) {
@@ -138,7 +140,7 @@ public class UserPage extends Page {
       System.out.println();
       System.out.println("Insufficient points");
       return;
-    } else if (coupon.getExpirationDate().before(new Date())) {
+    } else if (coupon.getExpirationDate().before(Util.today)) {
       System.out.println();
       System.out.println("Coupon has expired");
       return;
@@ -162,7 +164,7 @@ public class UserPage extends Page {
       System.out.println();
       System.out.println("Coupon has been used!");
       return;
-    } else if (coupon.getExpirationDate().before(new Date())) {
+    } else if (coupon.getExpirationDate().before(Util.today)) {
       System.out.println();
       System.out.println("Coupon has expired!");
       return;
@@ -182,7 +184,7 @@ public class UserPage extends Page {
     for (String s : couponList) {
       Coupon coupon = couponManager.getCoupon(s);
       if (
-        coupon.getExpirationDate().before(new Date()) && coupon.isActive()
+        coupon.getExpirationDate().before(Util.today) && coupon.isActive()
       ) continue;
 
       if (!hasCoupon) {
@@ -224,7 +226,7 @@ public class UserPage extends Page {
       System.out.println();
       System.out.println("Coupon has been used!");
       return;
-    } else if (coupon.getExpirationDate().before(new Date())) {
+    } else if (coupon.getExpirationDate().before(Util.today)) {
       System.out.println();
       System.out.println("Coupon has expired!");
       return;
@@ -236,31 +238,17 @@ public class UserPage extends Page {
 
   public void execute() {
     String cmd;
+    Map<String, Runnable> cmdMap = new HashMap<>();
+    cmdMap.put("1", () -> checkRemainingPoints());
+    cmdMap.put("2", () -> purchaseCoupon());
+    cmdMap.put("3", () -> redeemCoupon());
+    cmdMap.put("4", () -> System.out.println("Signout successfully"));
+    cmdMap.put("5", this::exit);
 
     do {
       getInstruction();
-      cmd = s.nextLine();
-
-      switch (cmd) {
-        case "1":
-          checkRemainingPoints();
-          break;
-        case "2":
-          purchaseCoupon();
-          break;
-        case "3":
-          redeemCoupon();
-          break;
-        case "4":
-          useCoupon();
-          break;
-        case "5":
-          System.out.println("Signout successfully");
-          break;
-        default:
-          System.out.println("Unknown command");
-          break;
-      }
-    } while (!cmd.equals("5"));
+      cmd = s.nextLine().toLowerCase();
+      cmdExecute(cmdMap, cmd);
+    } while (!cmd.equals("4"));
   }
 }

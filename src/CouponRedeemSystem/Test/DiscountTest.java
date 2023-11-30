@@ -5,7 +5,6 @@ import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.Util.Util;
 import CouponRedeemSystem.Test.model.MainTest;
 import java.text.ParseException;
-import java.util.Date;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.time.DateUtils;
 import org.junit.After;
@@ -133,7 +132,7 @@ public class DiscountTest extends MainTest {
 
   @Test
   public void validateTimeTest() {
-    String startDateStr = Util.sdf.format(DateUtils.addDays(new Date(), -1));
+    String startDateStr = Util.sdf.format(DateUtils.addDays(Util.today, -1));
 
     Shop shop = shopManager.createShop(shopName);
     Discount discount = discountManager.createDiscount(
@@ -149,7 +148,7 @@ public class DiscountTest extends MainTest {
 
   @Test
   public void validateTimeTestFail() {
-    String startDate = Util.sdf.format(DateUtils.addDays(new Date(), 1));
+    String startDate = Util.sdf.format(DateUtils.addDays(Util.today, 1));
 
     Shop shop = shopManager.createShop(shopName);
     Discount discount = discountManager.createDiscount(

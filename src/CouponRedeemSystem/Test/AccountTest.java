@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.time.DateUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -186,9 +187,10 @@ public class AccountTest extends MainTest {
 
     String couponCode = "rCouponTest";
     String type = "Redeemable";
+    String expirationDate = Util.sdf.format(DateUtils.addYears(Util.today, 1));
 
     Calendar cal = Calendar.getInstance();
-    cal.setTime(new Date());
+    cal.setTime(Util.today);
     int thisYear = cal.get(Calendar.YEAR);
     boolean isThisYearLeap =
       ((thisYear % 4 == 0) && (thisYear % 100 != 0) || (thisYear % 400 == 0));

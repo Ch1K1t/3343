@@ -67,7 +67,7 @@ public abstract class Coupon {
     Calendar cal = Calendar.getInstance();
     cal.setTime(this.expirationDate);
     Calendar cal2 = Calendar.getInstance();
-    cal2.setTime(new Date());
+    cal2.setTime(Util.today);
 
     int daysBeforeExpire =
       cal.get(Calendar.DAY_OF_YEAR) - cal2.get(Calendar.DAY_OF_YEAR);

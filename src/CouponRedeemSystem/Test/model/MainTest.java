@@ -9,7 +9,6 @@ import CouponRedeemSystem.System.Password.EncryptionManager;
 import CouponRedeemSystem.System.Password.PasswordManager;
 import CouponRedeemSystem.System.Util.Util;
 import java.io.File;
-import java.util.Date;
 import org.apache.commons.lang.time.DateUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -46,7 +45,7 @@ public class MainTest {
   protected final double intrinsicValue = 10.0;
   protected final double purchasingValue = 15.0;
   protected final String expirationDate = Util.sdf.format(
-    DateUtils.addYears(new Date(), 1)
+    DateUtils.addYears(Util.today, 1)
   );
 
   // Shop attributes
@@ -57,11 +56,11 @@ public class MainTest {
   protected final String discountName = "discountTest";
   protected final double value = 10.0;
   protected final String startDate = Util.sdf.format(
-    DateUtils.addDays(new Date(), -1)
+    DateUtils.addDays(Util.today, -1)
   );
   protected final int day = 10;
   protected final String endDate = Util.sdf.format(
-    DateUtils.addDays(new Date(), 9)
+    DateUtils.addDays(Util.today, 9)
   );
 
   @Test

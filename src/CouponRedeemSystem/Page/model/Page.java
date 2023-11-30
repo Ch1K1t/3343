@@ -7,6 +7,7 @@ import CouponRedeemSystem.System.Password.PasswordManager;
 import CouponRedeemSystem.System.Util.Util;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Map;
 import java.util.Scanner;
 
 public abstract class Page {
@@ -96,7 +97,7 @@ public abstract class Page {
           continue;
         }
         Date date = Util.sdf.parse(dateStr);
-        isBeforeToday = date.compareTo(new Date()) <= 0;
+        isBeforeToday = date.compareTo(Util.today) <= 0;
         if (!isBeforeToday) {
           System.out.println("Date must be before today, please input again:");
           continue;
@@ -128,7 +129,7 @@ public abstract class Page {
           continue;
         }
         Date date = Util.sdf.parse(dateStr);
-        isAfterToday = date.compareTo(new Date()) >= 0;
+        isAfterToday = date.compareTo(Util.today) >= 0;
         if (!isAfterToday) {
           System.out.println("Date must be after today, please input again:");
           continue;
@@ -195,6 +196,15 @@ public abstract class Page {
     accountManager.createAccount(userName, role, dob, telNo);
     System.out.println();
     System.out.println("Account created");
+  }
+
+  public void cmdExecute(Map<String, Runnable> cmdMap, String cmd) {
+    Runnable command = cmdMap.get(cmd);
+    if (command != null) {
+      command.run();
+    } else {
+      System.out.println("Unknown command");
+    }
   }
 
   public void exit() {
