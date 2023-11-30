@@ -10,34 +10,25 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.time.DateUtils;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class DiscountTest extends MainTest {
 
-  private final Shop shop = shopManager.createShop(shopName);
-
+  @Before
   @After
   public void reset() {
-    Shop shop = shopManager.getShop(shopName);
-    if (shop != null) {
-      shopManager.deleteShop(shop);
-    }
-    Discount discount = discountManager.getDiscount(discountName);
-    if (discount != null) {
-      discountManager.deleteDiscount(discount);
-    }
+    Util.clearSystem();
   }
 
   @Test
   public void createDiscountTest() throws ParseException {
-    Date startDate = Util.sdf.parse(startDateStr);
-    Date expireDate = Util.sdf.parse(expireDateStr);
-
+    Shop shop = shopManager.createShop(shopName);
     Discount discount = discountManager.createDiscount(
       discountName,
       shop,
       value,
-      startDateStr,
+      startDate,
       day
     );
 
@@ -47,9 +38,9 @@ public class DiscountTest extends MainTest {
       "\", shop=" +
       shop +
       ", startDate=" +
-      startDate +
-      ", expireDate=" +
-      expireDate +
+      Util.sdf.parse(startDate) +
+      ", endDate=" +
+      Util.sdf.parse(endDate) +
       ", value=" +
       value +
       "}";
@@ -59,13 +50,8 @@ public class DiscountTest extends MainTest {
 
   @Test
   public void updateDiscountTest() throws ParseException {
-    discountManager.createDiscount(
-      discountName,
-      shop,
-      value,
-      startDateStr,
-      day
-    );
+    Shop shop = shopManager.createShop(shopName);
+    discountManager.createDiscount(discountName, shop, value, startDate, day);
 
     JSONObject discountJson = jsonFileManager.searchJSON(discountName);
 
@@ -75,9 +61,9 @@ public class DiscountTest extends MainTest {
       "\", \"shop\":\"" +
       shopName +
       "\", \"startDate\":\"" +
-      startDateStr +
-      "\", \"expireDate\":\"" +
-      expireDateStr +
+      startDate +
+      "\", \"endDate\":\"" +
+      endDate +
       "\", \"value\":" +
       value +
       "}";
@@ -90,11 +76,12 @@ public class DiscountTest extends MainTest {
 
   @Test
   public void deleteDiscountTest() {
+    Shop shop = shopManager.createShop(shopName);
     Discount discount = discountManager.createDiscount(
       discountName,
       shop,
       value,
-      startDateStr,
+      startDate,
       day
     );
 
@@ -106,11 +93,12 @@ public class DiscountTest extends MainTest {
 
   @Test
   public void getDiscountTest() {
+    Shop shop = shopManager.createShop(shopName);
     Discount discount = discountManager.createDiscount(
       discountName,
       shop,
       value,
-      startDateStr,
+      startDate,
       day
     );
 
@@ -128,11 +116,12 @@ public class DiscountTest extends MainTest {
 
   @Test
   public void extractDiscountFromJsonTest() {
+    Shop shop = shopManager.createShop(shopName);
     Discount discount = discountManager.createDiscount(
       discountName,
       shop,
       value,
-      startDateStr,
+      startDate,
       day
     );
 
@@ -146,6 +135,7 @@ public class DiscountTest extends MainTest {
   public void validateTimeTest() {
     String startDateStr = Util.sdf.format(DateUtils.addDays(new Date(), -1));
 
+    Shop shop = shopManager.createShop(shopName);
     Discount discount = discountManager.createDiscount(
       discountName,
       shop,
@@ -161,6 +151,7 @@ public class DiscountTest extends MainTest {
   public void validateTimeTestFail() {
     String startDate = Util.sdf.format(DateUtils.addDays(new Date(), 1));
 
+    Shop shop = shopManager.createShop(shopName);
     Discount discount = discountManager.createDiscount(
       discountName,
       shop,

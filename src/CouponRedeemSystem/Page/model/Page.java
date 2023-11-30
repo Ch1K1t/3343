@@ -65,7 +65,7 @@ public abstract class Page {
 
   public String telInput() {
     System.out.println();
-    System.out.println("Please input telephone number:");
+    System.out.println("Please input the telephone number:");
     String telNo;
     boolean isValid;
     do {
@@ -81,7 +81,7 @@ public abstract class Page {
   public String beforeDateInput(String fieldName) {
     try {
       System.out.println();
-      System.out.println("Please input " + fieldName + " (dd/MM/yyyy):");
+      System.out.println("Please input the " + fieldName + " (dd/MM/yyyy):");
       String dateStr;
       boolean isDate = false;
       boolean isBeforeToday = false;
@@ -113,7 +113,7 @@ public abstract class Page {
   public String afterDateInput(String fieldName) {
     try {
       System.out.println();
-      System.out.println("Please input " + fieldName + " (dd/MM/yyyy):");
+      System.out.println("Please input the " + fieldName + " (dd/MM/yyyy):");
       String dateStr;
       boolean isDate = false;
       boolean isAfterToday = false;
@@ -170,7 +170,7 @@ public abstract class Page {
         shop = shopManager.getShop(shopName);
         if (shop == null) {
           System.out.println();
-          System.out.println("Shop " + shopName + " does not exist!");
+          System.out.println("Shop " + shopName + " not found!");
         }
       } while (shop == null);
       shop.addStaff(userName);
@@ -203,7 +203,7 @@ public abstract class Page {
     System.out.println("Goodbye");
     System.out.println();
     s.close();
-    System.exit(0);
+    // System.exit(0);
   }
 
   public static void setS(Scanner s) {

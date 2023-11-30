@@ -32,7 +32,6 @@ public class StaffPage extends Page {
     System.out.println("5. Create Discount");
     System.out.println("6. Delete Discount");
     System.out.println("7. Signout");
-    System.out.println("8. Exit");
     System.out.println();
   }
 
@@ -48,17 +47,21 @@ public class StaffPage extends Page {
       Coupon coupon = couponManager.getCoupon(s);
       if (coupon.getExpirationDate().before(new Date())) continue;
       noCoupon = false;
+      System.out.println();
       System.out.println("Coupon Code: " + coupon.getCouponCode());
       System.out.println(
         "Coupon Intrinsic Value: " + coupon.getIntrinsicValue()
       );
-      System.out.println("Coupon Points: " + coupon.getPurchasingValue());
+      System.out.println(
+        "Coupon Purchasing Value: " + coupon.getPurchasingValue()
+      );
       System.out.println(
         "Coupon Expiration Date: " + Util.sdf.format(coupon.getExpirationDate())
       );
     }
 
     if (noCoupon) {
+      System.out.println();
       System.out.println("There is no coupon");
     }
   }
@@ -131,18 +134,19 @@ public class StaffPage extends Page {
       Discount discount = discountManager.getDiscount(s);
       if (!discount.validateTime()) continue;
       noDiscount = false;
+      System.out.println();
       System.out.println("Discount Name: " + discount.getDiscountName());
       System.out.println("Discount Value: " + discount.getValue());
       System.out.println(
         "Discount Start Date: " + Util.sdf.format(discount.getStartDate())
       );
       System.out.println(
-        "Discount Expire Date: " + Util.sdf.format(discount.getExpireDate())
+        "Discount End Date: " + Util.sdf.format(discount.getEndDate())
       );
-      System.out.println();
     }
 
     if (noDiscount) {
+      System.out.println();
       System.out.println("There is no discount");
     }
   }
@@ -152,6 +156,12 @@ public class StaffPage extends Page {
     DiscountManager discountManager = DiscountManager.getInstance();
 
     String discountName = strInput("discount's name");
+    Discount discount = discountManager.getDiscount(discountName);
+    if (discount != null) {
+      System.out.println();
+      System.out.println("Discount already exists");
+      return;
+    }
 
     Shop shop = shopManager.getShopByStaff(account.getUserName());
     shop.addDiscount(discountName);
@@ -159,7 +169,7 @@ public class StaffPage extends Page {
 
     double value = doubleInput("discount's value");
 
-    String startDate = afterDateInput("discount's start date");
+    String startDate = beforeDateInput("discount's start date");
 
     int day = intInput("discount's duration in day");
 
@@ -219,9 +229,6 @@ public class StaffPage extends Page {
           break;
         case "7":
           System.out.println("Signout successfully");
-          break;
-        case "8":
-          exit();
           break;
         default:
           System.out.println("Invalid command, please input again:");

@@ -1,5 +1,6 @@
 package CouponRedeemSystem.Test;
 
+import CouponRedeemSystem.System.Util.Util;
 import CouponRedeemSystem.Test.model.MainTest;
 import java.io.File;
 import net.sf.json.JSONObject;
@@ -11,6 +12,7 @@ public class CRSTest extends MainTest {
 
   @After
   public void reset() {
+    jsonFileManager.deleteJSON(dirName, fileName);
     Util.clearSystem();
   }
 

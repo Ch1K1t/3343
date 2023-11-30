@@ -29,7 +29,6 @@ public class UserPage extends Page {
     System.out.println("3. Redeem Coupon");
     System.out.println("4. Use Coupon");
     System.out.println("5. Signout");
-    System.out.println("6. Exit");
     System.out.println();
   }
 
@@ -38,15 +37,11 @@ public class UserPage extends Page {
     System.out.println("Your remaining points is: " + account.getPoints());
   }
 
-  public void getPurchasableCouponList() {
+  public boolean getPurchasableCouponList() {
     CouponManager couponManager = CouponManager.getInstance();
     ShopManager shopManager = ShopManager.getInstance();
+    boolean firstCoupon = true;
 
-    System.out.println();
-    System.out.println("Your balance is " + account.getPoints());
-
-    System.out.println();
-    System.out.println("The available coupons are:");
     List<Shop> shopList = shopManager.getShopList();
     for (Shop shop : shopList) {
       boolean hasCouponToPurchase = false;
@@ -59,7 +54,16 @@ public class UserPage extends Page {
         break;
       }
       if (!hasCouponToPurchase) continue;
+      if (firstCoupon) {
+        firstCoupon = false;
+        System.out.println();
+        System.out.println("Your balance is: " + account.getPoints());
 
+        System.out.println();
+        System.out.println("The available coupons are:");
+      }
+
+      System.out.println();
       System.out.println("Shop " + shop.getShopName() + ":");
       int discountTotal = 0;
       List<String> discountList = shop.getDiscountList();
@@ -85,7 +89,7 @@ public class UserPage extends Page {
 
         if (discountTotal > 0) {
           System.out.println(
-            String.format("%-15s", "Code: " + coupon.getCouponCode()) +
+            String.format("%-30s", "Code: " + coupon.getCouponCode()) +
             String.format(
               "%-30s",
               "Original Points: " + coupon.getPurchasingValue()
@@ -99,22 +103,28 @@ public class UserPage extends Page {
           );
         } else {
           System.out.println(
-            String.format("%-15s", "Code: " + coupon.getCouponCode()) +
+            String.format("%-30s", "Code: " + coupon.getCouponCode()) +
             "Required Points: " +
             coupon.getPurchasingValue()
           );
         }
       }
-      System.out.println();
     }
+
+    if (firstCoupon) {
+      System.out.println();
+      System.out.println("There is no coupon to purchase");
+    }
+    return firstCoupon;
   }
 
   public void purchaseCoupon() {
     CouponManager couponManager = CouponManager.getInstance();
 
-    getPurchasableCouponList();
+    if (getPurchasableCouponList()) return;
 
     String couponCode = strInput("coupon's code");
+
     Coupon coupon = couponManager.getCoupon(couponCode);
     if (coupon == null || coupon.getOwner() != null) {
       System.out.println();
@@ -133,8 +143,8 @@ public class UserPage extends Page {
       System.out.println("Coupon has expired");
       return;
     }
-
     account.pointsToCoupon(coupon);
+
     System.out.println();
     System.out.println("Coupon purchased");
   }
@@ -157,6 +167,7 @@ public class UserPage extends Page {
       System.out.println("Coupon has expired!");
       return;
     }
+
     account.couponToPoints(coupon);
     System.out.println();
     System.out.println("Coupon redeemed");
@@ -164,27 +175,36 @@ public class UserPage extends Page {
 
   public boolean getOwnedCouponList() {
     CouponManager couponManager = CouponManager.getInstance();
+    boolean hasCoupon = false;
 
-    System.out.println();
-    System.out.println("Your owned coupons are:");
     List<String> couponList = account.getCouponIDs();
-    if (couponList.size() == 0) {
-      System.out.println("You have no coupon");
-      return false;
-    }
+
     for (String s : couponList) {
       Coupon coupon = couponManager.getCoupon(s);
-      if (coupon.getExpirationDate().before(new Date()) && coupon.isActive()) {
-        continue;
+      if (
+        coupon.getExpirationDate().before(new Date()) && coupon.isActive()
+      ) continue;
+
+      if (!hasCoupon) {
+        hasCoupon = true;
+        System.out.println();
+        System.out.println("Your owned coupons are:");
       }
 
       System.out.println(
-        String.format("%-15s", "Code: " + coupon.getCouponCode()) +
+        String.format("%-30s", "Code: " + coupon.getCouponCode()) +
         "Intrinsic Value: " +
         coupon.getIntrinsicValue()
       );
     }
-    return true;
+
+    if (!hasCoupon) {
+      System.out.println();
+      System.out.println("You have no coupon");
+      return false;
+    } else {
+      return true;
+    }
   }
 
   public void useCoupon() {
@@ -236,9 +256,6 @@ public class UserPage extends Page {
           break;
         case "5":
           System.out.println("Signout successfully");
-          break;
-        case "6":
-          exit();
           break;
         default:
           System.out.println("Unknown command");

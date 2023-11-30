@@ -13,33 +13,15 @@ import java.util.List;
 import net.sf.json.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class AccountTest extends MainTest {
 
+  @Before
   @After
   public void reset() {
-    if (
-      passwordManager.checkPasswordValid(userName, password).equals("success")
-    ) {
-      passwordManager.deletePassword(userName);
-    }
-    Account account = accountManager.getAccount(userName);
-    if (account != null) {
-      accountManager.deleteAccount(account);
-    }
-    Coupon coupon = couponManager.getCoupon("rCouponTest");
-    if (coupon != null) {
-      couponManager.deleteCoupon(coupon);
-    }
-    coupon = couponManager.getCoupon("pCouponTest");
-    if (coupon != null) {
-      couponManager.deleteCoupon(coupon);
-    }
-    Shop shop = shopManager.getShop("shopTest");
-    if (shop != null) {
-      shopManager.deleteShop(shop);
-    }
+    Util.clearSystem();
   }
 
   @Test
@@ -218,7 +200,7 @@ public class AccountTest extends MainTest {
       couponCode,
       intrinsicValue,
       type,
-      couponExpirationDate
+      expirationDate
     );
 
     account.couponToPoints(coupon);
@@ -258,7 +240,7 @@ public class AccountTest extends MainTest {
       purchasingValue,
       shop,
       type,
-      couponExpirationDate
+      expirationDate
     );
 
     account.pointsToCoupon(coupon);
@@ -293,7 +275,7 @@ public class AccountTest extends MainTest {
       purchasingValue,
       shop,
       type,
-      couponExpirationDate
+      expirationDate
     );
     coupon.setOwner(account);
     couponManager.updateCoupon(coupon);

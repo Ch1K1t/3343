@@ -18,7 +18,6 @@ public class AdminPage extends Page {
     System.out.println("5. Delete Account");
     System.out.println("6. Create Redeemable Coupon");
     System.out.println("7. Signout");
-    System.out.println("8. Exit");
     System.out.println();
   }
 
@@ -48,7 +47,7 @@ public class AdminPage extends Page {
       System.out.println("Coupon already exists");
       return;
     }
-    
+
     double intrinsicValue = doubleInput("coupon's intrinsic value");
     String expirationDate = afterDateInput("coupon's expiration date");
 
@@ -82,6 +81,7 @@ public class AdminPage extends Page {
           break;
         case "4":
           createAccount("User");
+          break;
         case "5":
           deleteAccount();
           break;
@@ -90,9 +90,6 @@ public class AdminPage extends Page {
           break;
         case "7":
           System.out.println("Signout successfully");
-          break;
-        case "8":
-          exit();
           break;
         default:
           System.out.println("Unknown command");

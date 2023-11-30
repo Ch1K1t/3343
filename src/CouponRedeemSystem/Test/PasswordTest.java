@@ -1,20 +1,19 @@
 package CouponRedeemSystem.Test;
 
+import CouponRedeemSystem.System.Util.Util;
 import CouponRedeemSystem.Test.model.MainTest;
 import net.sf.json.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class PasswordTest extends MainTest {
 
+  @Before
   @After
   public void reset() {
-    if (
-      passwordManager.checkPasswordValid(userName, password).equals("success")
-    ) {
-      passwordManager.deletePassword(userName);
-    }
+    Util.clearSystem();
   }
 
   // Already have a reference table

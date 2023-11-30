@@ -33,7 +33,7 @@ public class DiscountManager {
     int day
   ) {
     try {
-      String expireDate = Util.sdf.format(
+      String endDate = Util.sdf.format(
         DateUtils.addDays(Util.sdf.parse(startDate), day)
       );
 
@@ -42,7 +42,7 @@ public class DiscountManager {
         shop,
         value,
         startDate,
-        expireDate
+        endDate
       );
       this.updateDiscount(discount);
 
@@ -58,7 +58,7 @@ public class DiscountManager {
     jsonObject.put("discountName", discount.getDiscountName());
     jsonObject.put("shop", discount.getShop().getShopName());
     jsonObject.put("startDate", Util.sdf.format(discount.getStartDate()));
-    jsonObject.put("expireDate", Util.sdf.format(discount.getExpireDate()));
+    jsonObject.put("endDate", Util.sdf.format(discount.getEndDate()));
     jsonObject.put("value", discount.getValue());
 
     jsonFileManager.modifyJSON(
@@ -88,17 +88,17 @@ public class DiscountManager {
     String discountName = discountJson.getString("discountName");
     Shop shop = shopManager.getShop(discountJson.getString("shop"));
     String startDate = discountJson.getString("startDate");
-    String expireDate = discountJson.getString("expireDate");
+    String endDate = discountJson.getString("endDate");
     double value = discountJson.getDouble("value");
 
-    return new Discount(discountName, shop, value, startDate, expireDate);
+    return new Discount(discountName, shop, value, startDate, endDate);
   }
 
   public String jsonToString(JSONObject jsonObject) {
     String discountName = jsonObject.getString("discountName");
     String shopName = jsonObject.getString("shop");
     String startDate = jsonObject.getString("startDate");
-    String expireDate = jsonObject.getString("expireDate");
+    String endDate = jsonObject.getString("endDate");
     double value = jsonObject.getDouble("value");
 
     return (
@@ -108,8 +108,8 @@ public class DiscountManager {
       shopName +
       "\", \"startDate\":\"" +
       startDate +
-      "\", \"expireDate\":\"" +
-      expireDate +
+      "\", \"endDate\":\"" +
+      endDate +
       "\", \"value\":" +
       value +
       "}"

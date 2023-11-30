@@ -10,12 +10,12 @@ public class ShopManagerPage extends Page {
 
   public void getInstruction() {
     System.out.println();
+    System.out.println("Please select the command and input the number:");
     System.out.println("1. Create Shop");
     System.out.println("2. Delete Shop");
     System.out.println("3. Create Staff Account");
     System.out.println("4. Delete Staff Account");
     System.out.println("5. Signout");
-    System.out.println("6. Exit");
     System.out.println();
   }
 
@@ -43,7 +43,7 @@ public class ShopManagerPage extends Page {
     Shop shop = shopManager.getShop(shopName);
     if (shop == null) {
       System.out.println();
-      System.out.println("Shop does not exist");
+      System.out.println("Shop not found");
       return;
     }
 
@@ -61,7 +61,7 @@ public class ShopManagerPage extends Page {
     Account account = accountManager.getAccount(userName);
     if (account == null) {
       System.out.println();
-      System.out.println("Account does not exist");
+      System.out.println("Account not found");
       return;
     }
 
@@ -100,9 +100,6 @@ public class ShopManagerPage extends Page {
           break;
         case "5":
           System.out.println("Signout successfully");
-          break;
-        case "6":
-          exit();
           break;
         default:
           System.out.println("Unknown command");

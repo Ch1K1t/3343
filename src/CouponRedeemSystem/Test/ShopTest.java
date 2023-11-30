@@ -1,22 +1,22 @@
 package CouponRedeemSystem.Test;
 
 import CouponRedeemSystem.Shop.model.Shop;
+import CouponRedeemSystem.System.Util.Util;
 import CouponRedeemSystem.Test.model.MainTest;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.json.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class ShopTest extends MainTest {
 
+  @Before
   @After
   public void reset() {
-    Shop shop = shopManager.getShop(shopName);
-    if (shop != null) {
-      shopManager.deleteShop(shop);
-    }
+    Util.clearSystem();
   }
 
   @Test
@@ -31,7 +31,6 @@ public class ShopTest extends MainTest {
       "\", couponList=[], staffList=[], discountList=[]}";
 
     Assert.assertEquals(expectedOutput, shop.toString());
-    jsonFileManager.deleteJSON("Shop", shopName);
   }
 
   @Test
@@ -106,7 +105,6 @@ public class ShopTest extends MainTest {
         shopList.get(i).toString(),
         shopList2.get(i).toString()
       );
-      shopManager.deleteShop(shopList.get(i));
     }
   }
 

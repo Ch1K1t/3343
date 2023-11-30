@@ -11,26 +11,17 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.time.DateUtils;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class CouponTest extends MainTest {
 
   private final Shop shop = shopManager.createShop(shopName);
 
+  @Before
   @After
   public void reset() {
-    Coupon coupon = couponManager.getCoupon("rCouponTest");
-    if (coupon != null) {
-      couponManager.deleteCoupon(coupon);
-    }
-    coupon = couponManager.getCoupon("pCouponTest");
-    if (coupon != null) {
-      couponManager.deleteCoupon(coupon);
-    }
-    Shop shop = shopManager.getShop(shopName);
-    if (shop != null) {
-      shopManager.deleteShop(shop);
-    }
+    Util.clearSystem();
   }
 
   @Test
@@ -44,7 +35,7 @@ public class CouponTest extends MainTest {
       purchasingValue,
       shop,
       type,
-      couponExpirationDate
+      expirationDate
     );
 
     String expectedOutput =
@@ -63,7 +54,7 @@ public class CouponTest extends MainTest {
       ", type=\"" +
       type +
       "\", expirationDate=" +
-      Util.sdf.parse(couponExpirationDate) +
+      Util.sdf.parse(expirationDate) +
       "}";
 
     Assert.assertEquals(expectedOutput, coupon.toString());
@@ -78,7 +69,7 @@ public class CouponTest extends MainTest {
       couponCode,
       intrinsicValue,
       type,
-      couponExpirationDate
+      expirationDate
     );
 
     String expectedOutput =
@@ -91,7 +82,7 @@ public class CouponTest extends MainTest {
       ", type=\"" +
       type +
       "\", expirationDate=" +
-      Util.sdf.parse(couponExpirationDate) +
+      Util.sdf.parse(expirationDate) +
       "}";
 
     Assert.assertEquals(expectedOutput, coupon.toString());
@@ -108,7 +99,7 @@ public class CouponTest extends MainTest {
       purchasingValue,
       shop,
       type,
-      couponExpirationDate
+      expirationDate
     );
 
     JSONObject couponJson = jsonFileManager.searchJSON("pCouponTest");
@@ -129,7 +120,7 @@ public class CouponTest extends MainTest {
       ", \"type\":\"" +
       type +
       "\", \"expirationDate\":\"" +
-      couponExpirationDate +
+      expirationDate +
       "\"}";
 
     Assert.assertEquals(expectedOutput, couponManager.jsonToString(couponJson));
@@ -144,7 +135,7 @@ public class CouponTest extends MainTest {
       couponCode,
       intrinsicValue,
       type,
-      couponExpirationDate
+      expirationDate
     );
 
     JSONObject couponJson = jsonFileManager.searchJSON("rCouponTest");
@@ -159,7 +150,7 @@ public class CouponTest extends MainTest {
       ", \"type\":\"" +
       type +
       "\", \"expirationDate\":\"" +
-      couponExpirationDate +
+      expirationDate +
       "\"}";
 
     Assert.assertEquals(expectedOutput, couponManager.jsonToString(couponJson));
@@ -174,7 +165,7 @@ public class CouponTest extends MainTest {
       couponCode,
       intrinsicValue,
       type,
-      couponExpirationDate
+      expirationDate
     );
 
     couponManager.deleteCoupon(coupon);
@@ -192,7 +183,7 @@ public class CouponTest extends MainTest {
       couponCode,
       intrinsicValue,
       type,
-      couponExpirationDate
+      expirationDate
     );
 
     Coupon result = couponManager.getCoupon(couponCode);
@@ -220,7 +211,7 @@ public class CouponTest extends MainTest {
       intrinsicValue,
       null,
       type,
-      couponExpirationDate
+      expirationDate
     );
 
     JSONObject couponJson = jsonFileManager.searchJSON(couponCode);

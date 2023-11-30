@@ -11,7 +11,7 @@ public class Discount {
   private Shop shop;
   private double value;
   private Date startDate;
-  private Date expireDate;
+  private Date endDate;
 
   public Discount() {}
 
@@ -20,14 +20,14 @@ public class Discount {
     Shop shop,
     double value,
     String startDate,
-    String expireDate
+    String endDate
   ) {
     try {
       this.discountName = discountName;
       this.shop = shop;
       this.value = value;
       this.startDate = Util.sdf.parse(startDate);
-      this.expireDate = Util.sdf.parse(expireDate);
+      this.endDate = Util.sdf.parse(endDate);
     } catch (ParseException e) {
       e.printStackTrace();
     }
@@ -36,7 +36,7 @@ public class Discount {
   public boolean validateTime() {
     return (
       new Date().compareTo(this.startDate) >= 0 &&
-      new Date().compareTo(this.expireDate) < 0
+      new Date().compareTo(this.endDate) < 0
     );
   }
 
@@ -49,8 +49,8 @@ public class Discount {
       shop +
       ", startDate=" +
       startDate +
-      ", expireDate=" +
-      expireDate +
+      ", endDate=" +
+      endDate +
       ", value=" +
       value +
       "}"
@@ -69,8 +69,8 @@ public class Discount {
     return startDate;
   }
 
-  public Date getExpireDate() {
-    return expireDate;
+  public Date getEndDate() {
+    return endDate;
   }
 
   public double getValue() {

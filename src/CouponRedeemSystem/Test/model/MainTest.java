@@ -45,7 +45,7 @@ public class MainTest {
   // Coupon attributes
   protected final double intrinsicValue = 10.0;
   protected final double purchasingValue = 15.0;
-  protected final String couponExpirationDate = Util.sdf.format(
+  protected final String expirationDate = Util.sdf.format(
     DateUtils.addYears(new Date(), 1)
   );
 
@@ -56,9 +56,13 @@ public class MainTest {
   // Discount attributes
   protected final String discountName = "discountTest";
   protected final double value = 10.0;
-  protected final String startDateStr = "01/01/2024";
+  protected final String startDate = Util.sdf.format(
+    DateUtils.addDays(new Date(), -1)
+  );
   protected final int day = 10;
-  protected final String expireDateStr = "11/01/2024";
+  protected final String endDate = Util.sdf.format(
+    DateUtils.addDays(new Date(), 9)
+  );
 
   @Test
   public void testJsonFileManagerInstance() {

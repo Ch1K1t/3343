@@ -34,6 +34,6 @@ public class HomePage extends Page {
           System.out.println("Unknown command");
           break;
       }
-    } while (true);
+    } while (!cmd.equals("3"));
   }
 }
