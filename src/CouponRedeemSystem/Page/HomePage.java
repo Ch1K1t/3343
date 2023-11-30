@@ -16,26 +16,6 @@ public class HomePage extends Page {
   }
 
   public void execute() {
-    // do {
-    //   getInstruction();
-    //   cmd = s.nextLine().toLowerCase();
-
-    //   switch (cmd) {
-    //     case "1":
-    //       new SigninPage().execute();
-    //       break;
-    //     case "2":
-    //       createAccount("User");
-    //       break;
-    //     case "3":
-    //       exit();
-    //       break;
-    //     default:
-    //       System.out.println("Unknown command");
-    //       break;
-    //   }
-    // } while (true);
-
     // Replace switch statement to improve readability
     System.out.println("Welcome to Coupon Redeem System");
     String cmd;
@@ -46,12 +26,7 @@ public class HomePage extends Page {
     do {
       getInstruction();
       cmd = s.nextLine().toLowerCase();
-      Runnable command = cmdMap.get(cmd);
-      if (command != null) {
-        command.run();
-      } else {
-        System.out.println("Unknown command");
-      }
+      cmdExecute(cmdMap, cmd);
     } while (true);
   }
 }

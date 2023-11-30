@@ -4,6 +4,8 @@ import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.System.Password.PasswordManager;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SigninPage extends Page {
 
@@ -38,20 +40,17 @@ public class SigninPage extends Page {
     if (account == null) return;
 
     String role = account.getRole();
+    Map<String, Runnable> cmdMap = new HashMap<>();
+    cmdMap.put("User", () -> new UserPage(account.getUserName()).execute());
+    cmdMap.put("Admin", () -> new AdminPage().execute());
+    cmdMap.put("Shop Manager", () -> new ShopManagerPage().execute());
+    cmdMap.put("Staff", () -> new StaffPage(account.getUserName()).execute());
 
-    switch (role) {
-      case "User":
-        new UserPage(account.getUserName()).execute();
-        break;
-      case "Admin":
-        new AdminPage().execute();
-        break;
-      case "Shop Manager":
-        new ShopManagerPage().execute();
-        break;
-      case "Staff":
-        new StaffPage(account.getUserName()).execute();
-        break;
+    Runnable command = cmdMap.get(role);
+    if (command != null) {
+      command.run();
+    } else {
+      System.out.println("Unknown role");
     }
   }
 }

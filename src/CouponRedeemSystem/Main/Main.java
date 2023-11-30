@@ -13,7 +13,6 @@ import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.Util.Util;
 import java.io.File;
-import java.util.Date;
 
 public class Main {
 
@@ -93,7 +92,7 @@ public class Main {
   }
 
   public static void main(String[] args) {
-    // new HomePage().execute();
+    new HomePage().execute();
     // new AdminPage().execute();
     // new ShopManagerPage().execute();
     // new StaffPage("staff1").execute();

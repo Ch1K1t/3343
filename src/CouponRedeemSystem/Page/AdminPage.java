@@ -58,43 +58,6 @@ public class AdminPage extends Page {
   }
 
   public void execute() {
-    // String cmd;
-
-    // do {
-    //   getInstruction();
-    //   cmd = s.nextLine().toLowerCase();
-
-    //   switch (cmd) {
-    //     case "1":
-    //       createAccount("Admin");
-    //       break;
-    //     case "2":
-    //       createAccount("Shop Manager");
-    //       break;
-    //     case "3":
-    //       createAccount("Staff");
-    //       break;
-    //     case "4":
-    //       createAccount("User");
-    //     case "5":
-    //       deleteAccount();
-    //       break;
-    //     case "6":
-    //       createRedeemableCoupon();
-    //       break;
-    //     case "7":
-    //       System.out.println("Signout successfully");
-    //       break;
-    //     case "8":
-    //       exit();
-    //       break;
-    //     default:
-    //       System.out.println("Unknown command");
-    //       break;
-    //   }
-    // } while (!cmd.equals("7"));
-
-    // TODO: Replace switch statement to improve readability
     String cmd;
 
     Map<String, Runnable> cmdMap = new HashMap<>();
@@ -110,13 +73,7 @@ public class AdminPage extends Page {
     do {
       getInstruction();
       cmd = s.nextLine().toLowerCase();
-
-      Runnable command = cmdMap.get(cmd);
-      if (command != null) {
-        command.run();
-      } else {
-        System.out.println("Unknown command");
-      }
+      cmdExecute(cmdMap, cmd);
     } while (!cmd.equals("7"));
   }
 }

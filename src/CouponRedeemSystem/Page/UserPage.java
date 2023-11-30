@@ -10,7 +10,9 @@ import CouponRedeemSystem.Page.model.Page;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.Util.Util;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserPage extends Page {
 
@@ -124,10 +126,9 @@ public class UserPage extends Page {
       return;
     }
 
-    // TODO: more concise variable name
-    boolean isSuccess = account.pointsToCoupon(coupon);
+    boolean success = account.pointsToCoupon(coupon);
 
-    if (isSuccess) {
+    if (success) {
       System.out.println();
       System.out.println("Purchase successfully");
     } else {
@@ -167,31 +168,17 @@ public class UserPage extends Page {
 
   public void execute() {
     String cmd;
+    Map<String, Runnable> cmdMap = new HashMap<>();
+    cmdMap.put("1", () -> checkRemainingPoints());
+    cmdMap.put("2", () -> purchaseCoupon());
+    cmdMap.put("3", () -> redeemCoupon());
+    cmdMap.put("4", () -> System.out.println("Signout successfully"));
+    cmdMap.put("5", this::exit);
 
     do {
       getInstruction();
       cmd = s.nextLine().toLowerCase();
-
-      switch (cmd) {
-        case "1":
-          checkRemainingPoints();
-          break;
-        case "2":
-          purchaseCoupon();
-          break;
-        case "3":
-          redeemCoupon();
-          break;
-        case "4":
-          System.out.println("Signout successfully");
-          break;
-        case "5":
-          exit();
-          break;
-        default:
-          System.out.println("Unknown command");
-          break;
-      }
+      cmdExecute(cmdMap, cmd);
     } while (!cmd.equals("4"));
   }
 }

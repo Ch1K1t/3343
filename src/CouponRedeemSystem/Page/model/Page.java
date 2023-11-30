@@ -6,6 +6,7 @@ import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.Util.Util;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Map;
 import java.util.Scanner;
 
 public abstract class Page {
@@ -191,6 +192,15 @@ public abstract class Page {
     accountManager.createAccount(username, role, telNo, dob);
     System.out.println();
     System.out.println("Account created");
+  }
+
+  public void cmdExecute(Map<String, Runnable> cmdMap, String cmd) {
+    Runnable command = cmdMap.get(cmd);
+    if (command != null) {
+      command.run();
+    } else {
+      System.out.println("Unknown command");
+    }
   }
 
   public void exit() {
