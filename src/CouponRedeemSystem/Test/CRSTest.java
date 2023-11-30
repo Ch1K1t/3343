@@ -11,7 +11,7 @@ public class CRSTest extends MainTest {
 
   @After
   public void reset() {
-    jsonFileManager.deleteJSON(dirName, fileName);
+    Util.clearSystem();
   }
 
   @Test
