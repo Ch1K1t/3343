@@ -22,7 +22,7 @@ public class HomePage extends Page {
     Map<String, Runnable> cmdMap = new HashMap<>();
     cmdMap.put("1", () -> new SigninPage().execute());
     cmdMap.put("2", () -> createAccount("User"));
-    cmdMap.put("3", this::exit);
+    cmdMap.put("3", () -> exit());
     do {
       getInstruction();
       cmd = s.nextLine().toLowerCase();

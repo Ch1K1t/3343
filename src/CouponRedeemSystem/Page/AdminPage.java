@@ -72,10 +72,10 @@ public class AdminPage extends Page {
     cmdMap.put("2", () -> createAccount("Shop Manager"));
     cmdMap.put("3", () -> createAccount("Staff"));
     cmdMap.put("4", () -> createAccount("User"));
-    cmdMap.put("5", this::deleteAccount);
-    cmdMap.put("6", this::createRedeemableCoupon);
+    cmdMap.put("5", () -> deleteAccount());
+    cmdMap.put("6", () -> createRedeemableCoupon());
     cmdMap.put("7", () -> System.out.println("Signout successfully"));
-    cmdMap.put("8", this::exit);
+    cmdMap.put("8", () -> exit());
 
     do {
       getInstruction();

@@ -212,7 +212,7 @@ public class StaffPage extends Page {
     cmdMap.put("5", () -> createDiscount());
     cmdMap.put("6", () -> deleteDiscount());
     cmdMap.put("7", () -> System.out.println("Signout successfully"));
-    cmdMap.put("8", this::exit);
+    cmdMap.put("8", () -> exit());
 
     do {
       getInstruction();
