@@ -75,7 +75,6 @@ public class AdminPage extends Page {
     cmdMap.put("5", () -> deleteAccount());
     cmdMap.put("6", () -> createRedeemableCoupon());
     cmdMap.put("7", () -> System.out.println("Signout successfully"));
-    cmdMap.put("8", () -> exit());
 
     do {
       getInstruction();

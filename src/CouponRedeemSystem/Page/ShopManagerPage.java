@@ -89,7 +89,6 @@ public class ShopManagerPage extends Page {
     cmdMap.put("3", () -> createAccount("Staff"));
     cmdMap.put("4", () -> deleteAccount());
     cmdMap.put("5", () -> System.out.println("Signout successfully"));
-    cmdMap.put("6", () -> exit());
     do {
       getInstruction();
       cmd = s.nextLine().toLowerCase();

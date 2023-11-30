@@ -23,10 +23,11 @@ public class HomePage extends Page {
     cmdMap.put("1", () -> new SigninPage().execute());
     cmdMap.put("2", () -> createAccount("User"));
     cmdMap.put("3", () -> exit());
+
     do {
       getInstruction();
       cmd = s.nextLine().toLowerCase();
       cmdExecute(cmdMap, cmd);
-    } while (true);
+    } while (!cmd.equals("3"));
   }
 }

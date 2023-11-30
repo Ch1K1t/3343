@@ -243,7 +243,6 @@ public class UserPage extends Page {
     cmdMap.put("2", () -> purchaseCoupon());
     cmdMap.put("3", () -> redeemCoupon());
     cmdMap.put("4", () -> System.out.println("Signout successfully"));
-    cmdMap.put("5", () -> exit());
 
     do {
       getInstruction();
