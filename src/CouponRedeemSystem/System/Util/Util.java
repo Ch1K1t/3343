@@ -9,11 +9,21 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Util.
+ */
 public class Util {
 
+  /** The Constant sdf. */
   public static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+  
+  /** The Constant today. */
   public static final Date today = new Date();
 
+  /**
+   * Initialize system.
+   */
   public static void initializeSystem() {
     clearSystem();
 
@@ -73,6 +83,9 @@ public class Util {
     discountManager.createDiscount("discount2", shop2, 2, "01/12/2023", 5);
   }
 
+  /**
+   * Clear system.
+   */
   public static void clearSystem() {
     String[] dirList = new String[] {
       "Account",

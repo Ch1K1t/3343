@@ -10,16 +10,30 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Scanner;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Page.
+ */
 public abstract class Page {
 
+  /** The s. */
   protected static Scanner s;
 
+  /**
+   * Instantiates a new page.
+   */
   public Page() {
     if (s == null) {
       s = new Scanner(System.in);
     }
   }
 
+  /**
+   * Str input.
+   *
+   * @param fieldName the field name
+   * @return the string
+   */
   public String strInput(String fieldName) {
     System.out.println();
     System.out.println("Please input the " + fieldName + ":");
@@ -33,6 +47,12 @@ public abstract class Page {
     return input;
   }
 
+  /**
+   * Int input.
+   *
+   * @param fieldName the field name
+   * @return the int
+   */
   public int intInput(String fieldName) {
     System.out.println();
     System.out.println("Please input the " + fieldName + ":");
@@ -49,6 +69,12 @@ public abstract class Page {
     return Integer.parseInt(input);
   }
 
+  /**
+   * Double input.
+   *
+   * @param fieldName the field name
+   * @return the double
+   */
   public double doubleInput(String fieldName) {
     System.out.println();
     System.out.println("Please input the " + fieldName + ":");
@@ -64,6 +90,11 @@ public abstract class Page {
     return Double.parseDouble(input);
   }
 
+  /**
+   * Tel input.
+   *
+   * @return the string
+   */
   public String telInput() {
     System.out.println();
     System.out.println("Please input the telephone number:");
@@ -79,6 +110,12 @@ public abstract class Page {
     return telNo;
   }
 
+  /**
+   * Before date input.
+   *
+   * @param fieldName the field name
+   * @return the string
+   */
   public String beforeDateInput(String fieldName) {
     try {
       System.out.println();
@@ -111,6 +148,12 @@ public abstract class Page {
     }
   }
 
+  /**
+   * After date input.
+   *
+   * @param fieldName the field name
+   * @return the string
+   */
   public String afterDateInput(String fieldName) {
     try {
       System.out.println();
@@ -143,6 +186,11 @@ public abstract class Page {
     }
   }
 
+  /**
+   * Creates the account.
+   *
+   * @param role the role
+   */
   public void createAccount(String role) {
     PasswordManager passwordManager = PasswordManager.getInstance();
     AccountManager accountManager = AccountManager.getInstance();
@@ -198,6 +246,12 @@ public abstract class Page {
     System.out.println("Account created");
   }
 
+  /**
+   * Cmd execute.
+   *
+   * @param cmdMap the cmd map
+   * @param cmd the cmd
+   */
   public void cmdExecute(Map<String, Runnable> cmdMap, String cmd) {
     Runnable command = cmdMap.get(cmd);
     if (command != null) {
@@ -207,6 +261,9 @@ public abstract class Page {
     }
   }
 
+  /**
+   * Exit.
+   */
   public void exit() {
     System.out.println();
     System.out.println("Thank you for using Coupon Redeem System");
@@ -216,6 +273,11 @@ public abstract class Page {
     // System.exit(0);
   }
 
+  /**
+   * Sets the s.
+   *
+   * @param s the new s
+   */
   public static void setS(Scanner s) {
     Page.s = s;
   }

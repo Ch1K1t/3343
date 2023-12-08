@@ -13,22 +13,53 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Account.
+ */
 public class Account {
 
+  /** The user name. */
   private String userName;
+  
+  /** The role. */
   private String role;
+  
+  /** The points. */
   private double points;
+  
+  /** The coupon I ds. */
   private List<String> couponIDs;
+  
+  /** The date of birth. */
   private Date dateOfBirth;
+  
+  /** The age. */
   private int age;
+  
+  /** The tel no. */
   private String telNo;
 
+  /**
+   * Instantiates a new account.
+   *
+   * @param userName the user name
+   * @param role the role
+   */
   // Constructor for creating a new non-user account
   public Account(String userName, String role) {
     this.userName = userName;
     this.role = role;
   }
 
+  /**
+   * Instantiates a new account.
+   *
+   * @param userName the user name
+   * @param role the role
+   * @param dateOfBirth the date of birth
+   * @param telNo the tel no
+   */
   // Constructor for creating a new user account
   public Account(
     String userName,
@@ -49,6 +80,17 @@ public class Account {
     }
   }
 
+  /**
+   * Instantiates a new account.
+   *
+   * @param userName the user name
+   * @param role the role
+   * @param points the points
+   * @param coupons the coupons
+   * @param dateOfBirth the date of birth
+   * @param age the age
+   * @param telNo the tel no
+   */
   // Constructor for loading an existing account
   public Account(
     String userName,
@@ -68,6 +110,12 @@ public class Account {
     this.telNo = telNo;
   }
 
+  /**
+   * Calculate age.
+   *
+   * @param dateOfBirth the date of birth
+   * @return the int
+   */
   public static int calculateAge(Date dateOfBirth) {
     Calendar today = Calendar.getInstance();
     Calendar dob = Calendar.getInstance();
@@ -85,6 +133,11 @@ public class Account {
     return age;
   }
 
+  /**
+   * Coupon to points.
+   *
+   * @param coupon the coupon
+   */
   public void couponToPoints(Coupon coupon) {
     AccountManager accountManager = AccountManager.getInstance();
     CouponManager couponManager = CouponManager.getInstance();
@@ -97,6 +150,11 @@ public class Account {
     couponManager.updateCoupon(coupon);
   }
 
+  /**
+   * Points to coupon.
+   *
+   * @param coupon the coupon
+   */
   public void pointsToCoupon(Coupon coupon) {
     AccountManager accountManager = AccountManager.getInstance();
     CouponManager couponManager = CouponManager.getInstance();
@@ -124,6 +182,11 @@ public class Account {
     couponManager.updateCoupon(coupon);
   }
 
+  /**
+   * Use coupon.
+   *
+   * @param coupon the coupon
+   */
   public void useCoupon(Coupon coupon) {
     AccountManager accountManager = AccountManager.getInstance();
     CouponManager couponManager = CouponManager.getInstance();
@@ -135,6 +198,11 @@ public class Account {
     couponManager.updateCoupon(coupon);
   }
 
+  /**
+   * To string.
+   *
+   * @return the string
+   */
   @Override
   public String toString() {
     if (role.equals("User")) {
@@ -162,46 +230,101 @@ public class Account {
     }
   }
 
+  /**
+   * Gets the user name.
+   *
+   * @return the user name
+   */
   public String getUserName() {
     return userName;
   }
 
+  /**
+   * Gets the role.
+   *
+   * @return the role
+   */
   public String getRole() {
     return role;
   }
 
+  /**
+   * Gets the age.
+   *
+   * @return the age
+   */
   public int getAge() {
     return age;
   }
 
+  /**
+   * Gets the tel no.
+   *
+   * @return the tel no
+   */
   public String getTelNo() {
     return telNo;
   }
 
+  /**
+   * Gets the date of birth.
+   *
+   * @return the date of birth
+   */
   public Date getDateOfBirth() {
     return dateOfBirth;
   }
 
+  /**
+   * Gets the coupon I ds.
+   *
+   * @return the coupon I ds
+   */
   public List<String> getCouponIDs() {
     return couponIDs;
   }
 
+  /**
+   * Gets the points.
+   *
+   * @return the points
+   */
   public double getPoints() {
     return points;
   }
 
+  /**
+   * Adds the coupon ID.
+   *
+   * @param couponID the coupon ID
+   */
   public void addCouponID(String couponID) {
     couponIDs.add(couponID);
   }
 
+  /**
+   * Delete coupon ID.
+   *
+   * @param couponID the coupon ID
+   */
   public void deleteCouponID(String couponID) {
     couponIDs.remove(couponID);
   }
 
+  /**
+   * Adds the points.
+   *
+   * @param pointsToAdd the points to add
+   */
   public void addPoints(double pointsToAdd) {
     this.points += pointsToAdd;
   }
 
+  /**
+   * Deduct points.
+   *
+   * @param pointsToDeduct the points to deduct
+   */
   public void deductPoints(double pointsToDeduct) {
     this.points -= pointsToDeduct;
   }

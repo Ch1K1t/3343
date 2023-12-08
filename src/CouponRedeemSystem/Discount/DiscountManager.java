@@ -9,14 +9,28 @@ import java.text.ParseException;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.time.DateUtils;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DiscountManager.
+ */
 public class DiscountManager {
 
+  /** The instance. */
   private static DiscountManager instance;
 
+  /** The json file manager. */
   private final CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
 
+  /**
+   * Instantiates a new discount manager.
+   */
   private DiscountManager() {}
 
+  /**
+   * Gets the single instance of DiscountManager.
+   *
+   * @return single instance of DiscountManager
+   */
   public static DiscountManager getInstance() {
     if (instance == null) {
       instance = new DiscountManager();
@@ -25,6 +39,16 @@ public class DiscountManager {
     return instance;
   }
 
+  /**
+   * Creates the discount.
+   *
+   * @param discountName the discount name
+   * @param shop the shop
+   * @param value the value
+   * @param startDate the start date
+   * @param day the day
+   * @return the discount
+   */
   public Discount createDiscount(
     String discountName,
     Shop shop,
@@ -53,6 +77,11 @@ public class DiscountManager {
     }
   }
 
+  /**
+   * Update discount.
+   *
+   * @param discount the discount
+   */
   public void updateDiscount(Discount discount) {
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("discountName", discount.getDiscountName());
@@ -68,10 +97,21 @@ public class DiscountManager {
     );
   }
 
+  /**
+   * Delete discount.
+   *
+   * @param discount the discount
+   */
   public void deleteDiscount(Discount discount) {
     jsonFileManager.deleteJSON("Discount", discount.getDiscountName());
   }
 
+  /**
+   * Gets the discount.
+   *
+   * @param discountName the discount name
+   * @return the discount
+   */
   public Discount getDiscount(String discountName) {
     JSONObject discountJson = jsonFileManager.searchJSON(discountName);
 
@@ -82,6 +122,12 @@ public class DiscountManager {
     }
   }
 
+  /**
+   * Extract discount from json.
+   *
+   * @param discountJson the discount json
+   * @return the discount
+   */
   public Discount extractDiscountFromJson(JSONObject discountJson) {
     ShopManager shopManager = ShopManager.getInstance();
 
@@ -94,6 +140,12 @@ public class DiscountManager {
     return new Discount(discountName, shop, value, startDate, endDate);
   }
 
+  /**
+   * Json to string.
+   *
+   * @param jsonObject the json object
+   * @return the string
+   */
   public String jsonToString(JSONObject jsonObject) {
     String discountName = jsonObject.getString("discountName");
     String shopName = jsonObject.getString("shop");

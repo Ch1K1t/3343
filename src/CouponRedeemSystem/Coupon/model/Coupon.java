@@ -8,17 +8,48 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Coupon.
+ */
 public abstract class Coupon {
 
+  /** The coupon code. */
   private String couponCode;
+  
+  /** The intrinsic value. */
   private double intrinsicValue;
+  
+  /** The purchasing value. */
   private Double purchasingValue;
+  
+  /** The shop. */
   private Shop shop;
+  
+  /** The owner. */
   private Account owner;
+  
+  /** The active. */
   private boolean active;
+  
+  /** The type. */
   private String type;
+  
+  /** The expiration date. */
   private Date expirationDate;
 
+  /**
+   * Instantiates a new coupon.
+   *
+   * @param couponCode the coupon code
+   * @param intrinsicValue the intrinsic value
+   * @param purchasingValue the purchasing value
+   * @param shop the shop
+   * @param owner the owner
+   * @param active the active
+   * @param type the type
+   * @param expirationDate the expiration date
+   */
   // Purchasable Coupon
   public Coupon(
     String couponCode,
@@ -44,6 +75,15 @@ public abstract class Coupon {
     }
   }
 
+  /**
+   * Instantiates a new coupon.
+   *
+   * @param couponCode the coupon code
+   * @param intrinsicValue the intrinsic value
+   * @param active the active
+   * @param type the type
+   * @param expirationDate the expiration date
+   */
   // Redeemable Coupon
   public Coupon(
     String couponCode,
@@ -63,6 +103,11 @@ public abstract class Coupon {
     }
   }
 
+  /**
+   * Point conversion.
+   *
+   * @return the double
+   */
   public Double pointConversion() {
     Calendar cal = Calendar.getInstance();
     cal.setTime(this.expirationDate);
@@ -81,6 +126,11 @@ public abstract class Coupon {
     );
   }
 
+  /**
+   * To string.
+   *
+   * @return the string
+   */
   @Override
   public String toString() {
     if (type.equals("Purchasable")) {
@@ -120,42 +170,92 @@ public abstract class Coupon {
     }
   }
 
+  /**
+   * Gets the intrinsic value.
+   *
+   * @return the intrinsic value
+   */
   public double getIntrinsicValue() {
     return intrinsicValue;
   }
 
+  /**
+   * Gets the shop.
+   *
+   * @return the shop
+   */
   public Shop getShop() {
     return shop;
   }
 
+  /**
+   * Gets the expiration date.
+   *
+   * @return the expiration date
+   */
   public Date getExpirationDate() {
     return expirationDate;
   }
 
+  /**
+   * Checks if is active.
+   *
+   * @return true, if is active
+   */
   public boolean isActive() {
     return active;
   }
 
+  /**
+   * Sets the active.
+   *
+   * @param active the new active
+   */
   public void setActive(boolean active) {
     this.active = active;
   }
 
+  /**
+   * Gets the coupon code.
+   *
+   * @return the coupon code
+   */
   public String getCouponCode() {
     return couponCode;
   }
 
+  /**
+   * Gets the owner.
+   *
+   * @return the owner
+   */
   public Account getOwner() {
     return owner;
   }
 
+  /**
+   * Sets the owner.
+   *
+   * @param owner the new owner
+   */
   public void setOwner(Account owner) {
     this.owner = owner;
   }
 
+  /**
+   * Gets the purchasing value.
+   *
+   * @return the purchasing value
+   */
   public Double getPurchasingValue() {
     return purchasingValue;
   }
 
+  /**
+   * Gets the type.
+   *
+   * @return the type
+   */
   public String getType() {
     return type;
   }

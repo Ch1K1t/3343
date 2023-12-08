@@ -11,13 +11,28 @@ import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import CouponRedeemSystem.System.Util.Util;
 import net.sf.json.JSONObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CouponManager.
+ */
 public class CouponManager {
 
+  /** The instance. */
   private static CouponManager instance;
+  
+  /** The json file manager. */
   private CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
 
+  /**
+   * Instantiates a new coupon manager.
+   */
   private CouponManager() {}
 
+  /**
+   * Gets the single instance of CouponManager.
+   *
+   * @return single instance of CouponManager
+   */
   public static CouponManager getInstance() {
     if (instance == null) {
       instance = new CouponManager();
@@ -25,6 +40,17 @@ public class CouponManager {
     return instance;
   }
 
+  /**
+   * Creates the coupon.
+   *
+   * @param couponCode the coupon code
+   * @param intrinsicValue the intrinsic value
+   * @param purchasingValue the purchasing value
+   * @param shop the shop
+   * @param type the type
+   * @param expirationDate the expiration date
+   * @return the coupon
+   */
   // Create new purchasable coupon
   public Coupon createCoupon(
     String couponCode,
@@ -54,6 +80,15 @@ public class CouponManager {
     return coupon;
   }
 
+  /**
+   * Creates the coupon.
+   *
+   * @param couponCode the coupon code
+   * @param intrinsicValue the intrinsic value
+   * @param type the type
+   * @param expirationDate the expiration date
+   * @return the coupon
+   */
   // Create new redeemable coupon
   public Coupon createCoupon(
     String couponCode,
@@ -73,6 +108,11 @@ public class CouponManager {
     return coupon;
   }
 
+  /**
+   * Update coupon.
+   *
+   * @param coupon the coupon
+   */
   public void updateCoupon(Coupon coupon) {
     String type = coupon.getType();
 
@@ -110,6 +150,11 @@ public class CouponManager {
     );
   }
 
+  /**
+   * Delete coupon.
+   *
+   * @param coupon the coupon
+   */
   public void deleteCoupon(Coupon coupon) {
     jsonFileManager.deleteJSON(
       "Coupon/" + coupon.getType(),
@@ -117,6 +162,12 @@ public class CouponManager {
     );
   }
 
+  /**
+   * Gets the coupon.
+   *
+   * @param couponCode the coupon code
+   * @return the coupon
+   */
   public Coupon getCoupon(String couponCode) {
     JSONObject couponJson = jsonFileManager.searchJSON(couponCode);
 
@@ -127,6 +178,12 @@ public class CouponManager {
     }
   }
 
+  /**
+   * Extract coupon from json.
+   *
+   * @param couponJson the coupon json
+   * @return the coupon
+   */
   public Coupon extractCouponFromJson(JSONObject couponJson) {
     double intrinsicValue = couponJson.getDouble("intrinsicValue");
     boolean active = couponJson.getBoolean("active");
@@ -166,6 +223,12 @@ public class CouponManager {
     }
   }
 
+  /**
+   * Json to string.
+   *
+   * @param jsonObject the json object
+   * @return the string
+   */
   public String jsonToString(JSONObject jsonObject) {
     String result = "";
 

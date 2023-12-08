@@ -11,14 +11,31 @@ import java.util.List;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AccountManager.
+ */
 public class AccountManager {
 
+  /** The instance. */
   private static AccountManager instance;
+  
+  /** The json file manager. */
   private CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
+  
+  /** The password manager. */
   private PasswordManager passwordManager = PasswordManager.getInstance();
 
+  /**
+   * Instantiates a new account manager.
+   */
   private AccountManager() {}
 
+  /**
+   * Gets the single instance of AccountManager.
+   *
+   * @return single instance of AccountManager
+   */
   public static AccountManager getInstance() {
     if (instance == null) {
       instance = new AccountManager();
@@ -26,10 +43,25 @@ public class AccountManager {
     return instance;
   }
 
+  /**
+   * Creates the password.
+   *
+   * @param userName the user name
+   * @param Password the password
+   */
   public void createPassword(String userName, String Password) {
     passwordManager.createNewPassword(userName, Password);
   }
 
+  /**
+   * Creates the account.
+   *
+   * @param userName the user name
+   * @param role the role
+   * @param dob the dob
+   * @param telNo the tel no
+   * @return the account
+   */
   // Create new user account
   public Account createAccount(
     String userName,
@@ -43,6 +75,13 @@ public class AccountManager {
     return account;
   }
 
+  /**
+   * Creates the account.
+   *
+   * @param userName the user name
+   * @param role the role
+   * @return the account
+   */
   // Create new non-user account
   public Account createAccount(String userName, String role) {
     Account account = new Account(userName, role);
@@ -51,6 +90,11 @@ public class AccountManager {
     return account;
   }
 
+  /**
+   * Update account.
+   *
+   * @param account the account
+   */
   public void updateAccount(Account account) {
     String role = account.getRole();
 
@@ -68,10 +112,21 @@ public class AccountManager {
     jsonFileManager.modifyJSON("Account", account.getUserName(), jsonObject);
   }
 
+  /**
+   * Delete account.
+   *
+   * @param account the account
+   */
   public void deleteAccount(Account account) {
     jsonFileManager.deleteJSON("Account", account.getUserName());
   }
 
+  /**
+   * Gets the account.
+   *
+   * @param userName the user name
+   * @return the account
+   */
   public Account getAccount(String userName) {
     JSONObject accountJson = jsonFileManager.searchJSON(userName);
 
@@ -82,6 +137,12 @@ public class AccountManager {
     }
   }
 
+  /**
+   * Extract account from json.
+   *
+   * @param accountJson the account json
+   * @return the account
+   */
   public Account extractAccountFromJson(JSONObject accountJson) {
     try {
       String userName = accountJson.getString("userName");
@@ -115,6 +176,12 @@ public class AccountManager {
     }
   }
 
+  /**
+   * Json to string.
+   *
+   * @param jsonObject the json object
+   * @return the string
+   */
   public String jsonToString(JSONObject jsonObject) {
     String result = "";
 
