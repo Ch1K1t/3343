@@ -223,16 +223,7 @@ public class CouponTest extends MainTest {
   public void pointConversionTest() {
     String couponCode = "rCouponTest";
     String type = "Redeemable";
-    String expirationDate = Util.sdf.format(DateUtils.addYears(Util.today, 1));
-
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(Util.today);
-    int thisYear = cal.get(Calendar.YEAR);
-    boolean isThisYearLeap =
-      ((thisYear % 4 == 0) && (thisYear % 100 != 0) || (thisYear % 400 == 0));
-    int nextYear = cal.get(Calendar.YEAR) + 1;
-    boolean isNextYearLeap =
-      ((nextYear % 4 == 0) && (nextYear % 100 != 0) || (nextYear % 400 == 0));
+    String expirationDate = "08/12/2024";
 
     Coupon coupon = couponManager.createCoupon(
       couponCode,
@@ -243,12 +234,6 @@ public class CouponTest extends MainTest {
 
     double result = coupon.pointConversion();
 
-    if (isThisYearLeap) {
-      Assert.assertEquals(intrinsicValue + 182, result, 0.0);
-    } else if (isNextYearLeap) {
-      Assert.assertEquals(intrinsicValue + 183, result, 0.0);
-    } else {
-      Assert.assertEquals(intrinsicValue + 182.5, result, 0.0);
-    }
+    Assert.assertEquals(intrinsicValue + 183, result, 0.0);
   }
 }

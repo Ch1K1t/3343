@@ -66,42 +66,42 @@ public class MainTest {
   @Test
   public void testJsonFileManagerInstance() {
     CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
-    Assert.assertEquals(true, jsonFileManager != null);
+    Assert.assertEquals(CRSJsonFileManager.getInstance(), jsonFileManager);
   }
 
   @Test
   public void testEncryptionManagerInstance() {
     EncryptionManager encryptionManager = EncryptionManager.getInstance();
-    Assert.assertEquals(true, encryptionManager != null);
+    Assert.assertEquals(EncryptionManager.getInstance(), encryptionManager);
   }
 
   @Test
   public void testPasswordManagerInstance() {
     PasswordManager passwordManager = PasswordManager.getInstance();
-    Assert.assertEquals(true, passwordManager != null);
+    Assert.assertEquals(PasswordManager.getInstance(), passwordManager);
   }
 
   @Test
   public void testAccountManagerInstance() {
     AccountManager accountManager = AccountManager.getInstance();
-    Assert.assertEquals(true, accountManager != null);
+    Assert.assertEquals(AccountManager.getInstance(), accountManager);
   }
 
   @Test
   public void testCouponManagerInstance() {
     CouponManager couponManager = CouponManager.getInstance();
-    Assert.assertEquals(true, couponManager != null);
+    Assert.assertEquals(CouponManager.getInstance(), couponManager);
   }
 
   @Test
   public void testShopManagerInstance() {
     ShopManager shopManager = ShopManager.getInstance();
-    Assert.assertEquals(true, shopManager != null);
+    Assert.assertEquals(ShopManager.getInstance(), shopManager);
   }
 
   @Test
   public void testDiscountManagerInstance() {
     DiscountManager discountManager = DiscountManager.getInstance();
-    Assert.assertEquals(true, discountManager != null);
+    Assert.assertEquals(DiscountManager.getInstance(), discountManager);
   }
 }
