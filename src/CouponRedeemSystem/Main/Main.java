@@ -15,8 +15,6 @@ public class Main {
    * @param args the arguments
    */
   public static void main(String[] args) {
-    // new HomePage().execute();
-    // Util.clearSystem();
-    // Util.initializeSystem();
+    new HomePage().execute();
   }
 }
