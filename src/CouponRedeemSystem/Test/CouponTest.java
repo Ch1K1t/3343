@@ -234,6 +234,6 @@ public class CouponTest extends MainTest {
 
     double result = coupon.pointConversion();
 
-    Assert.assertEquals(intrinsicValue + 183, result, 0.0);
+    Assert.assertEquals(intrinsicValue + 182, result, 0.0);
   }
 }

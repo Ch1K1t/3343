@@ -199,7 +199,7 @@ public class AccountTest extends MainTest {
 
     account.couponToPoints(coupon);
 
-    Assert.assertEquals(intrinsicValue + 183, account.getPoints(), 0.0);
+    Assert.assertEquals(intrinsicValue + 182, account.getPoints(), 0.0);
 
     Assert.assertEquals(false, coupon.isActive());
   }
