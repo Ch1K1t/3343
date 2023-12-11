@@ -5,7 +5,10 @@ import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.Util.Util;
 import CouponRedeemSystem.Test.model.MainTest;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.time.DateUtils;
 import org.junit.After;
@@ -223,7 +226,7 @@ public class CouponTest extends MainTest {
   public void pointConversionTest() {
     String couponCode = "rCouponTest";
     String type = "Redeemable";
-    String expirationDate = "08/12/2024";
+    String expirationDate = new SimpleDateFormat("dd/MM/yyyy").format(DateUtils.addYears(new Date(), 1));
 
     Coupon coupon = couponManager.createCoupon(
       couponCode,
@@ -234,6 +237,6 @@ public class CouponTest extends MainTest {
 
     double result = coupon.pointConversion();
 
-    Assert.assertEquals(intrinsicValue + 182, result, 0.0);
+    Assert.assertEquals(intrinsicValue + 183, result, 0.0);
   }
 }

@@ -6,6 +6,7 @@ import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.Util.Util;
 import CouponRedeemSystem.Test.model.MainTest;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -188,7 +189,7 @@ public class AccountTest extends MainTest {
 
     String couponCode = "rCouponTest";
     String type = "Redeemable";
-    String expirationDate = "08/12/2024";
+    String expirationDate = new SimpleDateFormat("dd/MM/yyyy").format(DateUtils.addYears(new Date(), 1));
 
     Coupon coupon = couponManager.createCoupon(
       couponCode,
@@ -199,7 +200,7 @@ public class AccountTest extends MainTest {
 
     account.couponToPoints(coupon);
 
-    Assert.assertEquals(intrinsicValue + 182, account.getPoints(), 0.0);
+    Assert.assertEquals(intrinsicValue + 183, account.getPoints(), 0.0);
 
     Assert.assertEquals(false, coupon.isActive());
   }

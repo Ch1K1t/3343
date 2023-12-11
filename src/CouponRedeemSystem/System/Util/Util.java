@@ -92,7 +92,7 @@ public class Util {
       "Coupon/Purchasable",
       "Coupon/Redeemable",
       "Shop",
-      "Discount",
+      "Promotion",
       "Password",
     };
 
