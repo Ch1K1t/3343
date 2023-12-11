@@ -2,7 +2,6 @@ package CouponRedeemSystem.Test;
 
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.model.Coupon;
-import CouponRedeemSystem.Discount.model.Discount;
 import CouponRedeemSystem.Page.AdminPage;
 import CouponRedeemSystem.Page.HomePage;
 import CouponRedeemSystem.Page.ShopManagerPage;
@@ -10,6 +9,7 @@ import CouponRedeemSystem.Page.SigninPage;
 import CouponRedeemSystem.Page.StaffPage;
 import CouponRedeemSystem.Page.UserPage;
 import CouponRedeemSystem.Page.model.Page;
+import CouponRedeemSystem.Promotion.model.Promotion;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.Util.Util;
 import CouponRedeemSystem.Test.model.MainTest;
@@ -64,9 +64,9 @@ public class PageTest extends MainTest {
     String.format("1. Check Coupon\r\n") +
     String.format("2. Create Purchasable Coupon\r\n") +
     String.format("3. Delete Coupon\r\n") +
-    String.format("4. Check Discount\r\n") +
-    String.format("5. Create Discount\r\n") +
-    String.format("6. Delete Discount\r\n") +
+    String.format("4. Check Promotion\r\n") +
+    String.format("5. Create Promotion\r\n") +
+    String.format("6. Delete Promotion\r\n") +
     String.format("7. Signout\r\n\r\n");
 
   private final String userPageInstruction =
@@ -759,149 +759,167 @@ public class PageTest extends MainTest {
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
   }
 
-  // Have discount
+  // Have promotion
   @Test
-  public void checkDiscountTest() {
+  public void checkPromotionTest() {
     accountManager.createAccount(userName, "Staff");
     Shop shop = shopManager.createShop(shopName);
     shop.addStaff(userName);
     shopManager.updateShop(shop);
 
-    discountManager.createDiscount(discountName, shop, value, startDate, day);
-    discountManager.createDiscount(
-      "discountTest2",
+    promotionManager.createPromotion(
+      promotionName,
       shop,
       value,
       startDate,
       day
     );
-    shop.addDiscount(discountName);
-    shop.addDiscount("discountTest2");
+    promotionManager.createPromotion(
+      "promotionTest2",
+      shop,
+      value,
+      startDate,
+      day
+    );
+    shop.addPromotion(promotionName);
+    shop.addPromotion("promotionTest2");
     shopManager.updateShop(shop);
 
     StaffPage page = new StaffPage(userName);
-    page.checkDiscount();
+    page.checkPromotion();
 
     String expectedOutput =
-      String.format("\r\nDiscount Name: " + discountName + "\r\n") +
-      String.format("Discount Value: " + value + "\r\n") +
-      String.format("Discount Start Date: " + startDate + "\r\n") +
-      String.format("Discount End Date: " + endDate + "\r\n") +
-      String.format("\r\nDiscount Name: discountTest2\r\n") +
-      String.format("Discount Value: " + value + "\r\n") +
-      String.format("Discount Start Date: " + startDate + "\r\n") +
-      String.format("Discount End Date: " + endDate + "\r\n");
+      String.format("\r\nPromotion Name: " + promotionName + "\r\n") +
+      String.format("Promotion Value: " + value + "\r\n") +
+      String.format("Promotion Start Date: " + startDate + "\r\n") +
+      String.format("Promotion End Date: " + endDate + "\r\n") +
+      String.format("\r\nPromotion Name: promotionTest2\r\n") +
+      String.format("Promotion Value: " + value + "\r\n") +
+      String.format("Promotion Start Date: " + startDate + "\r\n") +
+      String.format("Promotion End Date: " + endDate + "\r\n");
 
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
   }
 
-  // No discount
+  // No promotion
   @Test
-  public void checkDiscountTest2() {
+  public void checkPromotionTest2() {
     accountManager.createAccount(userName, "Staff");
     Shop shop = shopManager.createShop(shopName);
     shop.addStaff(userName);
     shopManager.updateShop(shop);
 
     StaffPage page = new StaffPage(userName);
-    page.checkDiscount();
+    page.checkPromotion();
 
-    String expectedOutput = String.format("\r\nThere is no discount\r\n");
+    String expectedOutput = String.format("\r\nThere is no promotion\r\n");
 
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
   }
 
   @Test
-  public void createDiscountTest() {
+  public void createPromotionTest() {
     accountManager.createAccount(userName, "Staff");
     Shop shop = shopManager.createShop(shopName);
     shop.addStaff(userName);
     shopManager.updateShop(shop);
 
     systemIn.provideLines(
-      discountName,
+      promotionName,
       Double.toString(value),
       startDate,
       Integer.toString(day)
     );
 
     StaffPage page = new StaffPage(userName);
-    page.createDiscount();
+    page.createPromotion();
 
     String expectedOutput =
-      String.format("\r\nPlease input the discount's name:\r\n") +
-      String.format("\r\nPlease input the discount's value:\r\n") +
+      String.format("\r\nPlease input the promotion's name:\r\n") +
+      String.format("\r\nPlease input the promotion's value:\r\n") +
       String.format(
-        "\r\nPlease input the discount's start date (dd/MM/yyyy):\r\n"
+        "\r\nPlease input the promotion's start date (dd/MM/yyyy):\r\n"
       ) +
-      String.format("\r\nPlease input the discount's duration in day:\r\n") +
-      String.format("\r\nDiscount created\r\n");
+      String.format("\r\nPlease input the promotion's duration in day:\r\n") +
+      String.format("\r\nPromotion created\r\n");
 
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
   }
 
   @Test
-  public void createDiscountTestFail() {
+  public void createPromotionTestFail() {
     accountManager.createAccount(userName, "Staff");
     Shop shop = shopManager.createShop(shopName);
     shop.addStaff(userName);
     shopManager.updateShop(shop);
-    discountManager.createDiscount(discountName, shop, value, startDate, day);
+    promotionManager.createPromotion(
+      promotionName,
+      shop,
+      value,
+      startDate,
+      day
+    );
 
     systemIn.provideLines(
-      discountName,
+      promotionName,
       Double.toString(value),
       startDate,
       Integer.toString(day)
     );
 
     StaffPage page = new StaffPage(userName);
-    page.createDiscount();
+    page.createPromotion();
 
     String expectedOutput =
-      String.format("\r\nPlease input the discount's name:\r\n") +
-      String.format("\r\nDiscount already exists\r\n");
+      String.format("\r\nPlease input the promotion's name:\r\n") +
+      String.format("\r\nPromotion already exists\r\n");
 
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
   }
 
   @Test
-  public void deleteDiscountTest() {
+  public void deletePromotionTest() {
     accountManager.createAccount(userName, "Staff");
     Shop shop = shopManager.createShop(shopName);
     shop.addStaff(userName);
-    shop.addDiscount(discountName);
+    shop.addPromotion(promotionName);
     shopManager.updateShop(shop);
-    discountManager.createDiscount(discountName, shop, value, startDate, day);
+    promotionManager.createPromotion(
+      promotionName,
+      shop,
+      value,
+      startDate,
+      day
+    );
 
-    systemIn.provideLines(discountName);
+    systemIn.provideLines(promotionName);
 
     StaffPage page = new StaffPage(userName);
-    page.deleteDiscount();
+    page.deletePromotion();
 
     String expectedOutput =
-      String.format("\r\nPlease input the discount's name:\r\n") +
-      String.format("\r\nDiscount deleted\r\n");
+      String.format("\r\nPlease input the promotion's name:\r\n") +
+      String.format("\r\nPromotion deleted\r\n");
 
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
   }
 
   @Test
-  public void deleteDiscountTestFail() {
+  public void deletePromotionTestFail() {
     accountManager.createAccount(userName, "Staff");
     Shop shop = shopManager.createShop(shopName);
     shop.addStaff(userName);
-    shop.addDiscount(discountName);
+    shop.addPromotion(promotionName);
     shopManager.updateShop(shop);
 
-    systemIn.provideLines(discountName);
+    systemIn.provideLines(promotionName);
 
     StaffPage page = new StaffPage(userName);
-    page.deleteDiscount();
+    page.deletePromotion();
 
     String expectedOutput =
-      String.format("\r\nPlease input the discount's name:\r\n") +
-      String.format("\r\nDiscount not found\r\n");
+      String.format("\r\nPlease input the promotion's name:\r\n") +
+      String.format("\r\nPromotion not found\r\n");
 
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
   }
@@ -950,13 +968,13 @@ public class PageTest extends MainTest {
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
   }
 
-  // Have coupon with discount
+  // Have coupon with promotion
   @Test
   public void getPurchasableCouponListTest2() {
     accountManager.createAccount(userName, "User", dateOfBirth, telNo);
     Shop shop = shopManager.createShop(shopName);
     shop.addCoupon("pCouponTest");
-    shop.addDiscount(discountName);
+    shop.addPromotion(promotionName);
     shopManager.updateShop(shop);
     couponManager.createCoupon(
       "pCouponTest",
@@ -966,7 +984,13 @@ public class PageTest extends MainTest {
       "Purchasable",
       expirationDate
     );
-    discountManager.createDiscount(discountName, shop, value, startDate, day);
+    promotionManager.createPromotion(
+      promotionName,
+      shop,
+      value,
+      startDate,
+      day
+    );
 
     UserPage page = new UserPage(userName);
     page.getPurchasableCouponList();
@@ -976,13 +1000,13 @@ public class PageTest extends MainTest {
       String.format("\r\nThe available coupons are:\r\n") +
       String.format("\r\nShop " + shopName + ":\r\n") +
       String.format(
-        "This shop is holding a discount event, for each coupon, it will be discounted by " +
+        "This shop is holding a promotion event, for each coupon, it will be promotioned by " +
         (int) value +
         " points\r\n"
       ) +
       String.format("%-30s", "Code: pCouponTest") +
       String.format("%-30s", "Original Points: " + purchasingValue) +
-      String.format("After Discount: " + (purchasingValue - value) + "\r\n");
+      String.format("After Promotion: " + (purchasingValue - value) + "\r\n");
 
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
   }
@@ -2021,7 +2045,7 @@ public class PageTest extends MainTest {
     Assert.assertEquals(shopName, shop.getShopName());
     Assert.assertEquals(new ArrayList<>(), shop.getCouponList());
     Assert.assertEquals(new ArrayList<>(), shop.getStaffList());
-    Assert.assertEquals(new ArrayList<>(), shop.getDiscountList());
+    Assert.assertEquals(new ArrayList<>(), shop.getPromotionList());
   }
 
   @Test
@@ -2496,17 +2520,23 @@ public class PageTest extends MainTest {
     accountManager.createPassword(userName, password);
     accountManager.createAccount(userName, "Staff");
     Shop shop = shopManager.createShop(shopName);
-    discountManager.createDiscount(discountName, shop, value, startDate, day);
-    discountManager.createDiscount(
-      discountName + "2",
+    promotionManager.createPromotion(
+      promotionName,
+      shop,
+      value,
+      startDate,
+      day
+    );
+    promotionManager.createPromotion(
+      promotionName + "2",
       shop,
       value,
       startDate,
       day
     );
     shop.addStaff(userName);
-    shop.addDiscount(discountName);
-    shop.addDiscount(discountName + "2");
+    shop.addPromotion(promotionName);
+    shop.addPromotion(promotionName + "2");
     shopManager.updateShop(shop);
 
     systemIn.provideLines("1", userName, password, "4", "7", "3");
@@ -2521,14 +2551,14 @@ public class PageTest extends MainTest {
       String.format("\r\nPlease input the password:\r\n") +
       String.format("\r\nSignin successfully\r\n") +
       staffPageInstruction +
-      String.format("\r\nDiscount Name: " + discountName + "\r\n") +
-      String.format("Discount Value: " + value + "\r\n") +
-      String.format("Discount Start Date: " + startDate + "\r\n") +
-      String.format("Discount End Date: " + endDate + "\r\n") +
-      String.format("\r\nDiscount Name: " + discountName + "2\r\n") +
-      String.format("Discount Value: " + value + "\r\n") +
-      String.format("Discount Start Date: " + startDate + "\r\n") +
-      String.format("Discount End Date: " + endDate + "\r\n") +
+      String.format("\r\nPromotion Name: " + promotionName + "\r\n") +
+      String.format("Promotion Value: " + value + "\r\n") +
+      String.format("Promotion Start Date: " + startDate + "\r\n") +
+      String.format("Promotion End Date: " + endDate + "\r\n") +
+      String.format("\r\nPromotion Name: " + promotionName + "2\r\n") +
+      String.format("Promotion Value: " + value + "\r\n") +
+      String.format("Promotion Start Date: " + startDate + "\r\n") +
+      String.format("Promotion End Date: " + endDate + "\r\n") +
       staffPageInstruction +
       String.format("Signout successfully\r\n") +
       homePageInstruction +
@@ -2538,7 +2568,7 @@ public class PageTest extends MainTest {
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
   }
 
-  // No discount
+  // No promotion
   @Test
   public void executeStaff4_2() {
     accountManager.createPassword(userName, password);
@@ -2559,7 +2589,7 @@ public class PageTest extends MainTest {
       String.format("\r\nPlease input the password:\r\n") +
       String.format("\r\nSignin successfully\r\n") +
       staffPageInstruction +
-      String.format("\r\nThere is no discount\r\n") +
+      String.format("\r\nThere is no promotion\r\n") +
       staffPageInstruction +
       String.format("Signout successfully\r\n") +
       homePageInstruction +
@@ -2582,7 +2612,7 @@ public class PageTest extends MainTest {
       userName,
       password,
       "5",
-      discountName,
+      promotionName,
       Double.toString(value),
       startDate,
       Integer.toString(day),
@@ -2600,13 +2630,13 @@ public class PageTest extends MainTest {
       String.format("\r\nPlease input the password:\r\n") +
       String.format("\r\nSignin successfully\r\n") +
       staffPageInstruction +
-      String.format("\r\nPlease input the discount's name:\r\n") +
-      String.format("\r\nPlease input the discount's value:\r\n") +
+      String.format("\r\nPlease input the promotion's name:\r\n") +
+      String.format("\r\nPlease input the promotion's value:\r\n") +
       String.format(
-        "\r\nPlease input the discount's start date (dd/MM/yyyy):\r\n"
+        "\r\nPlease input the promotion's start date (dd/MM/yyyy):\r\n"
       ) +
-      String.format("\r\nPlease input the discount's duration in day:\r\n") +
-      String.format("\r\nDiscount created\r\n") +
+      String.format("\r\nPlease input the promotion's duration in day:\r\n") +
+      String.format("\r\nPromotion created\r\n") +
       staffPageInstruction +
       String.format("Signout successfully\r\n") +
       homePageInstruction +
@@ -2615,12 +2645,12 @@ public class PageTest extends MainTest {
 
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
     Shop updatedShop = shopManager.getShop(shopName);
-    Discount discount = discountManager.getDiscount(discountName);
-    Assert.assertEquals(discountName, discount.getDiscountName());
-    Assert.assertEquals(updatedShop.toString(), discount.getShop().toString());
-    Assert.assertEquals(value, discount.getValue(), 0.0);
-    Assert.assertEquals(Util.sdf.parse(startDate), discount.getStartDate());
-    Assert.assertEquals(Util.sdf.parse(endDate), discount.getEndDate());
+    Promotion promotion = promotionManager.getPromotion(promotionName);
+    Assert.assertEquals(promotionName, promotion.getPromotionName());
+    Assert.assertEquals(updatedShop.toString(), promotion.getShop().toString());
+    Assert.assertEquals(value, promotion.getValue(), 0.0);
+    Assert.assertEquals(Util.sdf.parse(startDate), promotion.getStartDate());
+    Assert.assertEquals(Util.sdf.parse(endDate), promotion.getEndDate());
   }
 
   @Test
@@ -2628,12 +2658,26 @@ public class PageTest extends MainTest {
     accountManager.createPassword(userName, password);
     accountManager.createAccount(userName, "Staff");
     Shop shop = shopManager.createShop(shopName);
-    discountManager.createDiscount(discountName, shop, value, startDate, day);
+    promotionManager.createPromotion(
+      promotionName,
+      shop,
+      value,
+      startDate,
+      day
+    );
     shop.addStaff(userName);
-    shop.addDiscount(discountName);
+    shop.addPromotion(promotionName);
     shopManager.updateShop(shop);
 
-    systemIn.provideLines("1", userName, password, "5", discountName, "7", "3");
+    systemIn.provideLines(
+      "1",
+      userName,
+      password,
+      "5",
+      promotionName,
+      "7",
+      "3"
+    );
 
     HomePage page = new HomePage();
     page.execute();
@@ -2645,8 +2689,8 @@ public class PageTest extends MainTest {
       String.format("\r\nPlease input the password:\r\n") +
       String.format("\r\nSignin successfully\r\n") +
       staffPageInstruction +
-      String.format("\r\nPlease input the discount's name:\r\n") +
-      String.format("\r\nDiscount already exists\r\n") +
+      String.format("\r\nPlease input the promotion's name:\r\n") +
+      String.format("\r\nPromotion already exists\r\n") +
       staffPageInstruction +
       String.format("Signout successfully\r\n") +
       homePageInstruction +
@@ -2662,12 +2706,26 @@ public class PageTest extends MainTest {
     accountManager.createPassword(userName, password);
     accountManager.createAccount(userName, "Staff");
     Shop shop = shopManager.createShop(shopName);
-    discountManager.createDiscount(discountName, shop, value, startDate, day);
+    promotionManager.createPromotion(
+      promotionName,
+      shop,
+      value,
+      startDate,
+      day
+    );
     shop.addStaff(userName);
-    shop.addDiscount(discountName);
+    shop.addPromotion(promotionName);
     shopManager.updateShop(shop);
 
-    systemIn.provideLines("1", userName, password, "6", discountName, "7", "3");
+    systemIn.provideLines(
+      "1",
+      userName,
+      password,
+      "6",
+      promotionName,
+      "7",
+      "3"
+    );
 
     HomePage page = new HomePage();
     page.execute();
@@ -2679,8 +2737,8 @@ public class PageTest extends MainTest {
       String.format("\r\nPlease input the password:\r\n") +
       String.format("\r\nSignin successfully\r\n") +
       staffPageInstruction +
-      String.format("\r\nPlease input the discount's name:\r\n") +
-      String.format("\r\nDiscount deleted\r\n") +
+      String.format("\r\nPlease input the promotion's name:\r\n") +
+      String.format("\r\nPromotion deleted\r\n") +
       staffPageInstruction +
       String.format("Signout successfully\r\n") +
       homePageInstruction +
@@ -2688,7 +2746,7 @@ public class PageTest extends MainTest {
       String.format("Goodbye\r\n\r\n");
 
     Assert.assertEquals(expectedOutput, systemOutRule.getLog());
-    Assert.assertEquals(null, discountManager.getDiscount(discountName));
+    Assert.assertEquals(null, promotionManager.getPromotion(promotionName));
   }
 
   @Test
@@ -2699,7 +2757,15 @@ public class PageTest extends MainTest {
     shop.addStaff(userName);
     shopManager.updateShop(shop);
 
-    systemIn.provideLines("1", userName, password, "6", discountName, "7", "3");
+    systemIn.provideLines(
+      "1",
+      userName,
+      password,
+      "6",
+      promotionName,
+      "7",
+      "3"
+    );
 
     HomePage page = new HomePage();
     page.execute();
@@ -2711,8 +2777,8 @@ public class PageTest extends MainTest {
       String.format("\r\nPlease input the password:\r\n") +
       String.format("\r\nSignin successfully\r\n") +
       staffPageInstruction +
-      String.format("\r\nPlease input the discount's name:\r\n") +
-      String.format("\r\nDiscount not found\r\n") +
+      String.format("\r\nPlease input the promotion's name:\r\n") +
+      String.format("\r\nPromotion not found\r\n") +
       staffPageInstruction +
       String.format("Signout successfully\r\n") +
       homePageInstruction +
@@ -2816,7 +2882,7 @@ public class PageTest extends MainTest {
     Assert.assertEquals(userName, updatedCoupon.getOwner().getUserName());
   }
 
-  // With discount
+  // With promotion
   @Test
   public void executeUser2_2() throws ParseException {
     accountManager.createPassword(userName, password);
@@ -2829,7 +2895,13 @@ public class PageTest extends MainTest {
     account.addPoints(100);
     accountManager.updateAccount(account);
     Shop shop = shopManager.createShop(shopName);
-    discountManager.createDiscount(discountName, shop, value, startDate, day);
+    promotionManager.createPromotion(
+      promotionName,
+      shop,
+      value,
+      startDate,
+      day
+    );
     couponManager.createCoupon(
       "pCouponTest",
       intrinsicValue,
@@ -2839,7 +2911,7 @@ public class PageTest extends MainTest {
       expirationDate
     );
     shop.addCoupon("pCouponTest");
-    shop.addDiscount(discountName);
+    shop.addPromotion(promotionName);
     shopManager.updateShop(shop);
 
     systemIn.provideLines(
@@ -2866,13 +2938,13 @@ public class PageTest extends MainTest {
       String.format("\r\nThe available coupons are:\r\n") +
       String.format("\r\nShop " + shopName + ":\r\n") +
       String.format(
-        "This shop is holding a discount event, for each coupon, it will be discounted by " +
+        "This shop is holding a promotion event, for each coupon, it will be promotioned by " +
         (int) value +
         " points\r\n"
       ) +
       String.format("%-30s", "Code: pCouponTest") +
       String.format("%-30s", "Original Points: " + purchasingValue) +
-      String.format("After Discount: " + (purchasingValue - value) + "\r\n") +
+      String.format("After Promotion: " + (purchasingValue - value) + "\r\n") +
       String.format("\r\nPlease input the coupon's code:\r\n") +
       String.format("\r\nCoupon purchased\r\n") +
       userPageInstruction +

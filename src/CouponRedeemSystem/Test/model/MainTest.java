@@ -2,7 +2,7 @@ package CouponRedeemSystem.Test.model;
 
 import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Coupon.CouponManager;
-import CouponRedeemSystem.Discount.DiscountManager;
+import CouponRedeemSystem.Promotion.PromotionManager;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.System.File.CRSJsonFileManager;
 import CouponRedeemSystem.System.Password.EncryptionManager;
@@ -22,7 +22,7 @@ public class MainTest {
   protected final AccountManager accountManager = AccountManager.getInstance();
   protected final CouponManager couponManager = CouponManager.getInstance();
   protected final ShopManager shopManager = ShopManager.getInstance();
-  protected final DiscountManager discountManager = DiscountManager.getInstance();
+  protected final PromotionManager promotionManager = PromotionManager.getInstance();
 
   protected final String fieldName = "test field";
   // CRSJsonFileManager attributes
@@ -53,7 +53,7 @@ public class MainTest {
   protected final String staffName = "staffTest";
 
   // Discount attributes
-  protected final String discountName = "discountTest";
+  protected final String promotionName = "discountTest";
   protected final double value = 10.0;
   protected final String startDate = Util.sdf.format(
     DateUtils.addDays(Util.today, -1)
@@ -101,7 +101,7 @@ public class MainTest {
 
   @Test
   public void testDiscountManagerInstance() {
-    DiscountManager discountManager = DiscountManager.getInstance();
-    Assert.assertEquals(DiscountManager.getInstance(), discountManager);
+    PromotionManager discountManager = PromotionManager.getInstance();
+    Assert.assertEquals(PromotionManager.getInstance(), discountManager);
   }
 }

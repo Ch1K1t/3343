@@ -16,7 +16,7 @@ public class ShopManager {
 
   /** The instance. */
   private static ShopManager instance;
-  
+
   /** The json file manager. */
   private CRSJsonFileManager jsonFileManager = CRSJsonFileManager.getInstance();
 
@@ -58,7 +58,7 @@ public class ShopManager {
     jsonObject.put("shopName", shop.getShopName());
     jsonObject.put("couponList", shop.getCouponList());
     jsonObject.put("staffList", shop.getStaffList());
-    jsonObject.put("discountList", shop.getDiscountList());
+    jsonObject.put("discountList", shop.getPromotionList());
 
     jsonFileManager.modifyJSON("Shop", shop.getShopName(), jsonObject);
   }

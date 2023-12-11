@@ -3,8 +3,8 @@ package CouponRedeemSystem.Account.model;
 import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Coupon.model.Coupon;
-import CouponRedeemSystem.Discount.DiscountManager;
-import CouponRedeemSystem.Discount.model.Discount;
+import CouponRedeemSystem.Promotion.PromotionManager;
+import CouponRedeemSystem.Promotion.model.Promotion;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.Util.Util;
 import java.text.ParseException;
@@ -21,22 +21,22 @@ public class Account {
 
   /** The user name. */
   private String userName;
-  
+
   /** The role. */
   private String role;
-  
+
   /** The points. */
   private double points;
-  
+
   /** The coupon I ds. */
   private List<String> couponIDs;
-  
+
   /** The date of birth. */
   private Date dateOfBirth;
-  
+
   /** The age. */
   private int age;
-  
+
   /** The tel no. */
   private String telNo;
 
@@ -160,20 +160,20 @@ public class Account {
     CouponManager couponManager = CouponManager.getInstance();
 
     Shop shop = coupon.getShop();
-    List<String> discountList = shop.getDiscountList();
-    int discountTotal = 0;
-    for (String s : discountList) {
-      DiscountManager discountManager = DiscountManager.getInstance();
-      Discount discount = discountManager.getDiscount(s);
-      if (discount.validateTime()) {
-        discountTotal += discount.getValue();
+    List<String> promotionList = shop.getPromotionList();
+    int promotionTotal = 0;
+    for (String s : promotionList) {
+      PromotionManager promotionManager = PromotionManager.getInstance();
+      Promotion promotion = promotionManager.getPromotion(s);
+      if (promotion.validateTime()) {
+        promotionTotal += promotion.getValue();
       }
     }
 
     this.deductPoints(
-        coupon.getPurchasingValue() - discountTotal < 1
+        coupon.getPurchasingValue() - promotionTotal < 1
           ? 1
-          : coupon.getPurchasingValue() - discountTotal
+          : coupon.getPurchasingValue() - promotionTotal
       );
     this.couponIDs.add(coupon.getCouponCode());
     accountManager.updateAccount(this);

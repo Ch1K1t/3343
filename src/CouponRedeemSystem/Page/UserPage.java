@@ -4,9 +4,9 @@ import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Coupon.model.Coupon;
-import CouponRedeemSystem.Discount.DiscountManager;
-import CouponRedeemSystem.Discount.model.Discount;
 import CouponRedeemSystem.Page.model.Page;
+import CouponRedeemSystem.Promotion.PromotionManager;
+import CouponRedeemSystem.Promotion.model.Promotion;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.Util.Util;
@@ -67,19 +67,19 @@ public class UserPage extends Page {
 
       System.out.println();
       System.out.println("Shop " + shop.getShopName() + ":");
-      int discountTotal = 0;
-      List<String> discountList = shop.getDiscountList();
-      for (String s : discountList) {
-        DiscountManager discountManager = DiscountManager.getInstance();
-        Discount discount = discountManager.getDiscount(s);
-        if (discount.validateTime()) {
-          discountTotal += discount.getValue();
+      int promotionTotal = 0;
+      List<String> promotionList = shop.getPromotionList();
+      for (String s : promotionList) {
+        PromotionManager promotionManager = PromotionManager.getInstance();
+        Promotion promotion = promotionManager.getPromotion(s);
+        if (promotion.validateTime()) {
+          promotionTotal += promotion.getValue();
         }
       }
-      if (discountTotal > 0) {
+      if (promotionTotal > 0) {
         System.out.println(
-          "This shop is holding a discount event, for each coupon, it will be discounted by " +
-          discountTotal +
+          "This shop is holding a promotion event, for each coupon, it will be promotioned by " +
+          promotionTotal +
           " points"
         );
       }
@@ -89,18 +89,18 @@ public class UserPage extends Page {
         if (coupon.getExpirationDate().before(Util.today)) continue;
         if (coupon.getOwner() != null) continue;
 
-        if (discountTotal > 0) {
+        if (promotionTotal > 0) {
           System.out.println(
             String.format("%-30s", "Code: " + coupon.getCouponCode()) +
             String.format(
               "%-30s",
               "Original Points: " + coupon.getPurchasingValue()
             ) +
-            "After Discount: " +
+            "After Promotion: " +
             (
-              coupon.getPurchasingValue() - discountTotal < 1
+              coupon.getPurchasingValue() - promotionTotal < 1
                 ? 1
-                : coupon.getPurchasingValue() - discountTotal
+                : coupon.getPurchasingValue() - promotionTotal
             )
           );
         } else {

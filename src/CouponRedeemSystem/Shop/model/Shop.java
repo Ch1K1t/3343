@@ -11,15 +11,15 @@ public class Shop {
 
   /** The shop name. */
   private String shopName;
-  
+
   /** The coupon list. */
   private List<String> couponList;
-  
+
   /** The staff list. */
   private List<String> staffList;
-  
+
   /** The discount list. */
-  private List<String> discountList;
+  private List<String> promotionList;
 
   /**
    * Instantiates a new shop.
@@ -30,7 +30,7 @@ public class Shop {
     this.shopName = shopName;
     this.couponList = new ArrayList<String>();
     this.staffList = new ArrayList<String>();
-    this.discountList = new ArrayList<String>();
+    this.promotionList = new ArrayList<String>();
   }
 
   /**
@@ -50,7 +50,7 @@ public class Shop {
     this.shopName = shopName;
     this.couponList = couponList;
     this.staffList = staffList;
-    this.discountList = discountList;
+    this.promotionList = discountList;
   }
 
   /**
@@ -68,7 +68,7 @@ public class Shop {
       ", staffList=" +
       staffList +
       ", discountList=" +
-      discountList +
+      promotionList +
       "}"
     );
   }
@@ -141,25 +141,25 @@ public class Shop {
    *
    * @return the discount list
    */
-  public List<String> getDiscountList() {
-    return discountList;
+  public List<String> getPromotionList() {
+    return promotionList;
   }
 
   /**
    * Adds the discount.
    *
-   * @param discountCode the discount code
+   * @param promotionCode the discount code
    */
-  public void addDiscount(String discountCode) {
-    discountList.add(discountCode);
+  public void addPromotion(String promotionCode) {
+    promotionList.add(promotionCode);
   }
 
   /**
    * Removes the discount.
    *
-   * @param discountCode the discount code
+   * @param promotionCode the discount code
    */
-  public void removeDiscount(String discountCode) {
-    discountList.remove(discountCode);
+  public void removePromotion(String promotionCode) {
+    promotionList.remove(promotionCode);
   }
 }

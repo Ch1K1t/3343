@@ -4,9 +4,9 @@ import CouponRedeemSystem.Account.AccountManager;
 import CouponRedeemSystem.Account.model.Account;
 import CouponRedeemSystem.Coupon.CouponManager;
 import CouponRedeemSystem.Coupon.model.Coupon;
-import CouponRedeemSystem.Discount.DiscountManager;
-import CouponRedeemSystem.Discount.model.Discount;
 import CouponRedeemSystem.Page.model.Page;
+import CouponRedeemSystem.Promotion.PromotionManager;
+import CouponRedeemSystem.Promotion.model.Promotion;
 import CouponRedeemSystem.Shop.ShopManager;
 import CouponRedeemSystem.Shop.model.Shop;
 import CouponRedeemSystem.System.Util.Util;
@@ -29,9 +29,9 @@ public class StaffPage extends Page {
     System.out.println("1. Check Coupon");
     System.out.println("2. Create Purchasable Coupon");
     System.out.println("3. Delete Coupon");
-    System.out.println("4. Check Discount");
-    System.out.println("5. Create Discount");
-    System.out.println("6. Delete Discount");
+    System.out.println("4. Check Promotion");
+    System.out.println("5. Create Promotion");
+    System.out.println("6. Delete Promotion");
     System.out.println("7. Signout");
     System.out.println();
   }
@@ -123,83 +123,89 @@ public class StaffPage extends Page {
     System.out.println("Coupon deleted");
   }
 
-  public void checkDiscount() {
+  public void checkPromotion() {
     ShopManager shopManager = ShopManager.getInstance();
-    DiscountManager discountManager = DiscountManager.getInstance();
+    PromotionManager promotionManager = PromotionManager.getInstance();
 
     Shop shop = shopManager.getShopByStaff(account.getUserName());
 
-    boolean noDiscount = true;
-    List<String> discountList = shop.getDiscountList();
-    for (String s : discountList) {
-      Discount discount = discountManager.getDiscount(s);
-      if (!discount.validateTime()) continue;
-      noDiscount = false;
+    boolean noPromotion = true;
+    List<String> promotionList = shop.getPromotionList();
+    for (String s : promotionList) {
+      Promotion promotion = promotionManager.getPromotion(s);
+      if (!promotion.validateTime()) continue;
+      noPromotion = false;
       System.out.println();
-      System.out.println("Discount Name: " + discount.getDiscountName());
-      System.out.println("Discount Value: " + discount.getValue());
+      System.out.println("Promotion Name: " + promotion.getPromotionName());
+      System.out.println("Promotion Value: " + promotion.getValue());
       System.out.println(
-        "Discount Start Date: " + Util.sdf.format(discount.getStartDate())
+        "Promotion Start Date: " + Util.sdf.format(promotion.getStartDate())
       );
       System.out.println(
-        "Discount End Date: " + Util.sdf.format(discount.getEndDate())
+        "Promotion End Date: " + Util.sdf.format(promotion.getEndDate())
       );
     }
 
-    if (noDiscount) {
+    if (noPromotion) {
       System.out.println();
-      System.out.println("There is no discount");
+      System.out.println("There is no promotion");
     }
   }
 
-  public void createDiscount() {
+  public void createPromotion() {
     ShopManager shopManager = ShopManager.getInstance();
-    DiscountManager discountManager = DiscountManager.getInstance();
+    PromotionManager promotionManager = PromotionManager.getInstance();
 
-    String discountName = strInput("discount's name");
-    Discount discount = discountManager.getDiscount(discountName);
-    if (discount != null) {
+    String promotionName = strInput("promotion's name");
+    Promotion promotion = promotionManager.getPromotion(promotionName);
+    if (promotion != null) {
       System.out.println();
-      System.out.println("Discount already exists");
+      System.out.println("Promotion already exists");
       return;
     }
 
     Shop shop = shopManager.getShopByStaff(account.getUserName());
-    shop.addDiscount(discountName);
+    shop.addPromotion(promotionName);
     shopManager.updateShop(shop);
 
-    double value = doubleInput("discount's value");
+    double value = doubleInput("promotion's value");
 
-    String startDate = beforeDateInput("discount's start date");
+    String startDate = beforeDateInput("promotion's start date");
 
-    int day = intInput("discount's duration in day");
+    int day = intInput("promotion's duration in day");
 
-    discountManager.createDiscount(discountName, shop, value, startDate, day);
+    promotionManager.createPromotion(
+      promotionName,
+      shop,
+      value,
+      startDate,
+      day
+    );
 
     System.out.println();
-    System.out.println("Discount created");
+    System.out.println("Promotion created");
   }
 
-  public void deleteDiscount() {
-    DiscountManager discountManager = DiscountManager.getInstance();
+  public void deletePromotion() {
+    PromotionManager promotionManager = PromotionManager.getInstance();
     ShopManager shopManager = ShopManager.getInstance();
 
-    String discountName = strInput("discount's name");
-    Discount discount = discountManager.getDiscount(discountName);
-    if (discount == null) {
+    String promotionName = strInput("promotion's name");
+    Promotion promotion = promotionManager.getPromotion(promotionName);
+    if (promotion == null) {
       System.out.println();
-      System.out.println("Discount not found");
+      System.out.println("Promotion not found");
       return;
     }
 
-    Shop shop = discount.getShop();
-    shop.removeDiscount(discountName);
+    Shop shop = promotion.getShop();
+    shop.removePromotion(promotionName);
     shopManager.updateShop(shop);
 
-    discountManager.deleteDiscount(discount);
+    promotionManager.deletePromotion(promotion);
 
     System.out.println();
-    System.out.println("Discount deleted");
+    System.out.println("Promotion deleted");
   }
 
   public void execute() {
@@ -208,9 +214,9 @@ public class StaffPage extends Page {
     cmdMap.put("1", () -> checkCoupon());
     cmdMap.put("2", () -> createPurchasableCoupon());
     cmdMap.put("3", () -> deleteCoupon());
-    cmdMap.put("4", () -> checkDiscount());
-    cmdMap.put("5", () -> createDiscount());
-    cmdMap.put("6", () -> deleteDiscount());
+    cmdMap.put("4", () -> checkPromotion());
+    cmdMap.put("5", () -> createPromotion());
+    cmdMap.put("6", () -> deletePromotion());
     cmdMap.put("7", () -> System.out.println("Signout successfully"));
 
     do {
